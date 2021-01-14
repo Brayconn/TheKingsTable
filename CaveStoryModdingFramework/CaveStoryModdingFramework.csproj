@@ -32,9 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Brayconn.FilePhoenix.Extensions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Brayconn.FilePhoenix.Extensions.1.0.0\lib\netstandard2.0\Brayconn.FilePhoenix.Extensions.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -92,9 +89,6 @@
       <Project>{4582ae75-d1e5-4228-bd5f-f9389da86ea4}</Project>
       <Name>PixelModdingFramework</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Dialog.resx">
