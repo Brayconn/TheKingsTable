@@ -41,6 +41,8 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.saveNPCTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportNPCTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadEntityInfotxtToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mainTabControl = new System.Windows.Forms.TabControl();
             this.stageTableTabPage = new System.Windows.Forms.TabPage();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
@@ -166,7 +168,8 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem});
+            this.fileToolStripMenuItem,
+            this.toolsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(800, 24);
@@ -193,14 +196,14 @@
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.newToolStripMenuItem.Text = "New...";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.openToolStripMenuItem.Text = "Open...";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
@@ -208,7 +211,7 @@
             // 
             this.saveProjectToolStripMenuItem.Enabled = false;
             this.saveProjectToolStripMenuItem.Name = "saveProjectToolStripMenuItem";
-            this.saveProjectToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveProjectToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.saveProjectToolStripMenuItem.Text = "Save Project";
             this.saveProjectToolStripMenuItem.Click += new System.EventHandler(this.saveProjectToolStripMenuItem_Click);
             // 
@@ -216,20 +219,20 @@
             // 
             this.saveProjectAsToolStripMenuItem.Enabled = false;
             this.saveProjectAsToolStripMenuItem.Name = "saveProjectAsToolStripMenuItem";
-            this.saveProjectAsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveProjectAsToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.saveProjectAsToolStripMenuItem.Text = "Save Project As...";
             this.saveProjectAsToolStripMenuItem.Click += new System.EventHandler(this.saveProjectAsToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(176, 6);
             // 
             // saveStageTableToolStripMenuItem
             // 
             this.saveStageTableToolStripMenuItem.Enabled = false;
             this.saveStageTableToolStripMenuItem.Name = "saveStageTableToolStripMenuItem";
-            this.saveStageTableToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveStageTableToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.saveStageTableToolStripMenuItem.Text = "Save Stage Table";
             this.saveStageTableToolStripMenuItem.Click += new System.EventHandler(this.saveStageTableToolStripMenuItem_Click);
             // 
@@ -237,20 +240,20 @@
             // 
             this.exportStageTableToolStripMenuItem.Enabled = false;
             this.exportStageTableToolStripMenuItem.Name = "exportStageTableToolStripMenuItem";
-            this.exportStageTableToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exportStageTableToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.exportStageTableToolStripMenuItem.Text = "Export Stage Table...";
             this.exportStageTableToolStripMenuItem.Click += new System.EventHandler(this.exportStageTableToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(176, 6);
             // 
             // saveNPCTableToolStripMenuItem
             // 
             this.saveNPCTableToolStripMenuItem.Enabled = false;
             this.saveNPCTableToolStripMenuItem.Name = "saveNPCTableToolStripMenuItem";
-            this.saveNPCTableToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveNPCTableToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.saveNPCTableToolStripMenuItem.Text = "Save NPC Table";
             this.saveNPCTableToolStripMenuItem.Click += new System.EventHandler(this.saveNPCTableToolStripMenuItem_Click);
             // 
@@ -258,9 +261,25 @@
             // 
             this.exportNPCTableToolStripMenuItem.Enabled = false;
             this.exportNPCTableToolStripMenuItem.Name = "exportNPCTableToolStripMenuItem";
-            this.exportNPCTableToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exportNPCTableToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.exportNPCTableToolStripMenuItem.Text = "Export NPC Table...";
             this.exportNPCTableToolStripMenuItem.Click += new System.EventHandler(this.exportNPCTableToolStripMenuItem_Click);
+            // 
+            // toolsToolStripMenuItem
+            // 
+            this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.loadEntityInfotxtToolStripMenuItem});
+            this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
+            this.toolsToolStripMenuItem.Text = "Tools";
+            // 
+            // loadEntityInfotxtToolStripMenuItem
+            // 
+            this.loadEntityInfotxtToolStripMenuItem.Enabled = false;
+            this.loadEntityInfotxtToolStripMenuItem.Name = "loadEntityInfotxtToolStripMenuItem";
+            this.loadEntityInfotxtToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.loadEntityInfotxtToolStripMenuItem.Text = "Load EntityInfo.txt";
+            this.loadEntityInfotxtToolStripMenuItem.Click += new System.EventHandler(this.loadEntityInfotxtToolStripMenuItem_Click);
             // 
             // mainTabControl
             // 
@@ -1390,6 +1409,8 @@
         private System.Windows.Forms.Button openScriptButton;
         private System.Windows.Forms.Button openTilesButton;
         private System.Windows.Forms.Button openBothButton;
+        private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem loadEntityInfotxtToolStripMenuItem;
     }
 }
 

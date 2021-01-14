@@ -40,8 +40,10 @@ namespace CaveStoryEditor
             InitCheckboxList();
             InitComboBoxDataSources();
 
+            //tool strip menu buttons
             saveProjectToolStripMenuItem.Enabled = true;
             saveProjectAsToolStripMenuItem.Enabled = true;
+            loadEntityInfotxtToolStripMenuItem.Enabled = true;
 
             //stage table
             stageTableBinding = new BindingSource(new BindingList<StageEntry>(mod.StageTable), null)
@@ -366,6 +368,24 @@ namespace CaveStoryEditor
         {
             manager.OpenTileEditor(selectedEntry);
             manager.OpenScriptEditor(Path.Combine(mod.DataFolderPath, mod.StageFolderPath, selectedEntry.Filename + "." + mod.TSCExtension));
+        }
+
+        private void loadEntityInfotxtToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var ofd = new OpenFileDialog()
+            {
+                Filter = string.Join("|", "EntityInfo.txt|EntityInfo.txt", AllFilesFilter)
+            })
+            {
+                if(ofd.ShowDialog() == DialogResult.OK && MessageBox.Show("This will overwrite ALL entity names/rects/categories etc.\nAre you sure you want to continue?","Warning",MessageBoxButtons.OKCancel) == DialogResult.OK)
+                {
+                    mod.EntityInfos.Clear();
+                    foreach(var entry in EntityInfoTXT.Load(ofd.FileName))
+                    {
+                        mod.EntityInfos.Add(entry.Key, entry.Value);
+                    }
+                }
+            }
         }
 
         private void onImageChanged(object sender, FileSystemEventArgs e)
