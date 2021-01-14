@@ -281,9 +281,9 @@ namespace CaveStoryModdingFramework.Stages
                     new XElement(nameof(BackgroundTypeType), BackgroundTypeType.FullName),
                     new XElement(nameof(BossNumberType), BossNumberType.FullName),
 
-                    new XElement(nameof(FilenameEncoding), FilenameEncoding.WebName),
-                    new XElement(nameof(MapNameEncoding), MapNameEncoding.WebName),
-                    new XElement(nameof(JapaneseNameEncoding), JapaneseNameEncoding.WebName),
+                    new XElement(nameof(FilenameEncoding), FilenameEncoding?.WebName ?? ""),
+                    new XElement(nameof(MapNameEncoding), MapNameEncoding?.WebName ?? ""),
+                    new XElement(nameof(JapaneseNameEncoding), JapaneseNameEncoding?.WebName ?? ""),
 
                     new XElement(nameof(TilesetNameBuffer), TilesetNameBuffer),
                     new XElement(nameof(FilenameBuffer), FilenameBuffer),
@@ -300,9 +300,12 @@ namespace CaveStoryModdingFramework.Stages
             BackgroundTypeType = Type.GetType(xml[nameof(BackgroundTypeType)].InnerText);
             BossNumberType = Type.GetType(xml[nameof(BossNumberType)].InnerText);
 
-            FilenameEncoding = Encoding.GetEncoding(xml[nameof(FilenameEncoding)].InnerText);
-            MapNameEncoding = Encoding.GetEncoding(xml[nameof(MapNameEncoding)].InnerText);
-            JapaneseNameEncoding = Encoding.GetEncoding(xml[nameof(JapaneseNameEncoding)].InnerText);
+            if (!string.IsNullOrEmpty(xml[nameof(FilenameEncoding)]?.InnerText))
+                FilenameEncoding = Encoding.GetEncoding(xml[nameof(FilenameEncoding)]?.InnerText ?? "");
+            if (!string.IsNullOrEmpty(xml[nameof(MapNameEncoding)]?.InnerText))
+                MapNameEncoding = Encoding.GetEncoding(xml[nameof(MapNameEncoding)]?.InnerText ?? "");
+            if(!string.IsNullOrEmpty(xml[nameof(JapaneseNameEncoding)]?.InnerText))
+                JapaneseNameEncoding = Encoding.GetEncoding(xml[nameof(JapaneseNameEncoding)]?.InnerText ?? "");
 
             TilesetNameBuffer = int.Parse(xml[nameof(TilesetNameBuffer)].InnerText);
             FilenameBuffer = int.Parse(xml[nameof(FilenameBuffer)].InnerText);
