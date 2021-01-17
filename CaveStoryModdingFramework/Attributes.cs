@@ -7,6 +7,7 @@ namespace CaveStoryModdingFramework.Maps
     public class Attribute : IMap<short, List<byte>, byte>
     {
         public const string DefaultPrefix = "Prt";
+        public const string DefaultExtension = "pxa";
         public short Width => 16;
         public short Height => 16;
         public List<byte> Tiles { get; private set; }

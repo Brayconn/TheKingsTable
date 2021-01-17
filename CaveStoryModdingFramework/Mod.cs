@@ -160,8 +160,8 @@ namespace CaveStoryModdingFramework
         }
 
         public event EventHandler AttributeExtensionChanged;
-        string attributeExtension = "pxa"; //TODO why is this hardcoded? there's a class for this
-        [LocalizeableCategory(nameof(Dialog.ModFilenameCategory), typeof(Dialog)), DefaultValue("pxa")]
+        string attributeExtension = Maps.Attribute.DefaultExtension; //TODO why is this hardcoded? there's a class for this
+        [LocalizeableCategory(nameof(Dialog.ModFilenameCategory), typeof(Dialog)), DefaultValue(Maps.Attribute.DefaultExtension)]
         public string AttributeExtension
         {
             get => attributeExtension;
