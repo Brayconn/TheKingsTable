@@ -361,13 +361,13 @@ namespace CaveStoryEditor
 
         private void openScriptButton_Click(object sender, EventArgs e)
         {
-            manager.OpenScriptEditor(Path.Combine(mod.DataFolderPath, mod.StageFolderPath, selectedEntry.Filename + "." + mod.TSCExtension));
+            manager.OpenScriptEditor(Path.Combine(mod.DataFolderPath, mod.ScriptFolderPath, selectedEntry.Filename + "." + mod.TSCExtension));
         }
 
         private void openBothButton_Click(object sender, EventArgs e)
         {
             manager.OpenTileEditor(selectedEntry);
-            manager.OpenScriptEditor(Path.Combine(mod.DataFolderPath, mod.StageFolderPath, selectedEntry.Filename + "." + mod.TSCExtension));
+            manager.OpenScriptEditor(Path.Combine(mod.DataFolderPath, mod.ScriptFolderPath, selectedEntry.Filename + "." + mod.TSCExtension));
         }
 
         private void loadEntityInfotxtToolStripMenuItem_Click(object sender, EventArgs e)

@@ -37,6 +37,9 @@ namespace CaveStoryModdingFramework
         public string DataFolderPath { get; private set; }
         [LocalizeableCategory(nameof(Dialog.FoldersCategory), typeof(Dialog)), DefaultValue("Stage")]
         public string StageFolderPath { get; private set; } = "Stage"; //HACK hardcoded
+        [LocalizeableCategory(nameof(Dialog.FoldersCategory), typeof(Dialog)), DefaultValue("Stage")]
+        public string ScriptFolderPath { get; private set; } = "Stage";
+
         [LocalizeableCategory(nameof(Dialog.FoldersCategory), typeof(Dialog)), DefaultValue("Npc")]
         public string NpcFolderPath { get; private set; } = "Npc"; //HACK hardcoded
         #endregion
@@ -347,6 +350,7 @@ namespace CaveStoryModdingFramework
                     new XElement("Paths", 
                         new XElement("DataPath", Uri.UnescapeDataString(relativeDataPath.ToString())),
                         new XElement("StageFolder", StageFolderPath),
+                        new XElement("ScriptFolder", ScriptFolderPath),
                         new XElement("NpcFolder", NpcFolderPath)
                     ),
                     new XElement("StageTable",
@@ -458,9 +462,9 @@ namespace CaveStoryModdingFramework
                 }
             }
 
-
             var paths = root["Paths"];
             StageFolderPath = paths["StageFolder"].InnerText;
+            ScriptFolderPath = paths["ScriptFolderPath"]?.InnerText ?? ScriptFolderPath;
             NpcFolderPath = paths["NpcFolder"].InnerText;
 
             var st = root["StageTable"];
