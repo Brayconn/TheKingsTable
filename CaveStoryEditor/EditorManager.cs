@@ -9,12 +9,12 @@ namespace CaveStoryEditor
 {
     public class EditorManager
     {
-        Mod parentMod;
-        SpriteCache cache;
+        readonly Mod parentMod;
+        readonly SpriteCache cache;
         
-        List<FormStageEditor> TileEditors;
-        List<FormScriptEditor> ScriptEditors;
-        List<FormAttributeEditor> AttributeEditors;
+        readonly List<FormStageEditor> TileEditors;
+        readonly List<FormScriptEditor> ScriptEditors;
+        readonly List<FormAttributeEditor> AttributeEditors;
         
         public EditorManager(Mod parent, SpriteCache c)
         {
