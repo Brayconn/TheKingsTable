@@ -615,20 +615,25 @@ namespace CaveStoryEditor
 
         #region edit map
 
+        Point selectedTilesOffset = new Point(0,0);
         Map SelectedTiles = new Map(1, 1, 0);
         void SelectTilesFromMap(Point p)
         {
-            SelectTilesFromMap(new Rectangle(p, new Size(0, 0)));
+            SelectTilesFromMap(p, p);
         }
-        void SelectTilesFromMap(Rectangle rect)
+        void SelectTilesFromMap(Point start, Point end)
         {
+            var rect = GetRect(start, end);
+            selectedTilesOffset = new Point(end.X - rect.X, end.Y - rect.Y);
             SelectedTiles = new Map((short)(rect.Width + 1), (short)(rect.Height + 1), 0);
             for (int i = 0; i < rect.Height + 1; i++)
                 for (int j = 0; j < rect.Width + 1; j++)
                     SelectedTiles.Tiles[(i*SelectedTiles.Width) + j] = map.Tiles[((rect.Y + i) * map.Width) + rect.X + j];
         }
-        void SelectTilesFromTileset(Rectangle rect)
+        void SelectTilesFromTileset(Point start, Point end)
         {
+            var rect = GetRect(start, end);
+            selectedTilesOffset = new Point(end.X - rect.X, end.Y - rect.Y);
             SelectedTiles = new Map((short)(rect.Width + 1), (short)(rect.Height + 1), 0);
             for (int i = 0; i < rect.Height + 1; i++)
                 for (int j = 0; j < rect.Width + 1; j++)
@@ -636,13 +641,13 @@ namespace CaveStoryEditor
         }
 
 
-        void SetTiles(Point p)
+        void SetTiles(Point p, Point offset)
         {
-            SetTiles(p, SelectedTiles);
+            SetTiles(new Point(p.X - offset.X, p.Y - offset.Y), SelectedTiles);
         }
         void SetTiles(int tileNum)
         {
-            SetTiles(new Point(tileNum%map.Width, tileNum/map.Width));
+            SetTiles(new Point(tileNum%map.Width, tileNum/map.Width), new Point(0,0));
         }
         void SetTile(int tileNum, byte? tileValue)
         {
@@ -662,11 +667,15 @@ namespace CaveStoryEditor
         }
         void SetTiles(Point p, Map tileSource)
         {
-            for (int i = 0; i < Math.Min(tileSource.Height, map.Height - p.Y); i++)
+            //clamp the bottom/right boundry
+            var effectiveHeight = Math.Min(tileSource.Height, map.Height - p.Y);
+            var effectiveWidth = Math.Min(tileSource.Width, map.Width - p.X);
+            //if the coord is bigger when "* -1", that means we're outside the top/left boundry and need to clamp
+            for (int y = Math.Max(0, p.Y * -1); y < effectiveHeight; y++)
             {
-                for (int j = 0; j < Math.Min(tileSource.Width, map.Width - p.X); j++)
-                {
-                    SetTile(((p.Y + i) * map.Width) + p.X + j, tileSource.Tiles[(i * tileSource.Width) + j]);
+                for (int x = Math.Max(0, p.X * -1); x < effectiveWidth; x++)
+                { 
+                    SetTile(((p.Y + y) * map.Width) + p.X + x, tileSource.Tiles[(y * tileSource.Width) + x]);
                 }
             }
         }
@@ -1002,7 +1011,7 @@ namespace CaveStoryEditor
         void EntityContextMenu_Delete(object sender, EventArgs e)
         {
             DeleteSelectedEntities();
-            MoveMouse(lastMousePosition);
+            MoveMouse(lastMousePosition, selectedTilesOffset);
         }
         void EntityContextMenu_SelectEntity(object sender, EventArgs e)
         {
@@ -1038,13 +1047,14 @@ namespace CaveStoryEditor
                             InitUndoAction<TilesPlaced>();
                             HoldAction = HoldActions.DrawTiles;
                             mouseOverlay.Shown = false;
-                            SetTiles(tile);
+                            SetTiles(p, selectedTilesOffset);
                             mapLayeredPictureBox.Invalidate();
                             break;
                         case MouseButtons.Middle: //Making these both do the same thing since not everyone has a middle mouse button
                         case MouseButtons.Right:
                             HoldAction = HoldActions.CopyTiles;
                             mouseOverlay.Image = MakeMouseImage(parentMod.TileSize, parentMod.TileSize, UI.Default.CursorColor);
+                            MoveMouse(p, selectedTilesOffset = new Point(0, 0));
                             startMousePosition = p;
                             break;
                     }
@@ -1082,7 +1092,7 @@ namespace CaveStoryEditor
                             //Insert
                             var insert = new ToolStripMenuItem("Insert Entity");
                             insert.Enabled = entitySelected;
-                            insert.Click += delegate { if (entitySelected) { CreateNewEntity(p); MoveMouse(lastMousePosition); SafeRefreshItems(); } };
+                            insert.Click += delegate { if (entitySelected) { CreateNewEntity(p); MoveMouse(lastMousePosition, selectedTilesOffset); SafeRefreshItems(); } };
                             entityContextMenu.Items.Add(insert);
                                                         
                             //Copy
@@ -1099,7 +1109,7 @@ namespace CaveStoryEditor
                             //Paste
                             var paste = new ToolStripMenuItem("Paste");
                             paste.Enabled = entitiesInClipboard;
-                            paste.Click += delegate { PasteEntities(p); MoveMouse(lastMousePosition); SafeRefreshItems(); };
+                            paste.Click += delegate { PasteEntities(p); MoveMouse(lastMousePosition, selectedTilesOffset); SafeRefreshItems(); };
                             entityContextMenu.Items.Add(paste);
 
                             //Delete
@@ -1154,14 +1164,13 @@ namespace CaveStoryEditor
             switch (HoldAction)
             {
                 case HoldActions.DrawTiles:
-                    SetTiles(p);
+                    SetTiles(p, selectedTilesOffset);
                     mapLayeredPictureBox.Invalidate();
                     break;
                 case HoldActions.CopyTiles:
                     UpdateMouseMarquee(startMousePosition, p, mouseOverlay, parentMod.TileSize, UI.Default.CursorColor);
                     break;
                 case HoldActions.MoveEntities:
-                    //TODO change this to actually MOVE the layers with the selected things
                     MoveSelectedEntities(p);
                     mapLayeredPictureBox.Invalidate();
                     break;
@@ -1169,7 +1178,7 @@ namespace CaveStoryEditor
                     UpdateMouseMarquee(startMousePosition, p, mouseOverlay, parentMod.TileSize, UI.Default.CursorColor);
                     break;
                 default:
-                    MoveMouse(p);
+                    MoveMouse(p, selectedTilesOffset);
                     break;
 
             }
@@ -1185,7 +1194,7 @@ namespace CaveStoryEditor
                     RestoreMouseSize();
                     break;
                 case HoldActions.CopyTiles:
-                    SelectTilesFromMap(GetRect(startMousePosition, lastMousePosition));
+                    SelectTilesFromMap(startMousePosition, lastMousePosition);
                     RestoreMouseSize();
                     if(SelectedTiles.Tiles.Count == 1 && SelectedTiles.Tiles[0] != null)
                     {
@@ -1203,7 +1212,7 @@ namespace CaveStoryEditor
                     FinalizeUndoAction();
                     break;
             }
-            MoveMouse(lastMousePosition);
+            MoveMouse(lastMousePosition, selectedTilesOffset);
             mouseOverlay.Shown = true;
             HoldAction = null;
         }

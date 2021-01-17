@@ -172,9 +172,10 @@ namespace CaveStoryEditor
             }            
         }
 
-        void MoveMouse(Point gridPosition)
+        void MoveMouse(Point gridPosition, Point offset)
         {
-            mouseOverlay.Location = new Point(gridPosition.X*parentMod.TileSize, gridPosition.Y*parentMod.TileSize);
+            mouseOverlay.Location = new Point((gridPosition.X - offset.X)*parentMod.TileSize,
+                                              (gridPosition.Y - offset.Y)*parentMod.TileSize);
         }
 
 #endregion

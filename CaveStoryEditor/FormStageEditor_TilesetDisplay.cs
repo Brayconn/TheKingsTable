@@ -70,7 +70,7 @@ namespace CaveStoryEditor
         {
             if(e.Button == MouseButtons.Left)
             {
-                SelectTilesFromTileset(GetRect(attributesStartPos, attributesLastPos));
+                SelectTilesFromTileset(attributesStartPos, attributesLastPos);
                 RestoreMouseSize();
             }
         }
