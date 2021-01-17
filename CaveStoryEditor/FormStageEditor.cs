@@ -1674,7 +1674,7 @@ namespace CaveStoryEditor
             {
                 if(sfd.ShowDialog() == DialogResult.OK)
                 {
-                    mapLayeredPictureBox.Flatten().Save(sfd.FileName, formatTypes[sfd.FilterIndex - 1]);
+                    mapLayeredPictureBox.Flatten(1).Save(sfd.FileName, formatTypes[sfd.FilterIndex - 1]);
                 }
             }            
         }
