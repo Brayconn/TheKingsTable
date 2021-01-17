@@ -160,6 +160,15 @@ namespace CaveStoryModdingFramework {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cave Story Mod Project.
+        /// </summary>
+        internal static string ModFilterText {
+            get {
+                return ResourceManager.GetString("ModFilterText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Stage Table.
         /// </summary>
         internal static string ModStageTableCategory {

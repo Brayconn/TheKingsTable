@@ -150,6 +150,9 @@
   <data name="ModFilenameCategory" xml:space="preserve">
     <value>Filenames</value>
   </data>
+  <data name="ModFilterText" xml:space="preserve">
+    <value>Cave Story Mod Project</value>
+  </data>
   <data name="ModStageTableCategory" xml:space="preserve">
     <value>Stage Table</value>
   </data>

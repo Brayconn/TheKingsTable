@@ -16,7 +16,7 @@ namespace CaveStoryModdingFramework
 {
     public class Mod
     {
-        public const string CaveStoryProjectFilter = "Cave Story Mod Project (*.cav)|*.cav";
+        public static readonly string CaveStoryProjectFilter = $"{Dialog.ModFilterText} (*.cav)|*.cav";
         #region stage table
         [LocalizeableCategory(nameof(Dialog.ModStageTableCategory), typeof(Dialog))]
         public StageTableTypes StageTableFormat { get; set; }
