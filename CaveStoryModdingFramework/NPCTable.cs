@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Runtime.CompilerServices;
 using LocalizeableComponentModel;
@@ -53,6 +54,22 @@ namespace CaveStoryModdingFramework.Entities
             }
             else
                 return -1;
+        }
+    }
+
+    public class ByteRectTypeConverter : ExpandableObjectConverter
+    {
+        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
+        {
+            return destinationType == typeof(string) || base.CanConvertTo(context, destinationType);
+        }
+
+        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+        {
+            if (value is ByteRect br)
+                return string.Join(", ", br.a, br.b, br.c, br.d);
+            else
+                return base.ConvertTo(context, culture, value, destinationType);
         }
     }
 
@@ -171,12 +188,12 @@ namespace CaveStoryModdingFramework.Entities
         public int XP { get => xp; set => SetVal(ref xp, value); }
         public int Damage { get => damage; set => SetVal(ref damage, value); }
 
-        [TypeConverter(typeof(ExpandableObjectConverter))]
+        [TypeConverter(typeof(ByteRectTypeConverter))]
         public NPCHitRect Hitbox { get => hitbox; set => SetVal(ref hitbox, value); }
 
         //despite sharing the same type as Hitbox (in the original game)
         //the values here are treated completely different, hence the seperate type
-        [TypeConverter(typeof(ExpandableObjectConverter))]
+        [TypeConverter(typeof(ByteRectTypeConverter))]
         public NPCViewRect Viewbox { get => viewbox; set => SetVal(ref viewbox, value); }
 
         public NPCTableEntry()
