@@ -71,7 +71,7 @@ namespace CaveStoryEditor
                         var vbox = parentMod.NPCTable[e.Type].Viewbox;
 
                         var half = (parentMod.TileSize / 2);
-                        var x = e.X * parentMod.TileSize + half - vbox.LeftOffset;
+                        var x = e.X * parentMod.TileSize + half - (((e.Flag | (short)CaveStoryModdingFramework.Entities.EntityFlags.SpawnInOtherDirection) != 0) ? vbox.RightOffset : vbox.LeftOffset);
                         var y = e.Y * parentMod.TileSize + half - vbox.YOffset;
                         g.DrawImage(img, x, y, img.Width, img.Height);
                     }
