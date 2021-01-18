@@ -46,6 +46,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes.cs" />
+    <Compile Include="Lists\BackgroundTypeNames.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BackgroundTypeNames.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Lists\BackgroundTypes.cs" />
+    <Compile Include="Lists\Bosses.cs" />
+    <Compile Include="Lists\BossNames.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BossNames.resx</DependentUpon>
+    </Compile>
     <Compile Include="Rectangles.cs" />
     <Compile Include="Dialog.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -53,7 +65,7 @@
       <DependentUpon>Dialog.resx</DependentUpon>
     </Compile>
     <Compile Include="EntityInfoTXT.cs" />
-    <Compile Include="SurfaceNames.Designer.cs">
+    <Compile Include="Lists\SurfaceNames.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>SurfaceNames.resx</DependentUpon>
@@ -72,8 +84,8 @@
     <Compile Include="Mod.cs" />
     <Compile Include="NPCTable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SmokeSize.cs" />
-    <Compile Include="Sounds.cs" />
+    <Compile Include="Lists\SmokeSize.cs" />
+    <Compile Include="Lists\Sounds.cs" />
     <Compile Include="StageTable.cs" />
     <Compile Include="Surfaces.cs" />
   </ItemGroup>
@@ -96,7 +108,15 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Dialog.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="SurfaceNames.resx">
+    <EmbeddedResource Include="Lists\BackgroundTypeNames.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>BackgroundTypeNames.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Lists\BossNames.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>BossNames.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Lists\SurfaceNames.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>SurfaceNames.Designer.cs</LastGenOutput>
     </EmbeddedResource>
