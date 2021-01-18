@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace CaveStoryModdingFramework
 {
     public static class SoundEffects
     {
-        public static readonly Dictionary<int, string> SoundEffectList = new Dictionary<int, string>()
+        //TODO this is going to be a mess to move to a resources file...
+        public static readonly ReadOnlyDictionary<int, string> SoundEffectList
+            = new ReadOnlyDictionary<int, string>(new Dictionary<int, string>()
         {
             {0,"Silent"},
             {1,"Y/N Change Choice"},
@@ -171,6 +170,6 @@ namespace CaveStoryModdingFramework
             {158,"Silence"},
             {159,"Silence"},
             {160,"MAX"},
-        };
+        });
     }
 }

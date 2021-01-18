@@ -22,14 +22,14 @@ namespace CaveStoryModdingFramework {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class BackgroundTypeNames {
+    internal class BossNames {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal BackgroundTypeNames() {
+        internal BossNames() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace CaveStoryModdingFramework {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CaveStoryModdingFramework.Lists.BackgroundTypeNames", typeof(BackgroundTypeNames).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CaveStoryModdingFramework.BossNames", typeof(BossNames).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,74 +61,92 @@ namespace CaveStoryModdingFramework {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fixed To Camera.
+        ///   Looks up a localized string similar to Balfrog.
         /// </summary>
-        internal static string FixedToCamera {
+        internal static string Balfrog {
             get {
-                return ResourceManager.GetString("FixedToCamera", resourceCulture);
+                return ResourceManager.GetString("Balfrog", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fixed To Foreground.
+        ///   Looks up a localized string similar to Ballos (Ball).
         /// </summary>
-        internal static string FixedToForeground {
+        internal static string BallosBall {
             get {
-                return ResourceManager.GetString("FixedToForeground", resourceCulture);
+                return ResourceManager.GetString("BallosBall", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Follow Slowly.
+        ///   Looks up a localized string similar to The Core.
         /// </summary>
-        internal static string FollowSlowly {
+        internal static string Core {
             get {
-                return ResourceManager.GetString("FollowSlowly", resourceCulture);
+                return ResourceManager.GetString("Core", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No Draw.
+        ///   Looks up a localized string similar to Heavy Press.
         /// </summary>
-        internal static string NoDraw {
+        internal static string HeavyPress {
             get {
-                return ResourceManager.GetString("NoDraw", resourceCulture);
+                return ResourceManager.GetString("HeavyPress", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parallax.
+        ///   Looks up a localized string similar to Ironhead.
         /// </summary>
-        internal static string Parallax {
+        internal static string Ironhead {
             get {
-                return ResourceManager.GetString("Parallax", resourceCulture);
+                return ResourceManager.GetString("Ironhead", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parallax (Items).
+        ///   Looks up a localized string similar to Monster X.
         /// </summary>
-        internal static string ParallaxItems {
+        internal static string MonsterX {
             get {
-                return ResourceManager.GetString("ParallaxItems", resourceCulture);
+                return ResourceManager.GetString("MonsterX", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Scroll (Items).
+        ///   Looks up a localized string similar to None.
         /// </summary>
-        internal static string ScrollItems {
+        internal static string None {
             get {
-                return ResourceManager.GetString("ScrollItems", resourceCulture);
+                return ResourceManager.GetString("None", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Water.
+        ///   Looks up a localized string similar to Omega.
         /// </summary>
-        internal static string Water {
+        internal static string Omega {
             get {
-                return ResourceManager.GetString("Water", resourceCulture);
+                return ResourceManager.GetString("Omega", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Sisters.
+        /// </summary>
+        internal static string Sisters {
+            get {
+                return ResourceManager.GetString("Sisters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Undead Core.
+        /// </summary>
+        internal static string UndeadCore {
+            get {
+                return ResourceManager.GetString("UndeadCore", resourceCulture);
             }
         }
     }

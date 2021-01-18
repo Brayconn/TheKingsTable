@@ -259,6 +259,8 @@ namespace CaveStoryModdingFramework
             //TODO related to the one above
             SoundEffects = new Dictionary<int, string>(CaveStoryModdingFramework.SoundEffects.SoundEffectList);
             SmokeSizes = new Dictionary<int, string>(CaveStoryModdingFramework.SmokeSizes.SmokeSizeList);
+            BossNumbers = new Dictionary<int, string>(CaveStoryModdingFramework.Bosses.BossNameList);
+            BackgroundTypes = new Dictionary<int, string>(CaveStoryModdingFramework.BackgroundTypes.BackgroundTypeList);
 
             EntityInfos = new Dictionary<int, EntityInfo>(EntityList.EntityInfos);
         }

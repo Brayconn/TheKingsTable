@@ -13,30 +13,6 @@ using System.Xml;
 
 namespace CaveStoryModdingFramework.Stages
 {
-    public enum BackgroundTypes
-    {
-        FixedToCamera = 0,
-        FollowSlowly,
-        FixedToForeground,
-        Water,
-        NoDraw,
-        ScrollItems,
-        ParallaxItems,
-        Parallax
-    }
-    public enum BossNumbers
-    {
-        None = 0,
-        Omega,
-        Balfrog,
-        MonsterX,
-        Core,
-        Ironhead,
-        Sisters,
-        UndeadCore,
-        HeavyPress,
-        BallosBall
-    }
     public class StageEntry : INotifyPropertyChanging, INotifyPropertyChanged, ICloneable
     {
         public event PropertyChangingEventHandler PropertyChanging;
@@ -61,16 +37,15 @@ namespace CaveStoryModdingFramework.Stages
         }
 
         string tilesetName, filename, backgroundName, spritesheet1, spritesheet2, japaneseName, mapName;
-        BackgroundTypes backgroundType;
-        BossNumbers bossNumber;
+        long backgroundType, bossNumber;
         public string TilesetName { get => tilesetName; set => SetVal(ref tilesetName, value); }
         //SW doesn't allow "\empty" as a name, it won't show them n stuff
         public string Filename { get => filename; set => SetVal(ref filename,value); }
-        public BackgroundTypes BackgroundType { get => backgroundType; set => SetVal(ref backgroundType, value); }
+        public long BackgroundType { get => backgroundType; set => SetVal(ref backgroundType, value); }
         public string BackgroundName { get => backgroundName; set => SetVal(ref backgroundName,value); }
         public string Spritesheet1 { get => spritesheet1; set => SetVal(ref spritesheet1, value); }
         public string Spritesheet2 { get => spritesheet2; set => SetVal(ref spritesheet2, value); }
-        public BossNumbers BossNumber { get => bossNumber; set => SetVal(ref bossNumber, value); }
+        public long BossNumber { get => bossNumber; set => SetVal(ref bossNumber, value); }
         public string JapaneseName { get => japaneseName; set => SetVal(ref japaneseName, value); }
         public string MapName { get => mapName; set => SetVal(ref mapName, value); }
 
@@ -517,12 +492,12 @@ namespace CaveStoryModdingFramework.Stages
             {
                 TilesetName = br.ReadString(settings.TilesetNameBuffer, settings.FilenameEncoding),
                 Filename = br.ReadString(settings.FilenameBuffer, settings.FilenameEncoding),
-                BackgroundType = (BackgroundTypes)br.Read(settings.BackgroundTypeType),
+                BackgroundType = (long)br.Read(settings.BackgroundTypeType),
                 BackgroundName = br.ReadString(settings.BackgroundNameBuffer, settings.FilenameEncoding),
                 Spritesheet1 = br.ReadString(settings.Spritesheet1Buffer, settings.FilenameEncoding),
                 Spritesheet2 = br.ReadString(settings.Spritesheet2Buffer, settings.FilenameEncoding),
                 JapaneseName = br.ReadString(settings.JapaneseNameBuffer, settings.JapaneseNameEncoding),
-                BossNumber = (BossNumbers)br.Read(settings.BossNumberType),
+                BossNumber = (long)br.Read(settings.BossNumberType),
                 MapName = br.ReadString(settings.MapNameBuffer, settings.MapNameEncoding),
             };
             br.BaseStream.Seek(settings.Padding, SeekOrigin.Current);
