@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace CaveStoryModdingFramework
 {
@@ -20,16 +17,6 @@ namespace CaveStoryModdingFramework
                 return max;
 
             return value;
-        }
-
-        /// <summary>
-        /// Reinterprets any string as its ASCII counterpart
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public static string ToASCII(this string value)
-        {
-            return Encoding.ASCII.GetString(Encoding.ASCII.GetBytes(value));
         }
 
         //TODO this should really go in filephoenix.extensions at some point
@@ -75,6 +62,7 @@ namespace CaveStoryModdingFramework
                 : BitConverter.GetBytes(conv);
         }
 
+        /*
         public static T?[] ToNullable<T>(this T[] array) where T : struct
         {
             T?[] output = new T?[array.Length];
@@ -89,5 +77,6 @@ namespace CaveStoryModdingFramework
                 output[i] = array[i] ?? default;
             return output;
         }
+        */
     }
 }
