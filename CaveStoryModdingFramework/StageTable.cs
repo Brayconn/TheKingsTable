@@ -275,12 +275,17 @@ namespace CaveStoryModdingFramework.Stages
             BackgroundTypeType = Type.GetType(xml[nameof(BackgroundTypeType)].InnerText);
             BossNumberType = Type.GetType(xml[nameof(BossNumberType)].InnerText);
 
-            if (!string.IsNullOrEmpty(xml[nameof(FilenameEncoding)]?.InnerText))
-                FilenameEncoding = Encoding.GetEncoding(xml[nameof(FilenameEncoding)]?.InnerText ?? "");
-            if (!string.IsNullOrEmpty(xml[nameof(MapNameEncoding)]?.InnerText))
-                MapNameEncoding = Encoding.GetEncoding(xml[nameof(MapNameEncoding)]?.InnerText ?? "");
-            if(!string.IsNullOrEmpty(xml[nameof(JapaneseNameEncoding)]?.InnerText))
-                JapaneseNameEncoding = Encoding.GetEncoding(xml[nameof(JapaneseNameEncoding)]?.InnerText ?? "");
+            Encoding ReadEncoding(XmlElement element)
+            {
+                var str = element?.InnerText;
+                if (!string.IsNullOrWhiteSpace(str))
+                    return Encoding.GetEncoding(str);
+                else
+                    return null;
+            }
+            FilenameEncoding = ReadEncoding(xml[nameof(FilenameEncoding)]);
+            MapNameEncoding = ReadEncoding(xml[nameof(MapNameEncoding)]);
+            JapaneseNameEncoding = ReadEncoding(xml[nameof(JapaneseNameEncoding)]);
 
             TilesetNameBuffer = int.Parse(xml[nameof(TilesetNameBuffer)].InnerText);
             FilenameBuffer = int.Parse(xml[nameof(FilenameBuffer)].InnerText);
