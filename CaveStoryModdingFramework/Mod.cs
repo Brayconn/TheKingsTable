@@ -212,10 +212,10 @@ namespace CaveStoryModdingFramework
         public Dictionary<int, string> SmokeSizes { get; private set; } = new Dictionary<int, string>();
 
         [Browsable(false)]
-        public Dictionary<int, string> BossNumbers { get; private set; } = new Dictionary<int, string>();
+        public Dictionary<long, string> BossNumbers { get; private set; } = new Dictionary<long, string>();
 
         [Browsable(false)]
-        public Dictionary<int, string> BackgroundTypes { get; private set; } = new Dictionary<int, string>();
+        public Dictionary<long, string> BackgroundTypes { get; private set; } = new Dictionary<long, string>();
 
         #endregion
 
@@ -259,8 +259,8 @@ namespace CaveStoryModdingFramework
             //TODO related to the one above
             SoundEffects = new Dictionary<int, string>(CaveStoryModdingFramework.SoundEffects.SoundEffectList);
             SmokeSizes = new Dictionary<int, string>(CaveStoryModdingFramework.SmokeSizes.SmokeSizeList);
-            BossNumbers = new Dictionary<int, string>(CaveStoryModdingFramework.Bosses.BossNameList);
-            BackgroundTypes = new Dictionary<int, string>(CaveStoryModdingFramework.BackgroundTypes.BackgroundTypeList);
+            BossNumbers = new Dictionary<long, string>(CaveStoryModdingFramework.Bosses.BossNameList);
+            BackgroundTypes = new Dictionary<long, string>(CaveStoryModdingFramework.BackgroundTypes.BackgroundTypeList);
 
             EntityInfos = new Dictionary<int, EntityInfo>(EntityList.EntityInfos);
         }
@@ -336,7 +336,7 @@ namespace CaveStoryModdingFramework
                 }
                 return @base;
             }
-            XElement SerializeDict(IDictionary<int, string> dict, string name, string valName, string keyName = "Key")
+            XElement SerializeDict<T>(IDictionary<T, string> dict, string name, string valName, string keyName = "Key")
             {
                 var @base = new XElement(name);
                 foreach (var item in dict)
@@ -463,6 +463,13 @@ namespace CaveStoryModdingFramework
                     dict.Add(int.Parse(item.GetAttribute("Key")), item.InnerText);
                 }
             }
+            void LoadLongDict(XmlElement element, IDictionary<long, string> dict)
+            {
+                foreach (XmlElement item in element.ChildNodes)
+                {
+                    dict.Add(long.Parse(item.GetAttribute("Key")), item.InnerText);
+                }
+            }
 
             var paths = root["Paths"];
             StageFolderPath = paths["StageFolder"].InnerText;
@@ -516,8 +523,8 @@ namespace CaveStoryModdingFramework
             LoadSurfaces(root["SurfaceList"], SurfaceDescriptors);
             LoadDict(root["SoundEffects"], SoundEffects);
             LoadDict(root["SmokeSizes"], SmokeSizes);
-            LoadDict(root["BossNumbers"], BossNumbers);
-            LoadDict(root["BackgroundTypes"], BackgroundTypes);
+            LoadLongDict(root["BossNumbers"], BossNumbers);
+            LoadLongDict(root["BackgroundTypes"], BackgroundTypes);
 
             StageTable = Stages.StageTable.Load(StageTableLocation, StageTableFormat);
             NPCTable = Entities.NPCTable.Load(Path.Combine(DataFolderPath, Entities.NPCTable.NPCTBL));

@@ -5,7 +5,8 @@ namespace CaveStoryModdingFramework
 {
     public static class BackgroundTypes
     {
-        public static readonly ReadOnlyDictionary<int, string> BackgroundTypeList = new ReadOnlyDictionary<int, string>(new Dictionary<int, string>()
+        public static readonly ReadOnlyDictionary<long, string> BackgroundTypeList
+            = new ReadOnlyDictionary<long, string>(new Dictionary<long, string>()
         {
             {0, BackgroundTypeNames.FixedToCamera },
             {1, BackgroundTypeNames.FollowSlowly },

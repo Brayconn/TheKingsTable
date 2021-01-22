@@ -277,7 +277,7 @@
             // 
             this.loadEntityInfotxtToolStripMenuItem.Enabled = false;
             this.loadEntityInfotxtToolStripMenuItem.Name = "loadEntityInfotxtToolStripMenuItem";
-            this.loadEntityInfotxtToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.loadEntityInfotxtToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.loadEntityInfotxtToolStripMenuItem.Text = "Load EntityInfo.txt";
             this.loadEntityInfotxtToolStripMenuItem.Click += new System.EventHandler(this.loadEntityInfotxtToolStripMenuItem_Click);
             // 
@@ -337,6 +337,7 @@
             this.stageTableDataGridView.Size = new System.Drawing.Size(578, 394);
             this.stageTableDataGridView.TabIndex = 0;
             this.stageTableDataGridView.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.stageTableDataGridView_CellFormatting);
+            this.stageTableDataGridView.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.StageTableDataGridView_DataError);
             this.stageTableDataGridView.SelectionChanged += new System.EventHandler(this.stageTableDataGridView_SelectionChanged);
             // 
             // tableLayoutPanel7

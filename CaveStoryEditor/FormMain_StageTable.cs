@@ -1,5 +1,6 @@
 ﻿using CaveStoryModdingFramework.Stages;
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace CaveStoryEditor
@@ -7,10 +8,12 @@ namespace CaveStoryEditor
     partial class FormMain
     {
         const string IndexColumnName = "Index";
+        const string ColumnPostFix = "Column";
         void InitStageTableColumns()
         {
             stageTableDataGridView.Columns.Clear();
 
+            #region index column
             //index column belongs no matter what
             var indexColumn = new DataGridViewColumn()
             {
@@ -25,24 +28,36 @@ namespace CaveStoryEditor
             TextRenderer.MeasureText(mod.StageTable.Count.ToString(), indexColumn.CellTemplate.Style.Font).Width
             );
             stageTableDataGridView.Columns.Add(indexColumn);
-
-
-            void AddCustomColumn(string Text, string Property, Type t, DataGridViewCell template)
+            #endregion
+                        
+            void AddComboBoxColumn<T>(string Text, string Property, IDictionary<T, string> dict)
             {
+                var list = new List<KeyValuePair<T, string>>(dict.Count);
+                foreach (var item in dict)
+                    list.Add(item);
                 stageTableDataGridView.Columns.Add(new DataGridViewColumn()
                 {
                     HeaderText = Text,
-                    Name = Property + "Column",
+                    Name = Property + ColumnPostFix,
                     DataPropertyName = Property,
-                    CellTemplate = template,
-                    ValueType = t
+                    CellTemplate = new DataGridViewComboBoxCell()
+                    {
+                        ValueMember = "Key",
+                        DisplayMember = "Value",
+                        DataSource = list
+                    },
+                    ValueType = typeof(T)
                 });
             }
             void AddColumn(string Text, string Property)
             {
-                AddCustomColumn(Text, Property, typeof(string), new DataGridViewTextBoxCell()
+                stageTableDataGridView.Columns.Add(new DataGridViewColumn()
                 {
-
+                    HeaderText = Text,
+                    Name = Property + ColumnPostFix,
+                    DataPropertyName = Property,
+                    CellTemplate = new DataGridViewTextBoxCell(),
+                    ValueType = typeof(string)
                 });
             }
             //adding the actual content
@@ -52,17 +67,51 @@ namespace CaveStoryEditor
                 AddColumn("Japanese Name", nameof(StageEntry.JapaneseName));
             AddColumn("Tileset", nameof(StageEntry.TilesetName));
             AddColumn("Filename", nameof(StageEntry.Filename));
-            AddCustomColumn("Background Type", nameof(StageEntry.BackgroundType), typeof(BackgroundTypes), new DataGridViewComboBoxCell()
-            {
-                DataSource = Enum.GetValues(typeof(BackgroundTypes))
-            });
+
+            AddComboBoxColumn("Background Type", nameof(StageEntry.BackgroundType), mod.BackgroundTypes);
+            
             AddColumn("Background Name", nameof(StageEntry.BackgroundName));
             AddColumn("Spritesheet 1", nameof(StageEntry.Spritesheet1));
             AddColumn("Spritesheet 2", nameof(StageEntry.Spritesheet2));
-            AddCustomColumn("Boss Number", nameof(StageEntry.BossNumber), typeof(BossNumbers), new DataGridViewComboBoxCell()
+            
+            AddComboBoxColumn("Boss Number", nameof(StageEntry.BossNumber), mod.BossNumbers);
+        }
+
+        private void StageTableDataGridView_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+            var cell = stageTableDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
+            switch (cell.OwningColumn.Name)
             {
-                DataSource = Enum.GetValues(typeof(BossNumbers))
-            });
+                case nameof(StageEntry.BackgroundType) + ColumnPostFix:
+                    e.Cancel = true;
+                    break;
+                case nameof(StageEntry.BossNumber) + ColumnPostFix:
+                    e.Cancel = true;
+                    break;
+            }
+        }
+
+        private void stageTableDataGridView_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            //filter to valid rows
+            if (0 <= e.RowIndex && e.RowIndex < stageTableDataGridView.NewRowIndex)
+            {
+                var cell = stageTableDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
+                switch (cell.OwningColumn.Name)
+                {
+                    case IndexColumnName:
+                        e.Value = e.RowIndex;
+                        break;
+                    case nameof(StageEntry.BackgroundType) + ColumnPostFix:
+                        if(string.IsNullOrWhiteSpace((string)e.Value))
+                            e.Value = "???";
+                        break;
+                    case nameof(StageEntry.BossNumber) + ColumnPostFix:
+                        if (string.IsNullOrWhiteSpace((string)e.Value))
+                            e.Value = "???";
+                        break;
+                }
+            }
         }
 
         private void stageTableDataGridView_SelectionChanged(object sender, EventArgs e)
@@ -78,18 +127,6 @@ namespace CaveStoryEditor
             else
             {
                 stageTablePropertyGrid.SelectedObject = null;
-            }
-        }
-
-        private void stageTableDataGridView_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
-        {
-            //filter to valid rows
-            if (0 <= e.RowIndex && e.RowIndex < stageTableDataGridView.NewRowIndex
-                //filter to index column
-                && stageTableDataGridView.Columns[e.ColumnIndex].Name == IndexColumnName)
-            {
-                //set the index
-                e.Value = e.RowIndex;
             }
         }
 
