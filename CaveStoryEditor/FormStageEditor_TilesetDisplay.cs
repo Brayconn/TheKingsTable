@@ -24,9 +24,10 @@ namespace CaveStoryEditor
             var tileset = new Bitmap(TilesetWidth * parentMod.TileSize, TilesetHeight * parentMod.TileSize);
             using (Graphics g = Graphics.FromImage(tileset))
             {
-                g.Clear(Color.Black);
+                g.Clear(parentMod.TransparentColor);
                 g.DrawImage(t, 0, 0, t.Width, t.Height);
             }
+            tileset.MakeTransparent(parentMod.TransparentColor);
             
             var tiletypes = new Bitmap(TilesetWidth * parentMod.TileSize, TilesetHeight * parentMod.TileSize);
             RenderTiles(tiletypes, attributes, tileTypes, parentMod.TileSize);
