@@ -52,6 +52,8 @@
             this.openTilesButton = new System.Windows.Forms.Button();
             this.openScriptButton = new System.Windows.Forms.Button();
             this.openBothButton = new System.Windows.Forms.Button();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.label13 = new System.Windows.Forms.Label();
             this.npcTableTabPage = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
@@ -118,6 +120,7 @@
             this.modSettingsTabPage = new System.Windows.Forms.TabPage();
             this.modPropertyGrid = new System.Windows.Forms.PropertyGrid();
             this.editorSettingsTabPage = new System.Windows.Forms.TabPage();
+            this.insertButton = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.mainTabControl.SuspendLayout();
             this.stageTableTabPage.SuspendLayout();
@@ -339,20 +342,27 @@
             this.stageTableDataGridView.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.stageTableDataGridView_CellFormatting);
             this.stageTableDataGridView.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.StageTableDataGridView_DataError);
             this.stageTableDataGridView.SelectionChanged += new System.EventHandler(this.stageTableDataGridView_SelectionChanged);
+            this.stageTableDataGridView.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.stageTableDataGridView_UserAddedRow);
+            this.stageTableDataGridView.UserDeletedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.stageTableDataGridView_UserDeletedRow);
             // 
             // tableLayoutPanel7
             // 
             this.tableLayoutPanel7.ColumnCount = 2;
             this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel7.Controls.Add(this.stageTablePropertyGrid, 0, 3);
-            this.tableLayoutPanel7.Controls.Add(this.openTilesButton, 0, 0);
-            this.tableLayoutPanel7.Controls.Add(this.openScriptButton, 1, 0);
-            this.tableLayoutPanel7.Controls.Add(this.openBothButton, 0, 1);
+            this.tableLayoutPanel7.Controls.Add(this.stageTablePropertyGrid, 0, 5);
+            this.tableLayoutPanel7.Controls.Add(this.openTilesButton, 0, 1);
+            this.tableLayoutPanel7.Controls.Add(this.openScriptButton, 1, 1);
+            this.tableLayoutPanel7.Controls.Add(this.openBothButton, 0, 2);
+            this.tableLayoutPanel7.Controls.Add(this.comboBox1, 1, 0);
+            this.tableLayoutPanel7.Controls.Add(this.label13, 0, 0);
+            this.tableLayoutPanel7.Controls.Add(this.insertButton, 0, 3);
             this.tableLayoutPanel7.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel7.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel7.Name = "tableLayoutPanel7";
-            this.tableLayoutPanel7.RowCount = 4;
+            this.tableLayoutPanel7.RowCount = 6;
+            this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
+            this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -364,16 +374,16 @@
             // 
             this.tableLayoutPanel7.SetColumnSpan(this.stageTablePropertyGrid, 2);
             this.stageTablePropertyGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.stageTablePropertyGrid.Location = new System.Drawing.Point(3, 229);
+            this.stageTablePropertyGrid.Location = new System.Drawing.Point(3, 258);
             this.stageTablePropertyGrid.Name = "stageTablePropertyGrid";
-            this.stageTablePropertyGrid.Size = new System.Drawing.Size(198, 162);
+            this.stageTablePropertyGrid.Size = new System.Drawing.Size(198, 133);
             this.stageTablePropertyGrid.TabIndex = 0;
             // 
             // openTilesButton
             // 
             this.openTilesButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.openTilesButton.Enabled = false;
-            this.openTilesButton.Location = new System.Drawing.Point(3, 3);
+            this.openTilesButton.Location = new System.Drawing.Point(3, 32);
             this.openTilesButton.Name = "openTilesButton";
             this.openTilesButton.Size = new System.Drawing.Size(96, 23);
             this.openTilesButton.TabIndex = 1;
@@ -385,7 +395,7 @@
             // 
             this.openScriptButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.openScriptButton.Enabled = false;
-            this.openScriptButton.Location = new System.Drawing.Point(105, 3);
+            this.openScriptButton.Location = new System.Drawing.Point(105, 32);
             this.openScriptButton.Name = "openScriptButton";
             this.openScriptButton.Size = new System.Drawing.Size(96, 23);
             this.openScriptButton.TabIndex = 2;
@@ -398,13 +408,30 @@
             this.tableLayoutPanel7.SetColumnSpan(this.openBothButton, 2);
             this.openBothButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.openBothButton.Enabled = false;
-            this.openBothButton.Location = new System.Drawing.Point(3, 32);
+            this.openBothButton.Location = new System.Drawing.Point(3, 61);
             this.openBothButton.Name = "openBothButton";
             this.openBothButton.Size = new System.Drawing.Size(198, 23);
             this.openBothButton.TabIndex = 3;
             this.openBothButton.Text = "Open Both";
             this.openBothButton.UseVisualStyleBackColor = true;
             this.openBothButton.Click += new System.EventHandler(this.openBothButton_Click);
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(105, 3);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(96, 21);
+            this.comboBox1.TabIndex = 4;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(3, 0);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(41, 13);
+            this.label13.TabIndex = 5;
+            this.label13.Text = "label13";
             // 
             // npcTableTabPage
             // 
@@ -1253,6 +1280,16 @@
             this.editorSettingsTabPage.Text = "Editor Settings";
             this.editorSettingsTabPage.UseVisualStyleBackColor = true;
             // 
+            // insertButton
+            // 
+            this.insertButton.Location = new System.Drawing.Point(3, 90);
+            this.insertButton.Name = "insertButton";
+            this.insertButton.Size = new System.Drawing.Size(75, 23);
+            this.insertButton.TabIndex = 6;
+            this.insertButton.Text = "Insert Entry";
+            this.insertButton.UseVisualStyleBackColor = true;
+            this.insertButton.Click += new System.EventHandler(this.insertButton_Click);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1274,6 +1311,7 @@
             this.splitContainer3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.stageTableDataGridView)).EndInit();
             this.tableLayoutPanel7.ResumeLayout(false);
+            this.tableLayoutPanel7.PerformLayout();
             this.npcTableTabPage.ResumeLayout(false);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
@@ -1412,6 +1450,9 @@
         private System.Windows.Forms.Button openBothButton;
         private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loadEntityInfotxtToolStripMenuItem;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Button insertButton;
     }
 }
 

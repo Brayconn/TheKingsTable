@@ -34,7 +34,8 @@ namespace CaveStoryEditor
 
             mod.ImageExtensionChanged += Mod_ImageExtensionChanged;
             mod.TSCExtensionChanged += Mod_TSCExtensionChanged;
-            
+            mod.StageTableTypeChanged += Mod_StageTableTypeChanged;
+
             modPropertyGrid.SelectedObject = mod;
 
             InitCheckboxList();
@@ -48,20 +49,23 @@ namespace CaveStoryEditor
             //stage table
             stageTableBinding = new BindingSource(new BindingList<StageEntry>(mod.StageTable), null)
             {
-
+                
             };
             InitStageTableColumns();
             stageTableDataGridView.DataSource = stageTableBinding;
-
+            
+            //asset tab
             FillListbox(pxmListBox, mod.StageExtension);
             FillListbox(pxeListBox, mod.EntityExtension);
             FillListbox(imageListBox, mod.ImageExtension);
             FillListbox(scriptListBox, mod.TSCExtension);
             FillListbox(attributeListBox, mod.AttributeExtension);
 
-            //stage table
+
+            //Menu buttons
             saveStageTableToolStripMenuItem.Enabled = true;
             exportStageTableToolStripMenuItem.Enabled = true;
+            UpdateAddRemove();
 
             //npc table
             npcTableListBox.DataSource = mod.NPCTable;
@@ -73,6 +77,11 @@ namespace CaveStoryEditor
 
             InitScriptWatcher();
             InitImageWatcher();
+        }
+
+        private void Mod_StageTableTypeChanged(object sender, EventArgs e)
+        {
+            
         }
 
         private void Mod_TSCExtensionChanged(object sender, EventArgs e)

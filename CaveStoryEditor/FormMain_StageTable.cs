@@ -93,8 +93,10 @@ namespace CaveStoryEditor
 
         private void stageTableDataGridView_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            //filter to valid rows
-            if (0 <= e.RowIndex && e.RowIndex < stageTableDataGridView.NewRowIndex)
+            //no negative rows
+            if (0 <= e.RowIndex &&
+                //either the NewRowIndex doesn't exist, or the row we're on has to be lower
+                (stageTableDataGridView.NewRowIndex == -1 || e.RowIndex < stageTableDataGridView.NewRowIndex))
             {
                 var cell = stageTableDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
                 switch (cell.OwningColumn.Name)
@@ -126,6 +128,39 @@ namespace CaveStoryEditor
             {
                 stageTablePropertyGrid.SelectedObject = null;
             }
+        }
+
+        private void insertButton_Click(object sender, EventArgs e)
+        {
+            mod.StageTable.Insert(stageTableDataGridView.SelectedRows[0].Index, new StageEntry());
+            stageTableBinding.ResetBindings(false);
+            UpdateAddRemove();
+        }
+
+        void UpdateAddRemove()
+        {
+            switch (mod.StageTableFormat)
+            {
+                case StageTableTypes.doukutsuexe:
+                    stageTableDataGridView.AllowUserToAddRows = mod.StageTable.Count * mod.StageTableSettings.Size < StageTable.CSStageTableSize;
+                    break;
+                case StageTableTypes.stagetbl:
+                    //TODO max value is 95 or something?
+                default:
+                    stageTableDataGridView.AllowUserToAddRows = true;
+                    break;
+            }
+            insertButton.Enabled = stageTableDataGridView.AllowUserToAddRows;
+        }
+
+        private void stageTableDataGridView_UserAddedRow(object sender, DataGridViewRowEventArgs e)
+        {
+            UpdateAddRemove();
+        }
+
+        private void stageTableDataGridView_UserDeletedRow(object sender, DataGridViewRowEventArgs e)
+        {
+            UpdateAddRemove();
         }
 
         private void saveStageTableToolStripMenuItem_Click(object sender, EventArgs e)

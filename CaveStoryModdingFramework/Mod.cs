@@ -18,10 +18,26 @@ namespace CaveStoryModdingFramework
     {
         public static readonly string CaveStoryProjectFilter = $"{Dialog.ModFilterText} (*.cav)|*.cav";
         #region stage table
+
+        public event EventHandler StageTableTypeChanged;
+        StageTableTypes stageTableType;
         [LocalizeableCategory(nameof(Dialog.ModStageTableCategory), typeof(Dialog))]
-        public StageTableTypes StageTableFormat { get; set; }
+        public StageTableTypes StageTableFormat
+        {
+            get => stageTableType;
+            set
+            {
+                if(stageTableType != value)
+                {
+                    stageTableType = value;
+                    StageTableTypeChanged?.Invoke(this, new EventArgs());
+                }
+            }
+        }
+
         [LocalizeableCategory(nameof(Dialog.ModStageTableCategory), typeof(Dialog)), TypeConverter(typeof(ExpandableObjectConverter))]
         public StageEntrySettings StageTableSettings { get; }
+        
         [LocalizeableCategory(nameof(Dialog.ModStageTableCategory), typeof(Dialog))]
         public string StageTableLocation { get; set; }
         #endregion
