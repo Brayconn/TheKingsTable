@@ -103,12 +103,10 @@ namespace CaveStoryEditor
                         e.Value = e.RowIndex;
                         break;
                     case nameof(StageEntry.BackgroundType) + ColumnPostFix:
-                        if(string.IsNullOrWhiteSpace((string)e.Value))
-                            e.Value = "???";
+                        e.Value = $"{mod.StageTable[e.RowIndex].BackgroundType} - {e.Value ?? "???"}";
                         break;
                     case nameof(StageEntry.BossNumber) + ColumnPostFix:
-                        if (string.IsNullOrWhiteSpace((string)e.Value))
-                            e.Value = "???";
+                        e.Value = $"{mod.StageTable[e.RowIndex].BossNumber} - {e.Value ?? "???"}";
                         break;
                 }
             }
