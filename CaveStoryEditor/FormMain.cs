@@ -53,7 +53,12 @@ namespace CaveStoryEditor
             };
             InitStageTableColumns();
             stageTableDataGridView.DataSource = stageTableBinding;
-            
+
+            //setup stage table type quick switcher
+            if(stageTableFormatComboBox.DataSource == null)
+                stageTableFormatComboBox.DataSource = Enum.GetValues(typeof(StageTableTypes));
+            stageTableFormatComboBox.Enabled = true;
+
             //asset tab
             FillListbox(pxmListBox, mod.StageExtension);
             FillListbox(pxeListBox, mod.EntityExtension);
@@ -65,7 +70,7 @@ namespace CaveStoryEditor
             //Menu buttons
             saveStageTableToolStripMenuItem.Enabled = true;
             exportStageTableToolStripMenuItem.Enabled = true;
-            UpdateAddRemove();
+            UpdateCanAddStageTableEntries();
 
             //npc table
             npcTableListBox.DataSource = mod.NPCTable;
@@ -79,9 +84,31 @@ namespace CaveStoryEditor
             InitImageWatcher();
         }
 
+        bool lockMod = false;
+        private void stageTableFormatComboBox_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            if (!lockMod)
+            {
+                lockMod = true;
+                
+                mod.StageTableFormat = (StageTableTypes)stageTableFormatComboBox.SelectedItem;
+                UpdateCanAddStageTableEntries();
+                
+                lockMod = false;
+            }
+        }
+
         private void Mod_StageTableTypeChanged(object sender, EventArgs e)
         {
-            
+            if (!lockMod)
+            {
+                lockMod = true;
+
+                stageTableFormatComboBox.SelectedItem = mod.StageTableFormat;
+                UpdateCanAddStageTableEntries();
+                
+                lockMod = false;
+            }
         }
 
         private void Mod_TSCExtensionChanged(object sender, EventArgs e)

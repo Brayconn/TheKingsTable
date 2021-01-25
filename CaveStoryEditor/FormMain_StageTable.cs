@@ -134,10 +134,10 @@ namespace CaveStoryEditor
         {
             mod.StageTable.Insert(stageTableDataGridView.SelectedRows[0].Index, new StageEntry());
             stageTableBinding.ResetBindings(false);
-            UpdateAddRemove();
+            UpdateCanAddStageTableEntries();
         }
 
-        void UpdateAddRemove()
+        void UpdateCanAddStageTableEntries()
         {
             switch (mod.StageTableFormat)
             {
@@ -155,12 +155,12 @@ namespace CaveStoryEditor
 
         private void stageTableDataGridView_UserAddedRow(object sender, DataGridViewRowEventArgs e)
         {
-            UpdateAddRemove();
+            UpdateCanAddStageTableEntries();
         }
 
         private void stageTableDataGridView_UserDeletedRow(object sender, DataGridViewRowEventArgs e)
         {
-            UpdateAddRemove();
+            UpdateCanAddStageTableEntries();
         }
 
         private void saveStageTableToolStripMenuItem_Click(object sender, EventArgs e)
