@@ -58,6 +58,9 @@ namespace CaveStoryEditor
             if(stageTableFormatComboBox.DataSource == null)
                 stageTableFormatComboBox.DataSource = Enum.GetValues(typeof(StageTableTypes));
             stageTableFormatComboBox.Enabled = true;
+            lockMod = true;
+            stageTableFormatComboBox.SelectedItem = mod.StageTableFormat;
+            lockMod = false;
 
             //asset tab
             FillListbox(pxmListBox, mod.StageExtension);
