@@ -342,9 +342,12 @@ namespace CaveStoryEditor
             foreach(string item in scriptListBox.SelectedItems)
             {
                 GetTXTAndTSC(item, out string inPath, out string outPath);
-                var inText = File.ReadAllBytes(inPath);
-                var outText = Encryptor.Encrypt(inText, mod.DefaultKey);
-                File.WriteAllBytes(outPath, outText);
+                if (File.Exists(inPath))
+                {
+                    var inText = File.ReadAllBytes(inPath);
+                    var outText = Encryptor.Encrypt(inText, mod.DefaultKey);
+                    File.WriteAllBytes(outPath, outText);
+                }
             }
         }
 
@@ -355,10 +358,12 @@ namespace CaveStoryEditor
             foreach(string item in scriptListBox.SelectedItems)
             {
                 GetTXTAndTSC(item, out string outPath, out string inPath);
-
-                var inText = File.ReadAllBytes(inPath);
-                var outText = Encryptor.Decrypt(inText, mod.DefaultKey);
-                File.WriteAllBytes(outPath, outText);
+                if (File.Exists(inPath))
+                {
+                    var inText = File.ReadAllBytes(inPath);
+                    var outText = Encryptor.Decrypt(inText, mod.DefaultKey);
+                    File.WriteAllBytes(outPath, outText);
+                }
             }
         }
 
