@@ -14,6 +14,7 @@ using static PixelModdingFramework.Rendering;
 using static CaveStoryEditor.SharedGraphics;
 using System.ComponentModel;
 using CaveStoryModdingFramework.Stages;
+using System.Runtime.InteropServices;
 
 namespace CaveStoryEditor
 {
@@ -1686,6 +1687,20 @@ namespace CaveStoryEditor
                     mapLayeredPictureBox.Flatten(1).Save(sfd.FileName, formatTypes[sfd.FilterIndex - 1]);
                 }
             }            
+        }
+
+        private void copyImageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Clipboard.SetImage(mapLayeredPictureBox.Flatten(1));
+            }
+            catch (ExternalException ee)
+            {
+                MessageBox.Show("Unable to set clipboard image!\n" + ee.Message);
+                return;
+            }
+            MessageBox.Show("Copied!");
         }
     }
 }

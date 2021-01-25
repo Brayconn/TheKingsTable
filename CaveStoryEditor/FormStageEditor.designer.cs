@@ -32,11 +32,14 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.undoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.redoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.selectAllEntitiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.copyImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tileTypesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gridToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -49,7 +52,6 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.tilesetLayeredPictureBox = new LayeredPictureBox.LayeredPictureBox();
-            this.mapResizeControl = new CaveStoryEditor.MapResizeControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.entityPropertyGrid = new System.Windows.Forms.PropertyGrid();
@@ -62,7 +64,7 @@
             this.hScreenPreviewScrollBar = new System.Windows.Forms.HScrollBar();
             this.pictureBoxPanel = new System.Windows.Forms.Panel();
             this.mapLayeredPictureBox = new LayeredPictureBox.LayeredPictureBox();
-            this.saveImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mapResizeControl = new CaveStoryEditor.MapResizeControl();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -102,9 +104,16 @@
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
+            // 
+            // saveImageToolStripMenuItem
+            // 
+            this.saveImageToolStripMenuItem.Name = "saveImageToolStripMenuItem";
+            this.saveImageToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
+            this.saveImageToolStripMenuItem.Text = "Save Image...";
+            this.saveImageToolStripMenuItem.Click += new System.EventHandler(this.saveImageToolStripMenuItem_Click);
             // 
             // editToolStripMenuItem
             // 
@@ -112,7 +121,9 @@
             this.undoToolStripMenuItem,
             this.redoToolStripMenuItem,
             this.toolStripSeparator2,
-            this.selectAllEntitiesToolStripMenuItem});
+            this.selectAllEntitiesToolStripMenuItem,
+            this.toolStripSeparator3,
+            this.copyImageToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.editToolStripMenuItem.Text = "Edit";
@@ -142,6 +153,18 @@
             this.selectAllEntitiesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.selectAllEntitiesToolStripMenuItem.Text = "Select All Entities";
             this.selectAllEntitiesToolStripMenuItem.Click += new System.EventHandler(this.selectAllEntitiesToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
+            // 
+            // copyImageToolStripMenuItem
+            // 
+            this.copyImageToolStripMenuItem.Name = "copyImageToolStripMenuItem";
+            this.copyImageToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.copyImageToolStripMenuItem.Text = "Copy Image";
+            this.copyImageToolStripMenuItem.Click += new System.EventHandler(this.copyImageToolStripMenuItem_Click);
             // 
             // viewToolStripMenuItem
             // 
@@ -279,15 +302,6 @@
             this.tilesetLayeredPictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.tilesetLayeredPictureBox_MouseMove);
             this.tilesetLayeredPictureBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.tilesetLayeredPictureBox_MouseUp);
             // 
-            // mapResizeControl
-            // 
-            this.mapResizeControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mapResizeControl.Location = new System.Drawing.Point(3, 3);
-            this.mapResizeControl.Name = "mapResizeControl";
-            this.mapResizeControl.Size = new System.Drawing.Size(246, 191);
-            this.mapResizeControl.TabIndex = 3;
-            this.mapResizeControl.MapResizeInitialized += new System.EventHandler<CaveStoryEditor.MapResizeInitiatedEventArgs>(this.mapResizeControl1_MapResizeInitialized);
-            // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.tableLayoutPanel1);
@@ -418,6 +432,7 @@
             // mapLayeredPictureBox
             // 
             this.mapLayeredPictureBox.AutoScroll = true;
+            this.mapLayeredPictureBox.BackColor = System.Drawing.Color.Black;
             this.mapLayeredPictureBox.Location = new System.Drawing.Point(0, 0);
             this.mapLayeredPictureBox.MaxCanvasSize = new System.Drawing.Size(0, 0);
             this.mapLayeredPictureBox.Name = "mapLayeredPictureBox";
@@ -430,12 +445,14 @@
             this.mapLayeredPictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.mapPictureBox_MouseMove);
             this.mapLayeredPictureBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mapPictureBox_MouseUp);
             // 
-            // saveImageToolStripMenuItem
+            // mapResizeControl
             // 
-            this.saveImageToolStripMenuItem.Name = "saveImageToolStripMenuItem";
-            this.saveImageToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.saveImageToolStripMenuItem.Text = "Save Image...";
-            this.saveImageToolStripMenuItem.Click += new System.EventHandler(this.saveImageToolStripMenuItem_Click);
+            this.mapResizeControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mapResizeControl.Location = new System.Drawing.Point(3, 3);
+            this.mapResizeControl.Name = "mapResizeControl";
+            this.mapResizeControl.Size = new System.Drawing.Size(246, 191);
+            this.mapResizeControl.TabIndex = 3;
+            this.mapResizeControl.MapResizeInitialized += new System.EventHandler<CaveStoryEditor.MapResizeInitiatedEventArgs>(this.mapResizeControl1_MapResizeInitialized);
             // 
             // FormStageEditor
             // 
@@ -510,5 +527,7 @@
         private System.Windows.Forms.TabPage mapStatesTabPage;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ToolStripMenuItem saveImageToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem copyImageToolStripMenuItem;
     }
 }
