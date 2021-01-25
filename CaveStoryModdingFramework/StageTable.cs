@@ -296,9 +296,7 @@ namespace CaveStoryModdingFramework.Stages
             MapNameBuffer = int.Parse(xml[nameof(MapNameBuffer)].InnerText);
             Padding = int.Parse(xml[nameof(Padding)].InnerText);
         }
-        public StageEntrySettings()
-        { }
-        public StageEntrySettings(StageTableTypes type)
+        public void Reset(StageTableTypes type)
         {
             switch (type)
             {
@@ -338,6 +336,12 @@ namespace CaveStoryModdingFramework.Stages
                     Padding = 0;
                     break;
             }
+        }
+        public StageEntrySettings()
+        { }
+        public StageEntrySettings(StageTableTypes type)
+        {
+            Reset(type);
         }
     }
 

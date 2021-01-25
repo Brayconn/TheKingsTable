@@ -92,6 +92,7 @@ namespace CaveStoryEditor
                 lockMod = true;
                 
                 mod.StageTableFormat = (StageTableTypes)stageTableFormatComboBox.SelectedItem;
+                mod.StageTableSettings.Reset(mod.StageTableFormat);
                 UpdateCanAddStageTableEntries();
                 
                 lockMod = false;
