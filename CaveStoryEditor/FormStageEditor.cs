@@ -663,7 +663,7 @@ namespace CaveStoryEditor
                     act.Tiles[tileNum].NewValue = tileValue;
             }
             map.Tiles[tileNum] = tileValue;
-            DrawTile(baseMap.Image, map, tileNum, (Bitmap)baseTileset.Image, parentMod.TileSize);
+            DrawTile(baseMap.Image, map, tileNum, (Bitmap)baseTileset.Image, parentMod.TileSize, System.Drawing.Drawing2D.CompositingMode.SourceCopy);
             DrawTile(mapTileTypes.Image, map, tileNum, (Bitmap)tilesetTileTypes.Image, parentMod.TileSize, System.Drawing.Drawing2D.CompositingMode.SourceCopy);
         }
         void SetTiles(Point p, Map tileSource)
