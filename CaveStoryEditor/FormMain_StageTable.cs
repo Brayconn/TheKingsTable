@@ -165,12 +165,41 @@ namespace CaveStoryEditor
 
         private void saveStageTableToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            //check that the actual format is ok
             if (!StageTable.VerifyStageTable(mod.StageTable, mod.StageTableFormat, mod.StageTableSettings))
             {
                 MessageBox.Show("Error: something broke before we got very far");
                 return;
             }
+
+            //safety check that you won't overwrite something important
+            bool VerifyExtension(string ext)
+            {
+                return mod.StageTableLocation.EndsWith(ext)
+                    || MessageBox.Show("Warning: You might be about to save over the wrong file, are you sure you want to continue?", "Warning", MessageBoxButtons.YesNo) == DialogResult.Yes;
+            }
+            bool result = false;
+            switch (mod.StageTableFormat)
+            {
+                case StageTableTypes.doukutsuexe:
+                case StageTableTypes.swdata:
+                case StageTableTypes.csmap:
+                    result = VerifyExtension("exe");
+                    break;
+                case StageTableTypes.stagetbl:
+                    result = VerifyExtension("tbl");
+                    break;
+                case StageTableTypes.mrmapbin:
+                    result = VerifyExtension("bin");
+                    break;
+            }
+            if (!result)
+                return;
+
+            //actually do the writing
             StageTable.Write(mod.StageTable, mod.StageTableLocation, mod.StageTableFormat);
+
+            //final check if SW worked
             if (mod.StageTableFormat == StageTableTypes.swdata && !StageTable.VerifySW(mod.StageTableLocation))
                 MessageBox.Show("Warning: SW won't be able to load this exe, sorry");
         }
