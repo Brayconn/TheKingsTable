@@ -261,6 +261,9 @@ namespace CaveStoryModdingFramework
                 case StageTableTypes.stagetbl:
                     TileSize = 32;
                     goto default;
+                case StageTableTypes.doukutsuexe:
+                    ImageExtension = Images.DefaultImageExtension;
+                    break;
                 default:
                     ImageExtension = "bmp";
                     break;
