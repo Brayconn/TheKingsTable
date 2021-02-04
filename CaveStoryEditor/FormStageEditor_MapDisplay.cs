@@ -1,4 +1,5 @@
-﻿using LayeredPictureBox;
+﻿using CaveStoryModdingFramework.Entities;
+using LayeredPictureBox;
 using System;
 using System.Drawing;
 using static CaveStoryEditor.SharedGraphics;
@@ -57,6 +58,20 @@ namespace CaveStoryEditor
             DrawSelectedEntityBoxes();
         }
 
+        void DrawEntity(Entity e, Graphics g, Image img)
+        {
+            var vbox = parentMod.NPCTable[e.Type].Viewbox;
+
+            var half = (parentMod.TileSize / 2);
+            var x = e.X * parentMod.TileSize + half - (
+                ((e.Flag & (short)EntityFlags.SpawnInOtherDirection) != 0)
+                    ? vbox.RightOffset
+                    : vbox.LeftOffset
+                );
+            var y = e.Y * parentMod.TileSize + half - vbox.YOffset;
+            g.DrawImage(img, x, y, img.Width, img.Height);
+        }
+
         void DrawEntityIcons()
         {
             using (var g = Graphics.FromImage(entityIcons.Image))
@@ -68,12 +83,7 @@ namespace CaveStoryEditor
                     if (!selectedEntities.Contains(e) &&
                         Cache.TryGetSprite(e.Type, out Image img, tilesetSurfaceSource, backgroundSurfaceSource, spritesheet1SurfaceSource, spritesheet2SurfaceSource))
                     {
-                        var vbox = parentMod.NPCTable[e.Type].Viewbox;
-
-                        var half = (parentMod.TileSize / 2);
-                        var x = e.X * parentMod.TileSize + half - (((e.Flag | (short)CaveStoryModdingFramework.Entities.EntityFlags.SpawnInOtherDirection) != 0) ? vbox.RightOffset : vbox.LeftOffset);
-                        var y = e.Y * parentMod.TileSize + half - vbox.YOffset;
-                        g.DrawImage(img, x, y, img.Width, img.Height);
+                        DrawEntity(e, g, img);                        
                     }
                 }
             }
@@ -88,12 +98,7 @@ namespace CaveStoryEditor
                 {
                     if (Cache.TryGetSprite(e.Type, out Image img, tilesetSurfaceSource, backgroundSurfaceSource, spritesheet1SurfaceSource, spritesheet2SurfaceSource))
                     {
-                        var vbox = parentMod.NPCTable[e.Type].Viewbox;
-
-                        var half = (parentMod.TileSize / 2);
-                        var x = e.X * parentMod.TileSize + half - vbox.LeftOffset;
-                        var y = e.Y * parentMod.TileSize + half - vbox.YOffset;
-                        g.DrawImage(img, x, y, img.Width, img.Height);
+                        DrawEntity(e, g, img);
                     }
                 }
             }
