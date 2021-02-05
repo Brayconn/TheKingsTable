@@ -64,7 +64,7 @@ namespace CaveStoryEditor
 
             var half = (parentMod.TileSize / 2);
             var x = e.X * parentMod.TileSize + half - (
-                ((e.Flag & (short)EntityFlags.SpawnInOtherDirection) != 0)
+                ((e.Bits & EntityFlags.SpawnInOtherDirection) != 0)
                     ? vbox.RightOffset
                     : vbox.LeftOffset
                 );
