@@ -23,9 +23,10 @@ namespace CaveStoryEditor
                 CellTemplate = new DataGridViewTextBoxCell(),
             };
             //width = whichever needs more room, the header, or the biggest index
+            //the ??'s regarding the font are to fix a bug in mono where it was null instead of DefaultFont
             indexColumn.Width = Math.Max(
-            (int)(TextRenderer.MeasureText(indexColumn.HeaderText, indexColumn.HeaderCell.Style.Font).Width * 1.5),
-            TextRenderer.MeasureText(mod.StageTable.Count.ToString(), indexColumn.CellTemplate.Style.Font).Width
+            (int)(TextRenderer.MeasureText(indexColumn.HeaderText, indexColumn.HeaderCell.Style.Font ?? DefaultFont).Width * 1.5),
+            TextRenderer.MeasureText(mod.StageTable.Count.ToString(), indexColumn.CellTemplate.Style.Font ?? DefaultFont).Width
             );
             stageTableDataGridView.Columns.Add(indexColumn);
             #endregion
