@@ -5,6 +5,28 @@ Please excuse the mess, this editor is only *just* in a state where you can use 
 
 In the future there will be more of a description here, but for now, I'm assuming you're here to build this for yourself.
 
+# Running
+
+## Windows
+
+Check the releases page and download that exe!
+
+## Mac
+
+It's the same exe, but you have to run it using wine.
+
+In *theory* it should work with mono,
+but the winforms implementation on macOS is limited to 32bit,
+and hasn't been updated in a long time, so I can't recommend it.
+
+## Linux
+
+It's still the same exe, just run it using mono.
+
+If you aren't using the `mono-complete` package,
+make sure you at least have `mono-locale-extras`,
+otherwise TKT will crash because it can't find Shift-JIS.
+
 # Building
 It's just a regular VS 2019 file, it should build pretty normally.
 
