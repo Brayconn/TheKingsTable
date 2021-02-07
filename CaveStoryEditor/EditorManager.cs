@@ -16,6 +16,29 @@ namespace CaveStoryEditor
         readonly List<FormScriptEditor> ScriptEditors;
         readonly List<FormAttributeEditor> AttributeEditors;
         
+        public bool UnsavedChanges
+        {
+            get
+            {
+                foreach(var editor in TileEditors)
+                {
+                    if (editor.UnsavedEdits)
+                        return true;
+                }
+                foreach (var editor in ScriptEditors)
+                {
+                    if (editor.UnsavedChanges)
+                        return true;
+                }
+                foreach (var editor in AttributeEditors)
+                {
+                    if (editor.UnsavedEdits)
+                        return true;
+                }
+                return false;
+            }
+        }
+
         public EditorManager(Mod parent, SpriteCache c)
         {
             parentMod = parent;
@@ -43,6 +66,22 @@ namespace CaveStoryEditor
 
             if (sender is IDisposable d)
                 d.Dispose();
+        }
+
+        /// <summary>
+        /// Closes every open editor
+        /// </summary>
+        public void Clear()
+        {
+            void clearList<T>(List<T> list) where T : Form
+            {
+                for (int i = 0; i < list.Count; i++)
+                    //TODO fix the part where this doesn't *force* close the editor
+                    list[i].Close();
+            }
+            clearList(TileEditors);
+            clearList(ScriptEditors);
+            clearList(AttributeEditors);
         }
 
         public void OpenTileEditor(StageEntry entry)

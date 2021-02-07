@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.IO;
-using System.Text;
 using System.Windows.Forms;
 using CaveStoryModdingFramework;
 using CaveStoryModdingFramework.Stages;
@@ -30,6 +29,7 @@ namespace CaveStoryEditor
         public void Init()
         {
             cache = new SpriteCache(mod);
+            manager?.Clear();
             manager = new EditorManager(mod,cache);
 
             mod.ImageExtensionChanged += Mod_ImageExtensionChanged;
@@ -40,6 +40,9 @@ namespace CaveStoryEditor
 
             InitCheckboxList();
             InitComboBoxDataSources();
+
+            StageTableUnsaved = false;
+            NPCTableUnsaved = false;
 
             //tool strip menu buttons
             saveProjectToolStripMenuItem.Enabled = true;
@@ -68,7 +71,6 @@ namespace CaveStoryEditor
             FillListbox(imageListBox, mod.ImageExtension);
             FillListbox(scriptListBox, mod.TSCExtension);
             FillListbox(attributeListBox, mod.AttributeExtension);
-
 
             //Menu buttons
             saveStageTableToolStripMenuItem.Enabled = true;
@@ -141,14 +143,11 @@ namespace CaveStoryEditor
 
         #region Project files
         string savePath = null;
-        bool LoadWarning()
-        {
-            //TODO localize
-            return mod == null || MessageBox.Show("You already have a mod loaded! Loading another will clear all unsaved changes!\n"+
-                "Are you sure you want to continue?", "Warning", MessageBoxButtons.YesNo) == DialogResult.Yes;
-        }
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (!SafeToClose())
+                return;
+
             using (var ofd = new OpenFileDialog()
             {
                 Title = "Select your game...",
@@ -183,6 +182,7 @@ namespace CaveStoryEditor
                             throw new ArgumentException();
                     }
                     mod = new Mod(data, stage, type);
+                    savePath = null;
                     Init();
                 }
             }
@@ -190,7 +190,7 @@ namespace CaveStoryEditor
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!LoadWarning())
+            if (!SafeToClose())
                 return;
 
             using (var ofd = new OpenFileDialog()
@@ -397,22 +397,22 @@ namespace CaveStoryEditor
             manager.OpenAttributeFile(Path.Combine(mod.DataFolderPath, attributeListBox.SelectedItem.ToString()));
         }
 
-        StageEntry selectedEntry => mod.StageTable[stageTableDataGridView.SelectedRows[0].Index];
+        StageEntry selectedStageTableEntry => mod.StageTable[stageTableDataGridView.SelectedRows[0].Index];
 
         private void openTilesButton_Click(object sender, EventArgs e)
         {
-            manager.OpenTileEditor(selectedEntry);
+            manager.OpenTileEditor(selectedStageTableEntry);
         }
 
         private void openScriptButton_Click(object sender, EventArgs e)
         {
-            manager.OpenScriptEditor(Path.Combine(mod.DataFolderPath, mod.ScriptFolderPath, selectedEntry.Filename + "." + mod.TSCExtension));
+            manager.OpenScriptEditor(Path.Combine(mod.DataFolderPath, mod.ScriptFolderPath, selectedStageTableEntry.Filename + "." + mod.TSCExtension));
         }
 
         private void openBothButton_Click(object sender, EventArgs e)
         {
-            manager.OpenTileEditor(selectedEntry);
-            manager.OpenScriptEditor(Path.Combine(mod.DataFolderPath, mod.ScriptFolderPath, selectedEntry.Filename + "." + mod.TSCExtension));
+            manager.OpenTileEditor(selectedStageTableEntry);
+            manager.OpenScriptEditor(Path.Combine(mod.DataFolderPath, mod.ScriptFolderPath, selectedStageTableEntry.Filename + "." + mod.TSCExtension));
         }
 
         private void loadEntityInfotxtToolStripMenuItem_Click(object sender, EventArgs e)
@@ -431,6 +431,18 @@ namespace CaveStoryEditor
                     }
                 }
             }
+        }
+
+        bool SafeToClose()
+        {
+            //TODO check for changes to the project file
+            return mod == null || (!StageTableUnsaved && !NPCTableUnsaved && !manager.UnsavedChanges) 
+                || MessageBox.Show("You have unsaved changes! Are you sure you want to continue?", "Warning", MessageBoxButtons.YesNo) == DialogResult.Yes;
+        }
+
+        private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            e.Cancel = !SafeToClose();
         }
 
         private void onImageChanged(object sender, FileSystemEventArgs e)

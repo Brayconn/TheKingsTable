@@ -22,6 +22,23 @@ namespace CaveStoryEditor
 
         bool lockNpcTableEntry = false;
 
+        bool npcTableUnsaved = false;
+        bool NPCTableUnsaved
+        {
+            get => npcTableUnsaved;
+            set
+            {
+                if (value != npcTableUnsaved)
+                {
+                    if (!npcTableUnsaved)
+                        npcTableTabPage.Text += "*";
+                    else
+                        npcTableTabPage.Text = npcTableTabPage.Text.Remove(npcTableTabPage.Text.Length - 1);
+                    npcTableUnsaved = value;
+                }
+            }
+        }
+
         #region bits
         void InitCheckboxList()
         {
@@ -313,6 +330,7 @@ namespace CaveStoryEditor
                     BitChanged(sender, e);
                     break;
             }
+            NPCTableUnsaved = true;
         }
 
         private void UpdateUIBindings()
@@ -611,6 +629,7 @@ namespace CaveStoryEditor
             mod.NPCTable.Add(new NPCTableEntry());
             SafeRefreshItems();
             SelectNPCTableEntry(mod.NPCTable.Count - 1);
+            NPCTableUnsaved = true;
         }
 
         private void insertNPCTableEntryButton_Click(object sender, EventArgs e)
@@ -620,6 +639,7 @@ namespace CaveStoryEditor
             mod.NPCTable.Insert(index, entry);
             SafeRefreshItems();
             SelectNPCTableEntry(index);
+            NPCTableUnsaved = true;
         }
 
         private void removeNPCTableEntryButton_Click(object sender, EventArgs e)
@@ -628,6 +648,7 @@ namespace CaveStoryEditor
             mod.NPCTable.RemoveAt(index);
             SafeRefreshItems();
             SelectNPCTableEntry(Math.Max(index - 1, 0));
+            NPCTableUnsaved = true;
         }
         #endregion
 
@@ -647,6 +668,7 @@ namespace CaveStoryEditor
         private void saveNPCTableToolStripMenuItem_Click(object sender, EventArgs e)
         {
             NPCTable.Save(mod.NPCTable, Path.Combine(mod.DataFolderPath, NPCTable.NPCTBL));
+            NPCTableUnsaved = false;
         }
 
         private void exportNPCTableToolStripMenuItem_Click(object sender, EventArgs e)

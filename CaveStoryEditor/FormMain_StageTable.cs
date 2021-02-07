@@ -43,8 +43,8 @@ namespace CaveStoryEditor
                     DataPropertyName = Property,
                     CellTemplate = new DataGridViewComboBoxCell()
                     {
-                        ValueMember = "Key",
-                        DisplayMember = "Value",
+                        ValueMember = nameof(KeyValuePair<T,string>.Key),
+                        DisplayMember = nameof(KeyValuePair<T,string>.Value),
                         DataSource = list
                     },
                     ValueType = typeof(T)
@@ -115,20 +115,53 @@ namespace CaveStoryEditor
             }
         }
 
+        StageEntry SelectedStageTableEntry
+        {
+            get => stageTablePropertyGrid.SelectedObject as StageEntry;
+            set
+            {
+                if(value != SelectedStageTableEntry)
+                {
+                    if(SelectedStageTableEntry != null)
+                        SelectedStageTableEntry.PropertyChanged -= SelectedStageTableEntry_PropertyChanged;
+
+                    stageTablePropertyGrid.SelectedObject = value;
+                    if(SelectedStageTableEntry != null)
+                        SelectedStageTableEntry.PropertyChanged += SelectedStageTableEntry_PropertyChanged;
+                }
+            }
+        }
+
+        bool stageTableUnsaved = false;
+        bool StageTableUnsaved
+        {
+            get => stageTableUnsaved;
+            set
+            {
+                if(value != stageTableUnsaved)
+                {
+                    if (!stageTableUnsaved)
+                        stageTableTabPage.Text += "*";
+                    else
+                        stageTableTabPage.Text = stageTableTabPage.Text.Remove(stageTableTabPage.Text.Length - 1);
+                    stageTableUnsaved = value;
+                }
+            }
+        }
+
+        private void SelectedStageTableEntry_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            StageTableUnsaved = true;
+        }
+
         private void stageTableDataGridView_SelectionChanged(object sender, EventArgs e)
         {
-            var oneSelected = stageTableDataGridView.SelectedRows.Count == 1;
+            var oneSelected = stageTableDataGridView.SelectedRows.Count == 1
+                && stageTableDataGridView.SelectedRows[0].Index < mod.StageTable.Count;
             openTilesButton.Enabled = openScriptButton.Enabled = openBothButton.Enabled = oneSelected;
-            if (oneSelected)
-            {
-                var entry = mod.StageTable[stageTableDataGridView.SelectedRows[0].Index];
-                if (stageTablePropertyGrid.SelectedObject != entry)
-                    stageTablePropertyGrid.SelectedObject = entry;
-            }
-            else
-            {
-                stageTablePropertyGrid.SelectedObject = null;
-            }
+            SelectedStageTableEntry = oneSelected
+                ? mod.StageTable[stageTableDataGridView.SelectedRows[0].Index]
+                : null;
         }
 
         private void insertButton_Click(object sender, EventArgs e)
@@ -136,6 +169,7 @@ namespace CaveStoryEditor
             mod.StageTable.Insert(stageTableDataGridView.SelectedRows[0].Index, new StageEntry());
             stageTableBinding.ResetBindings(false);
             UpdateCanAddStageTableEntries();
+            StageTableUnsaved = true;
         }
 
         void UpdateCanAddStageTableEntries()
@@ -156,11 +190,13 @@ namespace CaveStoryEditor
 
         private void stageTableDataGridView_UserAddedRow(object sender, DataGridViewRowEventArgs e)
         {
+            StageTableUnsaved = true;
             UpdateCanAddStageTableEntries();
         }
 
         private void stageTableDataGridView_UserDeletedRow(object sender, DataGridViewRowEventArgs e)
         {
+            StageTableUnsaved = true;
             UpdateCanAddStageTableEntries();
         }
 
@@ -202,7 +238,9 @@ namespace CaveStoryEditor
 
             //final check if SW worked
             if (mod.StageTableFormat == StageTableTypes.swdata && !StageTable.VerifySW(mod.StageTableLocation))
-                MessageBox.Show("Warning: SW won't be able to load this exe, sorry");
+                MessageBox.Show("Warning: SW won't be able to load this exe, sorry.");
+
+            StageTableUnsaved = false;
         }
 
         private void exportStageTableToolStripMenuItem_Click(object sender, EventArgs e)

@@ -8,6 +8,7 @@ namespace CaveStoryEditor
 {
     public partial class FormScriptEditor : Form
     {
+        public bool UnsavedChanges { get; private set; } = false;
         readonly Mod parentMod;
         public bool IsInStageFolder
         {
@@ -53,6 +54,8 @@ namespace CaveStoryEditor
             if (parentMod.TSCEncrypted)
                 Encryptor.EncryptInPlace(bytes);
             File.WriteAllBytes(path, bytes);
+            
+            UnsavedChanges = false;
 
             ScriptSaved?.Invoke(this, new EventArgs());
         }
@@ -71,9 +74,14 @@ namespace CaveStoryEditor
             {
                 if(sfd.ShowDialog() == DialogResult.OK)
                 {
-                    Save(sfd.FileName);                    
+                    Save(sfd.FileName);
                 }
             }            
+        }
+
+        private void mainScintilla_TextChanged(object sender, EventArgs e)
+        {
+            UnsavedChanges = true;
         }
     }
 }

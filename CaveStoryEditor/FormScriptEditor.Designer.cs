@@ -50,6 +50,7 @@
             this.mainScintilla.Size = new System.Drawing.Size(530, 426);
             this.mainScintilla.TabIndex = 0;
             this.mainScintilla.Text = "scintilla1";
+            this.mainScintilla.TextChanged += new System.EventHandler(this.mainScintilla_TextChanged);
             // 
             // splitContainer1
             // 
