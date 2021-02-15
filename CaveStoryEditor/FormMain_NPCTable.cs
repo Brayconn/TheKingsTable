@@ -421,6 +421,7 @@ namespace CaveStoryEditor
         void DrawHitboxEventHandler(object sender, EventArgs e)
         {
             Invoke(new Action(DrawHitbox));
+            NPCTableUnsaved = true;
         }
         void DrawHitbox()
         {
@@ -447,6 +448,7 @@ namespace CaveStoryEditor
         {
             if(e.PropertyName != nameof(NPCViewRect.Unused))
                 Invoke(new Action<string>(DrawViewbox),e.PropertyName);
+            NPCTableUnsaved = true;
         }
         const int MinBoxSize = 8;
         void DrawViewbox(string prop = null)
