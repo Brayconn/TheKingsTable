@@ -9,6 +9,7 @@ namespace CaveStoryModdingFramework.Entities
     [Flags]
     public enum EntityFlags : ushort
     {
+        None = 0x00,
         SoftSolid = 0x01,               // Pushes Quote out
         IgnoreTile44 = 0x02,            // Ignores tile 44, which normally blocks NPCs
         Invulnerable = 0x04,            // Can't be hurt
