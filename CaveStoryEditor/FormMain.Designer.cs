@@ -43,6 +43,7 @@
             this.exportNPCTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadEntityInfotxtToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.generateFlagListingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mainTabControl = new System.Windows.Forms.TabControl();
             this.stageTableTabPage = new System.Windows.Forms.TabPage();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
@@ -271,7 +272,8 @@
             // toolsToolStripMenuItem
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.loadEntityInfotxtToolStripMenuItem});
+            this.loadEntityInfotxtToolStripMenuItem,
+            this.generateFlagListingToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
@@ -280,9 +282,17 @@
             // 
             this.loadEntityInfotxtToolStripMenuItem.Enabled = false;
             this.loadEntityInfotxtToolStripMenuItem.Name = "loadEntityInfotxtToolStripMenuItem";
-            this.loadEntityInfotxtToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.loadEntityInfotxtToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
             this.loadEntityInfotxtToolStripMenuItem.Text = "Load EntityInfo.txt";
             this.loadEntityInfotxtToolStripMenuItem.Click += new System.EventHandler(this.loadEntityInfotxtToolStripMenuItem_Click);
+            // 
+            // generateFlagListingToolStripMenuItem
+            // 
+            this.generateFlagListingToolStripMenuItem.Enabled = false;
+            this.generateFlagListingToolStripMenuItem.Name = "generateFlagListingToolStripMenuItem";
+            this.generateFlagListingToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.generateFlagListingToolStripMenuItem.Text = "Generate Flag Listing";
+            this.generateFlagListingToolStripMenuItem.Click += new System.EventHandler(this.generateFlagListingToolStripMenuItem_Click);
             // 
             // mainTabControl
             // 
@@ -1460,6 +1470,7 @@
         private System.Windows.Forms.ComboBox stageTableFormatComboBox;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Button insertButton;
+        private System.Windows.Forms.ToolStripMenuItem generateFlagListingToolStripMenuItem;
     }
 }
 
