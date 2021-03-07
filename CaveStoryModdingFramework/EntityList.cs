@@ -422,7 +422,7 @@ namespace CaveStoryModdingFramework.Entities
             {214,new EntityInfo("Night Spirit balloon (projectile)",new Rectangle(144,48,32,16))},
             {215,new EntityInfo("Sandcroc, White (enemy)",new Rectangle(0,120,48,8))},
             {216,new EntityInfo("Debug Cat",new Rectangle(256,200,16,16))},
-            {217,new EntityInfo("Itoh",new Rectangle(144,64,-64,96))},
+            {217,new EntityInfo("Itoh",new Rectangle(144,64,16,16))}, //WARNING this was breaking things maybe?
             {218,new EntityInfo("Core large energy ball (projectile)",new Rectangle(0,0,0,0))},
             {219,new EntityInfo("Generator - Smoke/Underwater Current",new Rectangle(16,0,16,16))},
             {220,new EntityInfo("Shovel Brigade, standing",new Rectangle(0,64,16,16))},

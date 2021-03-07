@@ -94,6 +94,8 @@ namespace CaveStoryEditor
                     img.MakeTransparent(parentMod.TransparentColor);
                     return true;
                 }
+                //Clone() can also throw this in the event of an invalid rect I think...?
+                catch (ArgumentException) { }
                 //Clone() throws this in the case of an invalid location
                 catch (OutOfMemoryException) { }
             }
