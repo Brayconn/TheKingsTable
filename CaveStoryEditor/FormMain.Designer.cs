@@ -49,7 +49,7 @@
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.stageTableDataGridView = new System.Windows.Forms.DataGridView();
             this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
-            this.stageTablePropertyGrid = new System.Windows.Forms.PropertyGrid();
+            this.stageTablePropertyGrid = new PropertyGridShell();
             this.openTilesButton = new System.Windows.Forms.Button();
             this.openScriptButton = new System.Windows.Forms.Button();
             this.openBothButton = new System.Windows.Forms.Button();
@@ -64,7 +64,7 @@
             this.addNPCTableEntryButton = new System.Windows.Forms.Button();
             this.removeNPCTableEntryButton = new System.Windows.Forms.Button();
             this.insertNPCTableEntryButton = new System.Windows.Forms.Button();
-            this.npcTableEntryPropertyGrid = new System.Windows.Forms.PropertyGrid();
+            this.npcTableEntryPropertyGrid = new PropertyGridShell();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.hitboxGroupBox = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
@@ -120,7 +120,7 @@
             this.label12 = new System.Windows.Forms.Label();
             this.attributeListBox = new System.Windows.Forms.ListBox();
             this.modSettingsTabPage = new System.Windows.Forms.TabPage();
-            this.modPropertyGrid = new System.Windows.Forms.PropertyGrid();
+            this.modPropertyGrid = new PropertyGridShell();
             this.editorSettingsTabPage = new System.Windows.Forms.TabPage();
             this.menuStrip1.SuspendLayout();
             this.mainTabControl.SuspendLayout();
@@ -1392,11 +1392,11 @@
         private System.Windows.Forms.ToolStripMenuItem saveStageTableToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exportStageTableToolStripMenuItem;
         private System.Windows.Forms.TabPage modSettingsTabPage;
-        private System.Windows.Forms.PropertyGrid modPropertyGrid;
+        private PropertyGridShell modPropertyGrid;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.ListBox npcTableListBox;
         private System.Windows.Forms.SplitContainer splitContainer2;
-        private System.Windows.Forms.PropertyGrid npcTableEntryPropertyGrid;
+        private PropertyGridShell npcTableEntryPropertyGrid;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem saveNPCTableToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exportNPCTableToolStripMenuItem;
@@ -1441,7 +1441,7 @@
         private System.Windows.Forms.Button insertNPCTableEntryButton;
         private System.Windows.Forms.SplitContainer splitContainer3;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel7;
-        private System.Windows.Forms.PropertyGrid stageTablePropertyGrid;
+        private PropertyGridShell stageTablePropertyGrid;
         private System.Windows.Forms.CheckedListBox bitsCheckedListBox;
         private System.Windows.Forms.Panel viewboxContainerPanel;
         private System.Windows.Forms.Panel hitboxContainerPanel;
