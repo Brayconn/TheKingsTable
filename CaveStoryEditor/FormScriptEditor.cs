@@ -35,9 +35,14 @@ namespace CaveStoryEditor
             parentMod = m;
             Fullpath = path;
 
-            Text = Path.GetFileName(Fullpath);
-
             InitializeComponent();
+
+            if (Path.GetFileNameWithoutExtension(Fullpath).Contains("Credit"))
+                ParserMode = ParserModes.Credits;
+            else
+                ParserMode = ParserModes.Default;
+
+            Text = Path.GetFileName(Fullpath);
 
             if (File.Exists(path))
             {
@@ -86,10 +91,85 @@ namespace CaveStoryEditor
             UnsavedChanges = true;
         }
 
+        enum ParserModes
+        {
+            None,
+            Default,
+            Credits,
+            Scriptsource
+        }
+        ParserModes parserMode = ParserModes.None;
+        ParserModes ParserMode
+        {
+            get => parserMode;
+            set
+            {
+                if (parserMode != value)
+                {
+                    parserMode = value;
+                    defaultToolStripMenuItem.Checked = ParserMode == ParserModes.Default;
+                    creditsToolStripMenuItem.Checked = ParserMode == ParserModes.Credits;
+                    InitParserStyles(ParserMode, mainScintilla);
+                }
+            }
+        }
+
+        private void InitParserStyles(ParserModes mode, ScintillaNET.Scintilla scintilla)
+        {
+            scintilla.ClearDocumentStyle();
+            switch (mode)
+            {
+                case ParserModes.Default:
+                case ParserModes.Scriptsource:
+                    break;
+                case ParserModes.Credits:
+                    for (int i = 0; i <= 10; i++)
+                        scintilla.Styles[i].Font = "Consolas";
+
+                    scintilla.Styles[StyleValue].ForeColor = Color.FromArgb(0xC42F63);
+
+                    scintilla.Styles[StyleSeparater].ForeColor = Color.Gray;
+
+                    scintilla.Styles[StyleLabel].ForeColor = Color.Black;
+                    scintilla.Styles[StyleLabel].Bold = true;
+
+                    scintilla.Styles[StyleJump].ForeColor = Color.Blue;
+                    //scintilla.Styles[StyleJump].Bold = true;
+
+                    scintilla.Styles[StyleOffset].ForeColor = Color.Blue;
+                    //scintilla.Styles[StyleOffset].Bold = true;
+
+                    scintilla.Styles[StyleBrackets].ForeColor = Color.Blue;
+
+                    scintilla.Styles[StyleFade].ForeColor = Color.Blue;
+                    //scintilla.Styles[StyleFade].Bold = true;
+
+                    scintilla.Styles[StyleEnd].ForeColor = Color.Blue;
+                    //scintilla.Styles[StyleEnd].Bold = true;
+
+                    scintilla.Styles[StyleMusic].ForeColor = Color.Blue;
+                    //scintilla.Styles[StyleMusic].Bold = true;
+
+                    scintilla.Styles[StyleComment].ForeColor = Color.FromArgb(0x367A2A);
+                    scintilla.Styles[StyleComment].Italic = true;
+                    break;
+            }
+            scintilla.StartStyling(0);
+        }
+
         private void mainScintilla_StyleNeeded(object sender, ScintillaNET.StyleNeededEventArgs e)
         {
             var s = (ScintillaNET.Scintilla)sender;
-            StyleCredits(s, s.GetEndStyled(), e.Position);
+            switch(ParserMode)
+            {
+                case ParserModes.Scriptsource:
+                case ParserModes.Default:
+                    StyleTSC(s, s.GetEndStyled(), e.Position);
+                    break;
+                case ParserModes.Credits:
+                    StyleCredits(s, s.GetEndStyled(), e.Position);
+                    break;
+            }            
         }
 
         private void StyleTSC(ScintillaNET.Scintilla scintilla, int startPos, int endPos)
@@ -107,29 +187,9 @@ namespace CaveStoryEditor
         const int StyleEnd = 8;
         const int StyleMusic = 9;
         const int StyleComment = 10;
-                
-        HashSet<char> CreditCommands = new HashSet<char>(new [] { '[', ']', 'l', 'f', 'j', '+', '-', '!', '~', '/' });
-
+        
         private void StyleCredits(ScintillaNET.Scintilla scintilla, int startPos, int endPos)
         {
-            scintilla.Styles[StyleValue].ForeColor = Color.Blue;
-
-            scintilla.Styles[StyleSeparater].ForeColor = Color.Gray;
-            scintilla.Styles[StyleJump].ForeColor = Color.Orange;
-            scintilla.Styles[StyleJump].Bold = true;
-            scintilla.Styles[StyleOffset].ForeColor = Color.Olive;
-            scintilla.Styles[StyleOffset].Bold = true;
-            scintilla.Styles[StyleBrackets].ForeColor = Color.BurlyWood;
-            
-            scintilla.Styles[StyleFade].ForeColor = Color.Teal;
-            scintilla.Styles[StyleFade].Bold = true;
-            scintilla.Styles[StyleEnd].ForeColor = Color.Black;
-            scintilla.Styles[StyleEnd].Bold = true;
-            scintilla.Styles[StyleMusic].ForeColor = Color.Red;
-            scintilla.Styles[StyleMusic].Bold = true;
-            scintilla.Styles[StyleComment].ForeColor = Color.Green;
-            scintilla.Styles[StyleComment].Italic = true;
-
             bool IsValidArg(int offset)
             {
                 return char.IsDigit((char)scintilla.GetCharAt(offset))
@@ -143,20 +203,35 @@ namespace CaveStoryEditor
                 startPos--;
             while (startPos > 0 && (char)scintilla.GetCharAt(startPos) != '[')
                 startPos--;
-
+            
             scintilla.StartStyling(startPos);
             while(startPos < endPos)
             {
                 switch((char)scintilla.GetCharAt(startPos))
                 {
                     case '[':
-                        scintilla.SetStyling(1, StyleBrackets);
                         int textLen = 0;
-                        for (char c = (char)scintilla.GetCharAt(++startPos); startPos < scintilla.TextLength && c != ']'; c = (char)scintilla.GetCharAt(++startPos))
+                        char c;
+                        //scan for the matching brace, or the end of the doc
+                        for (c = (char)scintilla.GetCharAt(++startPos);
+                            startPos < scintilla.TextLength && c != ']';
+                            c = (char)scintilla.GetCharAt(++startPos))
+                        {
                             textLen++;
-                        scintilla.SetStyling(textLen, 0);
-                        if (startPos < endPos)
+                        }
+                        //style the inner text if we found a brace
+                        if (c == ']')
+                        {
+                            scintilla.SetStyling(1, StyleBrackets);
+                            scintilla.SetStyling(textLen, 0);
                             goto case ']';
+                        }
+                        //otherwise it's just a comment I guess?
+                        else
+                        {
+                            startPos -= textLen;
+                            goto default;
+                        }
                         break;
                     case ']':
                         scintilla.SetStyling(1, StyleBrackets);
@@ -164,13 +239,13 @@ namespace CaveStoryEditor
                         startPos += 5;
                         break;
 
-                    //label
                     case 'l':
                         //char prevChar = (char)scintilla.GetCharAt(startPos - 1);
                         if (IsValidArg(startPos + 1))
                         {
                             scintilla.SetStyling(1, StyleLabel);
-                            scintilla.SetStyling(4, StyleValue);
+                            //scintilla.SetStyling(4, StyleValue);
+                            scintilla.SetStyling(4, StyleLabel);
                             startPos += 5;
                         }
                         else
@@ -216,6 +291,16 @@ namespace CaveStoryEditor
                         break;
                 }
             }
+        }
+
+        private void defaultToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ParserMode = ParserModes.Default;
+        }
+
+        private void creditsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ParserMode = ParserModes.Credits;
         }
     }
 }
