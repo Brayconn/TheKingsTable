@@ -515,7 +515,9 @@ namespace CaveStoryEditor
                                 break;
                             //l == # in credits
                             case 'l':
-                                curreve = text.Substring(index + 1, 4);
+                                var l = text.Substring(index + 1, 4);
+                                if (char.IsDigit(l[0]) && char.IsDigit(l[1]) && char.IsDigit(l[2]) && char.IsDigit(l[3]))
+                                    curreve = l;
                                 index += 4;
                                 break;
                             //f == FLJ in credits
