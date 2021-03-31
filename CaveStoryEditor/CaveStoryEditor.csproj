@@ -130,6 +130,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PropertyGridShell.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="SharedGraphics.cs" />
     <Compile Include="FormStageEditor_TilesetDisplay.cs">
       <SubType>Form</SubType>
