@@ -570,6 +570,45 @@ namespace CaveStoryEditor
             }
         }
 
+        private void loadTsclisttxtToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using(var ofd = new OpenFileDialog()
+            {
+                Filter = string.Join("|", "tsc_list.txt|tsc_list.txt", AllFilesFilter),
+            })
+            {
+                if(ofd.ShowDialog() == DialogResult.OK)
+                {
+                    mod.Commands = CaveStoryModdingFramework.Compatability.TSCListTXT.Load(ofd.FileName);
+                    mod.Commands.Add(new Command()
+                    {
+                        ShortName = "<RNJ",
+                        LongName = "RaNdom Jump",
+                        Description = "Jumps to a random event",
+                        Arguments = new List<object>()
+                        {
+                            new Argument()
+                            {
+                                Name = "Event count"
+                            },
+                            new RepeatStructure()
+                            {
+                                RepeatType = RepeatTypes.GlobalIndex,
+                                Value = 0,
+                                Arguments = new List<object>()
+                                {
+                                    new Argument()
+                                    {
+                                        Type = ArgumentTypes.Event
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        }
+
         private void onImageChanged(object sender, FileSystemEventArgs e)
         {
             if (mod.CopyrightText.Length > 0)

@@ -49,7 +49,7 @@
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.stageTableDataGridView = new System.Windows.Forms.DataGridView();
             this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
-            this.stageTablePropertyGrid = new PropertyGridShell();
+            this.stageTablePropertyGrid = new CaveStoryEditor.PropertyGridShell();
             this.openTilesButton = new System.Windows.Forms.Button();
             this.openScriptButton = new System.Windows.Forms.Button();
             this.openBothButton = new System.Windows.Forms.Button();
@@ -64,7 +64,7 @@
             this.addNPCTableEntryButton = new System.Windows.Forms.Button();
             this.removeNPCTableEntryButton = new System.Windows.Forms.Button();
             this.insertNPCTableEntryButton = new System.Windows.Forms.Button();
-            this.npcTableEntryPropertyGrid = new PropertyGridShell();
+            this.npcTableEntryPropertyGrid = new CaveStoryEditor.PropertyGridShell();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.hitboxGroupBox = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
@@ -120,8 +120,9 @@
             this.label12 = new System.Windows.Forms.Label();
             this.attributeListBox = new System.Windows.Forms.ListBox();
             this.modSettingsTabPage = new System.Windows.Forms.TabPage();
-            this.modPropertyGrid = new PropertyGridShell();
+            this.modPropertyGrid = new CaveStoryEditor.PropertyGridShell();
             this.editorSettingsTabPage = new System.Windows.Forms.TabPage();
+            this.loadTsclisttxtToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.mainTabControl.SuspendLayout();
             this.stageTableTabPage.SuspendLayout();
@@ -273,7 +274,8 @@
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.loadEntityInfotxtToolStripMenuItem,
-            this.generateFlagListingToolStripMenuItem});
+            this.generateFlagListingToolStripMenuItem,
+            this.loadTsclisttxtToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
@@ -1306,6 +1308,13 @@
             this.editorSettingsTabPage.Text = "Editor Settings";
             this.editorSettingsTabPage.UseVisualStyleBackColor = true;
             // 
+            // loadTsclisttxtToolStripMenuItem
+            // 
+            this.loadTsclisttxtToolStripMenuItem.Name = "loadTsclisttxtToolStripMenuItem";
+            this.loadTsclisttxtToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.loadTsclisttxtToolStripMenuItem.Text = "Load tsc_list.txt";
+            this.loadTsclisttxtToolStripMenuItem.Click += new System.EventHandler(this.loadTsclisttxtToolStripMenuItem_Click);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1471,6 +1480,7 @@
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Button insertButton;
         private System.Windows.Forms.ToolStripMenuItem generateFlagListingToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem loadTsclisttxtToolStripMenuItem;
     }
 }
 

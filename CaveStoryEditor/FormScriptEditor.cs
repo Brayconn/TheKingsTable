@@ -121,14 +121,31 @@ namespace CaveStoryEditor
             {
                 case ParserModes.Default:
                 case ParserModes.Scriptsource:
+                    for(int i = 0; i <= 6; i++)
+                        scintilla.Styles[i].Font = "Consolas";
+
+                    scintilla.Styles[TSCStyleValue].ForeColor = Color.FromArgb(0xC42F63);
+
+                    scintilla.Styles[TSCStyleSeparator].ForeColor = Color.Gray;
+
+                    scintilla.Styles[TSCStyleCommand].ForeColor = Color.Blue;
+
+                    scintilla.Styles[TSCStyleEvent].ForeColor = Color.Black;
+                    scintilla.Styles[TSCStyleEvent].Bold = true;
+
+                    scintilla.Styles[TSCStyleError].ForeColor = Color.Red;
+                    scintilla.Styles[TSCStyleError].BackColor = Color.Gray;
+
+                    scintilla.Styles[TSCStyleComment].ForeColor = Color.FromArgb(0x367A2A);
+                    scintilla.Styles[TSCStyleComment].Italic = true;
                     break;
                 case ParserModes.Credits:
                     for (int i = 0; i <= 10; i++)
                         scintilla.Styles[i].Font = "Consolas";
 
-                    scintilla.Styles[StyleValue].ForeColor = Color.FromArgb(0xC42F63);
+                    scintilla.Styles[CreditStyleValue].ForeColor = Color.FromArgb(0xC42F63);
 
-                    scintilla.Styles[StyleSeparater].ForeColor = Color.Gray;
+                    scintilla.Styles[CreditStyleSeparater].ForeColor = Color.Gray;
 
                     scintilla.Styles[StyleLabel].ForeColor = Color.Black;
                     scintilla.Styles[StyleLabel].Bold = true;
@@ -150,8 +167,8 @@ namespace CaveStoryEditor
                     scintilla.Styles[StyleMusic].ForeColor = Color.Blue;
                     //scintilla.Styles[StyleMusic].Bold = true;
 
-                    scintilla.Styles[StyleComment].ForeColor = Color.FromArgb(0x367A2A);
-                    scintilla.Styles[StyleComment].Italic = true;
+                    scintilla.Styles[CreditStyleComment].ForeColor = Color.FromArgb(0x367A2A);
+                    scintilla.Styles[CreditStyleComment].Italic = true;
                     break;
             }
             scintilla.StartStyling(0);
@@ -172,13 +189,180 @@ namespace CaveStoryEditor
             }            
         }
 
-        private void StyleTSC(ScintillaNET.Scintilla scintilla, int startPos, int endPos)
+        private static void LookBackUntil(ScintillaNET.Scintilla scintilla, ref int startPos, params string[] stopStrings)
         {
-
+            if (startPos > 0)
+                startPos--;
+            while (startPos > 0)
+            {
+                string currentString = scintilla.GetTextRange(startPos, stopStrings[0].Length);
+                foreach (var ss in stopStrings)
+                {
+                    if(currentString.Length != ss.Length)
+                        currentString = scintilla.GetTextRange(startPos, ss.Length);
+                    if (ss == currentString)
+                        return;
+                }
+                startPos--;
+            }                
         }
 
-        const int StyleValue = 1;
-        const int StyleSeparater = 2;
+        private static int LookBackUntil(ScintillaNET.Scintilla scintilla, int startPos, char stopChar)
+        {
+            if (startPos > 0)
+                startPos--;
+            while (startPos > 0 && (char)scintilla.GetCharAt(startPos) != stopChar)
+                startPos--;
+            return startPos;
+        }
+
+        /*
+        private static void LookBackUntil(ScintillaNET.Scintilla scintilla, ref int startPos, params char[] stopChars)
+        {
+            var table = new HashSet<char>(stopChars);
+            if (startPos > 0)
+                startPos--;
+            while (startPos > 0 && !table.Contains((char)scintilla.GetCharAt(startPos)))
+                startPos--;
+        }
+        */
+
+        const int TSCStyleEvent = 1;
+        const int TSCStyleCommand = 2;
+        const int TSCStyleValue = 3;
+        const int TSCStyleSeparator = 4;
+        const int TSCStyleComment = 5;
+        const int TSCStyleError = 6;
+        
+
+        const int TEMPHEADLASTFLAG = 49;
+        private void StyleTSC(ScintillaNET.Scintilla scintilla, int startPos, int endPos)
+        {
+            HashSet<Command> stopCommands = new HashSet<Command>();
+            List<string> stopStrings = new List<string>() { "#" };
+            foreach (var cmd in parentMod.Commands)
+            {
+                if ((cmd.Properties & CommandProperties.EndsEvent) != 0)
+                {
+                    stopCommands.Add(cmd);
+                    stopStrings.Add(cmd.ShortName);
+                }
+            }
+
+            //find the first command or event number (or start of the text box)
+            LookBackUntil(scintilla, ref startPos, stopStrings.ToArray());
+                        
+            scintilla.StartStyling(startPos);
+            bool inEvent = false;
+            while (startPos < endPos)
+            {
+                switch ((char)scintilla.GetCharAt(startPos))
+                {
+                    case '#':
+                        inEvent = true;
+
+                        var eventValue = FlagConverter.FlagToRealValue(scintilla.GetTextRange(startPos + 1, 4));
+
+                        var prevEventIndex = LookBackUntil(scintilla, startPos, '#');
+                        int prevEventValue = (char)scintilla.GetCharAt(prevEventIndex) != '#' ? TEMPHEADLASTFLAG
+                            : FlagConverter.FlagToRealValue(scintilla.GetTextRange(prevEventIndex + 1, 4));
+
+                        scintilla.SetStyling(5, eventValue > prevEventValue ? TSCStyleEvent : TSCStyleError);
+                        startPos += 5;
+                        break;
+                    case '<':
+                        string cmdText = scintilla.GetTextRange(startPos, parentMod.Commands[0].ShortName.Length);
+                        Command foundCommand = null;
+                        foreach(var cmd in parentMod.Commands)
+                        {
+                            if (cmdText.Length != cmd.ShortName.Length)
+                                cmdText = scintilla.GetTextRange(startPos, cmd.ShortName.Length);
+                            if (cmdText == cmd.ShortName)
+                            {
+                                foundCommand = cmd;
+                                break;
+                            }
+                        }
+                        if (foundCommand == null)
+                        {
+                            scintilla.SetStyling(1, TSCStyleError);
+                            startPos++;
+                            break;
+                        }
+
+                        scintilla.SetStyling(foundCommand.ShortName.Length, TSCStyleCommand);
+                        startPos += foundCommand.ShortName.Length;
+
+                        List<Tuple<int, int>> flattenedArgs = null;
+                        if (foundCommand.UsesRepeats)
+                            flattenedArgs = new List<Tuple<int, int>>();
+
+                        void StyleArgs(List<object> args, bool forceEndingSeparator = false)
+                        {
+                            for (int i = 0; i < args.Count; i++)
+                            {
+                                if (args[i] is Argument a)
+                                {
+                                    //fixed length arguments
+                                    if (a.Length > 0)
+                                    {
+                                        flattenedArgs?.Add(new Tuple<int, int>(startPos, a.Length));
+                                        
+                                        scintilla.SetStyling(a.Length, TSCStyleValue);
+                                        startPos += a.Length;
+                                        if (a.Separator.Length > 0 && (forceEndingSeparator || i < args.Count - 1))
+                                        {
+                                            scintilla.SetStyling(a.Separator.Length, TSCStyleSeparator);
+                                            startPos += a.Separator.Length;
+                                        }
+                                    }
+                                    //variable length arguments
+                                    else
+                                    {
+                                        int argLen = 0;
+                                        string maybeSep;
+                                        do
+                                        {
+                                            maybeSep = scintilla.GetTextRange(startPos + argLen, a.Separator.Length);
+                                        } while (maybeSep != a.Separator);
+
+                                        flattenedArgs?.Add(new Tuple<int, int>(startPos, argLen));
+
+                                        scintilla.SetStyling(argLen, TSCStyleValue);
+                                        scintilla.SetStyling(a.Separator.Length, TSCStyleSeparator);
+
+                                        startPos += argLen + a.Separator.Length;
+                                    }
+                                }
+                                else if (args[i] is RepeatStructure r)
+                                {
+                                    switch (r.RepeatType)
+                                    {
+                                        case RepeatTypes.GlobalIndex:
+                                            var repeatCount = FlagConverter.FlagToRealValue(scintilla.GetTextRange(flattenedArgs[r.Value].Item1, flattenedArgs[r.Value].Item2));
+                                            for (int j = 0; j < repeatCount; j++)
+                                                StyleArgs(r.Arguments, forceEndingSeparator || i < args.Count - 1 || j < repeatCount - 1);
+                                            break;
+                                        //TODO local index?
+                                    }
+                                }
+                            }
+                        } 
+                        StyleArgs(foundCommand.Arguments);
+
+                        if (stopCommands.Contains(foundCommand))
+                            inEvent = false;
+                        break;
+                    default:
+                        scintilla.SetStyling(1, inEvent ? 0 : TSCStyleComment);
+                        startPos++;
+                        break;
+                }
+            }
+        }
+
+        const int CreditStyleValue = 1;
+        const int CreditStyleSeparater = 2;
         const int StyleLabel = 3;
         const int StyleJump = 4;
         const int StyleOffset = 5;
@@ -186,7 +370,7 @@ namespace CaveStoryEditor
         const int StyleFade = 7;
         const int StyleEnd = 8;
         const int StyleMusic = 9;
-        const int StyleComment = 10;
+        const int CreditStyleComment = 10;
         
         private void StyleCredits(ScintillaNET.Scintilla scintilla, int startPos, int endPos)
         {
@@ -197,12 +381,9 @@ namespace CaveStoryEditor
                             && char.IsDigit((char)scintilla.GetCharAt(offset + 2))
                             && char.IsDigit((char)scintilla.GetCharAt(offset + 3));
             }
-            
+
             //scan backwards for the first [, or the start of the file
-            if(startPos > 0)
-                startPos--;
-            while (startPos > 0 && (char)scintilla.GetCharAt(startPos) != '[')
-                startPos--;
+            startPos = LookBackUntil(scintilla, startPos, '[');
             
             scintilla.StartStyling(startPos);
             while(startPos < endPos)
@@ -235,7 +416,7 @@ namespace CaveStoryEditor
                         break;
                     case ']':
                         scintilla.SetStyling(1, StyleBrackets);
-                        scintilla.SetStyling(4, StyleValue);
+                        scintilla.SetStyling(4, CreditStyleValue);
                         startPos += 5;
                         break;
 
@@ -254,27 +435,27 @@ namespace CaveStoryEditor
 
                     case 'f':
                         scintilla.SetStyling(1, StyleJump);
-                        scintilla.SetStyling(4, StyleValue);
-                        scintilla.SetStyling(1, StyleSeparater);
-                        scintilla.SetStyling(4, StyleValue);
+                        scintilla.SetStyling(4, CreditStyleValue);
+                        scintilla.SetStyling(1, CreditStyleSeparater);
+                        scintilla.SetStyling(4, CreditStyleValue);
                         startPos += 10;
                         break;
                     case 'j':
                         scintilla.SetStyling(1, StyleJump);
-                        scintilla.SetStyling(4, StyleValue);
+                        scintilla.SetStyling(4, CreditStyleValue);
                         startPos += 5;
                         break;
 
                     case '-':
                     case '+':
                         scintilla.SetStyling(1, StyleOffset);
-                        scintilla.SetStyling(4, StyleValue);
+                        scintilla.SetStyling(4, CreditStyleValue);
                         startPos += 5;
                         break;
 
                     case '!':
                         scintilla.SetStyling(1, StyleMusic);
-                        scintilla.SetStyling(4, StyleValue);
+                        scintilla.SetStyling(4, CreditStyleValue);
                         startPos += 5;
                         break;
                     case '~':
@@ -286,7 +467,7 @@ namespace CaveStoryEditor
                         startPos++;
                         break;
                     default:
-                        scintilla.SetStyling(1, StyleComment);
+                        scintilla.SetStyling(1, CreditStyleComment);
                         startPos++;
                         break;
                 }

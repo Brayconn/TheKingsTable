@@ -35,45 +35,54 @@ namespace CaveStoryModdingFramework.Compatability
             { '.', ArgumentTypes.Number },
         };
 
-        public static Dictionary<string, Command> Load(string path)
+        public static List<Command> Load(string path)
         {
-            Dictionary<string, Command> output;
+            List<Command> output;
             
             using (var sr = new StreamReader(path))
             {
                 string[] headerLine;
+                //scan for the header
                 do
                 {
                     headerLine = sr.ReadLine().Split('\t');
                 }
-                while (!sr.EndOfStream || (headerLine[0] != CEHeader && headerLine[0] != BLHeader));
+                while (sr.EndOfStream || (headerLine[0] != CEHeader && headerLine[0] != BLHeader));
+                //stop if we didn't find it
                 if (sr.EndOfStream)
                     return null;
 
+                //try to initialize with the length of the array
                 if (int.TryParse(headerLine[1], out int argCount))
-                    output = new Dictionary<string, Command>(argCount);
+                    output = new List<Command>(argCount);
                 else
-                    output = new Dictionary<string, Command>();
+                    output = new List<Command>();
                 
+                //init the actual reader
                 using (var tfp = new TextFieldParser(sr)
                 {
                     TextFieldType = FieldType.Delimited,
                     Delimiters = new[] { "\t" },
                 })
                 {
-                    Command cmd;
-                    switch (headerLine[0])
+                    while (!tfp.EndOfData)
                     {
-                        case BLHeader:
-                            cmd = ReadBLLine(tfp.ReadFields());
-                            break;
-                        case CEHeader:
-                            cmd = ReadCELine(tfp.ReadFields());
-                            break;
-                        default:
-                            throw new ArgumentException("A red spy is in the base!", headerLine[0]);
+                        Command cmd;
+                        //switch to the right reader
+                        switch (headerLine[0])
+                        {
+                            case BLHeader:
+                                cmd = ReadBLLine(tfp.ReadFields());
+                                break;
+                            case CEHeader:
+                                cmd = ReadCELine(tfp.ReadFields());
+                                break;
+                            //this should never be possible to hit
+                            default:
+                                throw new ArgumentException("A red spy is in the base!", headerLine[0]);
+                        }
+                        output.Add(cmd);
                     }
-                    output.Add(cmd.ShortName, cmd);
                 }
             }
             return output;
@@ -186,10 +195,11 @@ namespace CaveStoryModdingFramework.Compatability
 
             for(int i = 0; i < cmd.Arguments.Count; i++)
             {
-                cmd.Arguments[i].Separator = Separated ? "." : "";
+                var arg = cmd.Arguments[i] as Argument;
+                arg.Separator = Separated ? "." : "";
 
                 if (int.TryParse(line[ParameterLengthsIndex + i], out int argLen))
-                    cmd.Arguments[i].Length = argLen;
+                    arg.Length = argLen;
             }
 
             return cmd;
