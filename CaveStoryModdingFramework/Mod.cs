@@ -11,6 +11,7 @@ using System.Drawing;
 using System.Xml.Linq;
 using System.Reflection;
 using System.Xml;
+using CaveStoryModdingFramework.TSC;
 
 namespace CaveStoryModdingFramework
 {
@@ -201,6 +202,8 @@ namespace CaveStoryModdingFramework
         public byte DefaultKey { get; set; } = 7;
         [LocalizeableCategory(nameof(Dialog.ModTSCOptions), typeof(Dialog)), TypeConverter(typeof(EncodingTypeConverter))]
         public Encoding TSCEncoding { get; set; } = Encoding.ASCII;
+                
+        public List<Command> Commands { get; set; }
 
         #endregion
 

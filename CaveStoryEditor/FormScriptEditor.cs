@@ -238,6 +238,8 @@ namespace CaveStoryEditor
         const int TEMPHEADLASTFLAG = 49;
         private void StyleTSC(ScintillaNET.Scintilla scintilla, int startPos, int endPos)
         {
+            if ((parentMod.Commands?.Count ?? 0) <= 0)
+                return;
             HashSet<Command> stopCommands = new HashSet<Command>();
             List<string> stopStrings = new List<string>() { "#" };
             foreach (var cmd in parentMod.Commands)

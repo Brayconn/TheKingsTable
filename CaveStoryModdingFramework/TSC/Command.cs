@@ -6,29 +6,28 @@ namespace CaveStoryModdingFramework.TSC
     public enum ArgumentTypes
     {
         //BL/CE compatability
-        Arms, //a
-        //Ammo, //A
-        Direction, //d
-        Event, //e
-        EquipFlags, //E
-        Face, //f
-        TSCFlags, //F
-        ItemGraphic, //g
+        Arms,               //a
+        //Ammo,             //A
+        Direction,          //d
+        Event,              //e
+        EquipFlags,         //E
+        Face,               //f
+        TSCFlags,           //F
+        ItemGraphic,        //g
         CreditIllustration, //l
-        Item, //i
-        Map, //m
-        Music, //u
-        NPCEvent, //N
-        NPCType, //n
-        Sound, //s
-        TileIndex, //t
-        XCoord, //x
-        YCoord, //y
-        Number, //#
-        //Ticks, //.
+        Item,               //i
+        Map,                //m
+        Music,              //u
+        NPCEvent,           //N
+        NPCType,            //n
+        Sound,              //s
+        TileIndex,          //t
+        XCoord,             //x
+        YCoord,             //y
+        Number,             //#
+        //Ticks,            //.
 
         //New stuff
-        Separator,
         SkipFlags,
         MapFlags,
         ANP,
