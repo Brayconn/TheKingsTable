@@ -78,8 +78,14 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SurfaceNames.resx</DependentUpon>
     </Compile>
+    <Compile Include="TSCCommandDescriptions.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TSCCommandDescriptions.resx</DependentUpon>
+    </Compile>
     <Compile Include="TSCSimulator.cs" />
     <Compile Include="TSC\Command.cs" />
+    <Compile Include="TSC\CommandList.cs" />
     <Compile Include="TSC\Encryptor.cs" />
     <Compile Include="Entities.cs" />
     <Compile Include="EntityList.cs" />
@@ -132,6 +138,10 @@
     <EmbeddedResource Include="SurfaceNames.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>SurfaceNames.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TSCCommandDescriptions.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>TSCCommandDescriptions.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />
