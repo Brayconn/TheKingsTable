@@ -1,0 +1,393 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AEPlus" xml:space="preserve">
+    <value>Refill all weapon ammo</value>
+  </data>
+  <data name="AMJ" xml:space="preserve">
+    <value>Jump to event X if the PC has weapon W</value>
+  </data>
+  <data name="AMMinus" xml:space="preserve">
+    <value>Remove weapon W</value>
+  </data>
+  <data name="AMPlus" xml:space="preserve">
+    <value>Give weapon W with X ammo. Use 0000 for infinite ammo</value>
+  </data>
+  <data name="ANP" xml:space="preserve">
+    <value>Give all entities W scriptstate X and direction Y</value>
+  </data>
+  <data name="BOA" xml:space="preserve">
+    <value>Give map-boss scriptstate W</value>
+  </data>
+  <data name="BSL" xml:space="preserve">
+    <value>Start boss fight with entity W. Use 0000 to end the boss fight</value>
+  </data>
+  <data name="CAT" xml:space="preserve">
+    <value>Instantly display text. Use before a &lt;MSG/2/3; works until &lt;END. Same command as &lt;SAT</value>
+  </data>
+  <data name="CIL" xml:space="preserve">
+    <value>Clear illustration (during credits)</value>
+  </data>
+  <data name="CLO" xml:space="preserve">
+    <value>Close message box</value>
+  </data>
+  <data name="CLR" xml:space="preserve">
+    <value>Clear message box.</value>
+  </data>
+  <data name="CMP" xml:space="preserve">
+    <value>Change the tile at coordinates W:X to type Y. Produces smoke</value>
+  </data>
+  <data name="CMU" xml:space="preserve">
+    <value>Change music to song W</value>
+  </data>
+  <data name="CNP" xml:space="preserve">
+    <value>Change all entities W to type X with direction Y</value>
+  </data>
+  <data name="CPS" xml:space="preserve">
+    <value>Stops the propeller sound</value>
+  </data>
+  <data name="CRE" xml:space="preserve">
+    <value>Rolls credits</value>
+  </data>
+  <data name="CSS" xml:space="preserve">
+    <value>Stops the stream sound.</value>
+  </data>
+  <data name="DNA" xml:space="preserve">
+    <value>Remove all entities of type W</value>
+  </data>
+  <data name="DNP" xml:space="preserve">
+    <value>Remove all entities W</value>
+  </data>
+  <data name="ECJ" xml:space="preserve">
+    <value>Jump to event X if any entities W exist</value>
+  </data>
+  <data name="END" xml:space="preserve">
+    <value>Ends the current event</value>
+  </data>
+  <data name="EQMinus" xml:space="preserve">
+    <value>Dequip item(s) W</value>
+  </data>
+  <data name="EQPlus" xml:space="preserve">
+    <value>Equip item(s) W</value>
+  </data>
+  <data name="ESC" xml:space="preserve">
+    <value>Quit to title screen</value>
+  </data>
+  <data name="EVE" xml:space="preserve">
+    <value>Go to event W</value>
+  </data>
+  <data name="FAC" xml:space="preserve">
+    <value>Show face W in the message box</value>
+  </data>
+  <data name="FAI" xml:space="preserve">
+    <value>Fade in with direction W</value>
+  </data>
+  <data name="FAO" xml:space="preserve">
+    <value>Fade out with direction W</value>
+  </data>
+  <data name="FLA" xml:space="preserve">
+    <value>Flash the screen white</value>
+  </data>
+  <data name="FLJ" xml:space="preserve">
+    <value>Jump to event X if flag W is set</value>
+  </data>
+  <data name="FLMinus" xml:space="preserve">
+    <value>Unset flag W</value>
+  </data>
+  <data name="FLPlus" xml:space="preserve">
+    <value>Set flag W. Valid flags range from 0-7999</value>
+  </data>
+  <data name="FMU" xml:space="preserve">
+    <value>Fade the music out</value>
+  </data>
+  <data name="FOB" xml:space="preserve">
+    <value>Focus on boss W in X ticks. Use X &gt; 0</value>
+  </data>
+  <data name="FOM" xml:space="preserve">
+    <value>Focus on the PC in W ticks. Use W &gt; 0</value>
+  </data>
+  <data name="FON" xml:space="preserve">
+    <value>Focus on entity W in X ticks. Use X &gt; 0</value>
+  </data>
+  <data name="FRE" xml:space="preserve">
+    <value>Free game action and the PC</value>
+  </data>
+  <data name="GIT" xml:space="preserve">
+    <value>Display an item or weapon icon above the message box. Add 1000 to W for items. Use 0000 to remove</value>
+  </data>
+  <data name="HMC" xml:space="preserve">
+    <value>Hide the PC</value>
+  </data>
+  <data name="INI" xml:space="preserve">
+    <value>Reset memory and restart game</value>
+  </data>
+  <data name="INP" xml:space="preserve">
+    <value>Change entity W to type X with direction Y and set entity flag 100 (0x8000)</value>
+  </data>
+  <data name="ITJ" xml:space="preserve">
+    <value>Jump to event X if the PC has item W</value>
+  </data>
+  <data name="ITMinus" xml:space="preserve">
+    <value>Remove item W</value>
+  </data>
+  <data name="ITPlus" xml:space="preserve">
+    <value>Give item W</value>
+  </data>
+  <data name="KEY" xml:space="preserve">
+    <value>Lock player controls and hide status bars until &lt;END.</value>
+  </data>
+  <data name="LDP" xml:space="preserve">
+    <value>Load the saved game</value>
+  </data>
+  <data name="LIPlus" xml:space="preserve">
+    <value>Recover W health</value>
+  </data>
+  <data name="MLP" xml:space="preserve">
+    <value>Shows the map system view of/enters the map loop for the current area</value>
+  </data>
+  <data name="MLPlus" xml:space="preserve">
+    <value>Increase the current and maximum health by W</value>
+  </data>
+  <data name="MM0" xml:space="preserve">
+    <value>Halt the PC's forward motion</value>
+  </data>
+  <data name="MNA" xml:space="preserve">
+    <value>Display the map name</value>
+  </data>
+  <data name="MNP" xml:space="preserve">
+    <value>Move entity W to coordinates X:Y with direction Z</value>
+  </data>
+  <data name="MOV" xml:space="preserve">
+    <value>Move the PC to coordinates W:X</value>
+  </data>
+  <data name="MPJ" xml:space="preserve">
+    <value>Jump to event W if the map flag for the current area is set</value>
+  </data>
+  <data name="MPPlus" xml:space="preserve">
+    <value>Set map flag W. Map flags cannot be unset. Highest usable flag is 127.</value>
+  </data>
+  <data name="MS2" xml:space="preserve">
+    <value>Open an invisible message box at the top of screen</value>
+  </data>
+  <data name="MS3" xml:space="preserve">
+    <value>Open a message box at the top of screen</value>
+  </data>
+  <data name="MSG" xml:space="preserve">
+    <value>Open a message box at the bottom of the screen</value>
+  </data>
+  <data name="MYB" xml:space="preserve">
+    <value>Causes the PC to hop in the direction opposite of W. Using up or down causes the jump to be vertical</value>
+  </data>
+  <data name="MYD" xml:space="preserve">
+    <value>Causes the PC to face direction W</value>
+  </data>
+  <data name="NCJ" xml:space="preserve">
+    <value>Jump to event X if any entity of type W exists</value>
+  </data>
+  <data name="NOD" xml:space="preserve">
+    <value>Wait for player input before resuming script</value>
+  </data>
+  <data name="NUM" xml:space="preserve">
+    <value>Prints the value [4a5b34+W*4] to the message box. Use 0000 to print the last used W from compatible commands (eg AM+)</value>
+  </data>
+  <data name="PRI" xml:space="preserve">
+    <value>Lock player controls and freeze game action</value>
+  </data>
+  <data name="PSPlus" xml:space="preserve">
+    <value>Set teleporter slot W to event X. Selecting slot W while using the teleporter menu will jump to event X</value>
+  </data>
+  <data name="QUA" xml:space="preserve">
+    <value>Shake the screen for W ticks</value>
+  </data>
+  <data name="RMU" xml:space="preserve">
+    <value>Resume the song last played</value>
+  </data>
+  <data name="SAT" xml:space="preserve">
+    <value>Instantly display text. Use before a &lt;MSG/2/3; works until &lt;END. Same command as &lt;CAT</value>
+  </data>
+  <data name="SIL" xml:space="preserve">
+    <value>Show illustration W (during credits)</value>
+  </data>
+  <data name="SKJ" xml:space="preserve">
+    <value>Jump to event X if skipflag W is set</value>
+  </data>
+  <data name="SKMinus" xml:space="preserve">
+    <value>Unset skipflag W</value>
+  </data>
+  <data name="SKPlus" xml:space="preserve">
+    <value>Set skipflag W</value>
+  </data>
+  <data name="SLP" xml:space="preserve">
+    <value>Show the teleporter menu</value>
+  </data>
+  <data name="SMC" xml:space="preserve">
+    <value>Show the PC</value>
+  </data>
+  <data name="SMP" xml:space="preserve">
+    <value>Subtract 1 from the tile type at coordinates W:X. Does not create smoke</value>
+  </data>
+  <data name="SNP" xml:space="preserve">
+    <value>Create an entity of type W at coordinates X:Y with direction Z</value>
+  </data>
+  <data name="SOU" xml:space="preserve">
+    <value>Play sound effect W</value>
+  </data>
+  <data name="SPS" xml:space="preserve">
+    <value>Start the propeller sound</value>
+  </data>
+  <data name="SSS" xml:space="preserve">
+    <value>Start the stream sound with volume W</value>
+  </data>
+  <data name="STC" xml:space="preserve">
+    <value>Saves current time to 290.rec</value>
+  </data>
+  <data name="SVP" xml:space="preserve">
+    <value>Saves current game</value>
+  </data>
+  <data name="TAM" xml:space="preserve">
+    <value>Trade weapon W for weapon X and set max ammo to Y. Use 0000 to keep the same amount of ammo</value>
+  </data>
+  <data name="TRA" xml:space="preserve">
+    <value>Travel to map W, run event X, and move the PC to coordinates Y:Z</value>
+  </data>
+  <data name="TUR" xml:space="preserve">
+    <value>Instantly display text. Use after a &lt;MSG/2/3; works until another &lt;MSG/2/3 or an &lt;END</value>
+  </data>
+  <data name="UNI" xml:space="preserve">
+    <value>Set character movement type. Use 0000 for normal, 0001 for zero-G and 0002 to disallow movement.</value>
+  </data>
+  <data name="UNJ" xml:space="preserve">
+    <value>Jump to event X if movement is of type W (0000 for normal, 0001 for zero-G)</value>
+  </data>
+  <data name="WAI" xml:space="preserve">
+    <value>Pause script for W ticks</value>
+  </data>
+  <data name="WAS" xml:space="preserve">
+    <value>Pause script until character is on ground</value>
+  </data>
+  <data name="XX1" xml:space="preserve">
+    <value>Show the island falling in manner W. Use 0000 to have it crash and 0001 to have it stop midway</value>
+  </data>
+  <data name="YNJ" xml:space="preserve">
+    <value>Prompt Yes/No; jump to event W if No is selected</value>
+  </data>
+  <data name="ZAM" xml:space="preserve">
+    <value>Sets all weapon energy to zero</value>
+  </data>
+</root>

@@ -19,7 +19,7 @@ namespace CaveStoryModdingFramework.Compatability
             { 'e', ArgumentTypes.Event },
             { 'E', ArgumentTypes.EquipFlags },
             { 'f', ArgumentTypes.Face },
-            { 'F', ArgumentTypes.TSCFlags },
+            { 'F', ArgumentTypes.NpcFlags },
             { 'g', ArgumentTypes.ItemGraphic },
             { 'l', ArgumentTypes.CreditIllustration },
             { 'i', ArgumentTypes.Item },
