@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="290.cs" />
     <Compile Include="Attributes.cs" />
     <Compile Include="BackgroundTypeNames.Designer.cs">
       <AutoGen>True</AutoGen>
