@@ -143,6 +143,7 @@ namespace CaveStoryModdingFramework.TSC
         public int Value { get; set; }
         public List<object> Arguments { get; set; } = new List<object>();
 
+        public RepeatStructure() { }
         public RepeatStructure(RepeatTypes type, int value, params object[] args)
         {
             RepeatType = type;
