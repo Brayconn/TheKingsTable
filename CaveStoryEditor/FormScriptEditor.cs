@@ -189,7 +189,7 @@ namespace CaveStoryEditor
             }            
         }
 
-        private static void LookBackUntil(ScintillaNET.Scintilla scintilla, ref int startPos, params string[] stopStrings)
+        private static void LookBackUntil(ScintillaNET.Scintilla scintilla, ref int startPos, List<string> stopStrings)
         {
             if (startPos > 0)
                 startPos--;
@@ -247,18 +247,22 @@ namespace CaveStoryEditor
                 if ((cmd.Properties & CommandProperties.EndsEvent) != 0)
                 {
                     stopCommands.Add(cmd);
-                    stopStrings.Add(cmd.ShortName);
+                    //stopStrings.Add(cmd.ShortName); //TODO this is disabled to reduce the chances of an edge case happening
                 }
             }
+            
 
             //find the first command or event number (or start of the text box)
-            LookBackUntil(scintilla, ref startPos, stopStrings.ToArray());
+            LookBackUntil(scintilla, ref startPos, stopStrings);
                         
             scintilla.StartStyling(startPos);
-            bool inEvent = false;
+            //TODO if we reached 0 we need to check head
+            var firstChar = (char)scintilla.GetCharAt(startPos);
+            bool inEvent =  firstChar == '#' || firstChar == '<';
             while (startPos < endPos)
             {
-                switch ((char)scintilla.GetCharAt(startPos))
+                var currChar = (char)scintilla.GetCharAt(startPos);
+                switch (currChar)
                 {
                     case '#':
                         inEvent = true;
@@ -266,13 +270,14 @@ namespace CaveStoryEditor
                         var eventValue = FlagConverter.FlagToRealValue(scintilla.GetTextRange(startPos + 1, 4));
 
                         var prevEventIndex = LookBackUntil(scintilla, startPos, '#');
-                        int prevEventValue = (char)scintilla.GetCharAt(prevEventIndex) != '#' ? TEMPHEADLASTFLAG
+                        int prevEventValue = (prevEventIndex == startPos || (char)scintilla.GetCharAt(prevEventIndex) != '#')
+                            ? TEMPHEADLASTFLAG
                             : FlagConverter.FlagToRealValue(scintilla.GetTextRange(prevEventIndex + 1, 4));
 
-                        scintilla.SetStyling(5, eventValue > prevEventValue ? TSCStyleEvent : TSCStyleError);
+                        scintilla.Style(5, eventValue > prevEventValue ? TSCStyleEvent : TSCStyleError);
                         startPos += 5;
                         break;
-                    case '<':
+                    case '<' when inEvent:
                         string cmdText = scintilla.GetTextRange(startPos, parentMod.Commands[0].ShortName.Length);
                         Command foundCommand = null;
                         foreach(var cmd in parentMod.Commands)
@@ -287,12 +292,12 @@ namespace CaveStoryEditor
                         }
                         if (foundCommand == null)
                         {
-                            scintilla.SetStyling(1, TSCStyleError);
+                            scintilla.Style(1, TSCStyleError);
                             startPos++;
                             break;
                         }
 
-                        scintilla.SetStyling(foundCommand.ShortName.Length, TSCStyleCommand);
+                        scintilla.Style(foundCommand.ShortName.Length, TSCStyleCommand);
                         startPos += foundCommand.ShortName.Length;
 
                         List<Tuple<int, int>> flattenedArgs = null;
@@ -310,28 +315,28 @@ namespace CaveStoryEditor
                                     {
                                         flattenedArgs?.Add(new Tuple<int, int>(startPos, a.Length));
                                         
-                                        scintilla.SetStyling(a.Length, TSCStyleValue);
+                                        scintilla.Style(a.Length, TSCStyleValue);
                                         startPos += a.Length;
                                         if (a.Separator.Length > 0 && (forceEndingSeparator || i < args.Count - 1))
                                         {
-                                            scintilla.SetStyling(a.Separator.Length, TSCStyleSeparator);
+                                            scintilla.Style(a.Separator.Length, TSCStyleSeparator);
                                             startPos += a.Separator.Length;
                                         }
                                     }
                                     //variable length arguments
                                     else
                                     {
-                                        int argLen = 0;
+                                        int argLen = -1;
                                         string maybeSep;
                                         do
                                         {
-                                            maybeSep = scintilla.GetTextRange(startPos + argLen, a.Separator.Length);
-                                        } while (maybeSep != a.Separator);
+                                            maybeSep = scintilla.GetTextRange(startPos + (++argLen), a.Separator.Length);
+                                        } while (maybeSep != a.Separator && startPos + argLen < scintilla.TextLength);
 
                                         flattenedArgs?.Add(new Tuple<int, int>(startPos, argLen));
 
-                                        scintilla.SetStyling(argLen, TSCStyleValue);
-                                        scintilla.SetStyling(a.Separator.Length, TSCStyleSeparator);
+                                        scintilla.Style(argLen, TSCStyleValue);
+                                        scintilla.Style(a.Separator.Length, TSCStyleSeparator);
 
                                         startPos += argLen + a.Separator.Length;
                                     }
@@ -356,7 +361,7 @@ namespace CaveStoryEditor
                             inEvent = false;
                         break;
                     default:
-                        scintilla.SetStyling(1, inEvent ? 0 : TSCStyleComment);
+                        scintilla.Style(1, inEvent ? 0 : TSCStyleComment);
                         startPos++;
                         break;
                 }
@@ -405,8 +410,8 @@ namespace CaveStoryEditor
                         //style the inner text if we found a brace
                         if (c == ']')
                         {
-                            scintilla.SetStyling(1, StyleBrackets);
-                            scintilla.SetStyling(textLen, 0);
+                            scintilla.Style(1, StyleBrackets);
+                            scintilla.Style(textLen, 0);
                             goto case ']';
                         }
                         //otherwise it's just a comment I guess?
@@ -417,8 +422,8 @@ namespace CaveStoryEditor
                         }
                         break;
                     case ']':
-                        scintilla.SetStyling(1, StyleBrackets);
-                        scintilla.SetStyling(4, CreditStyleValue);
+                        scintilla.Style(1, StyleBrackets);
+                        scintilla.Style(4, CreditStyleValue);
                         startPos += 5;
                         break;
 
@@ -426,9 +431,9 @@ namespace CaveStoryEditor
                         //char prevChar = (char)scintilla.GetCharAt(startPos - 1);
                         if (IsValidArg(startPos + 1))
                         {
-                            scintilla.SetStyling(1, StyleLabel);
+                            scintilla.Style(1, StyleLabel);
                             //scintilla.SetStyling(4, StyleValue);
-                            scintilla.SetStyling(4, StyleLabel);
+                            scintilla.Style(4, StyleLabel);
                             startPos += 5;
                         }
                         else
@@ -436,40 +441,40 @@ namespace CaveStoryEditor
                         break;
 
                     case 'f':
-                        scintilla.SetStyling(1, StyleJump);
-                        scintilla.SetStyling(4, CreditStyleValue);
-                        scintilla.SetStyling(1, CreditStyleSeparater);
-                        scintilla.SetStyling(4, CreditStyleValue);
+                        scintilla.Style(1, StyleJump);
+                        scintilla.Style(4, CreditStyleValue);
+                        scintilla.Style(1, CreditStyleSeparater);
+                        scintilla.Style(4, CreditStyleValue);
                         startPos += 10;
                         break;
                     case 'j':
-                        scintilla.SetStyling(1, StyleJump);
-                        scintilla.SetStyling(4, CreditStyleValue);
+                        scintilla.Style(1, StyleJump);
+                        scintilla.Style(4, CreditStyleValue);
                         startPos += 5;
                         break;
 
                     case '-':
                     case '+':
-                        scintilla.SetStyling(1, StyleOffset);
-                        scintilla.SetStyling(4, CreditStyleValue);
+                        scintilla.Style(1, StyleOffset);
+                        scintilla.Style(4, CreditStyleValue);
                         startPos += 5;
                         break;
 
                     case '!':
-                        scintilla.SetStyling(1, StyleMusic);
-                        scintilla.SetStyling(4, CreditStyleValue);
+                        scintilla.Style(1, StyleMusic);
+                        scintilla.Style(4, CreditStyleValue);
                         startPos += 5;
                         break;
                     case '~':
-                        scintilla.SetStyling(1, StyleFade);
+                        scintilla.Style(1, StyleFade);
                         startPos++;
                         break;
                     case '/':
-                        scintilla.SetStyling(1, StyleEnd);
+                        scintilla.Style(1, StyleEnd);
                         startPos++;
                         break;
                     default:
-                        scintilla.SetStyling(1, CreditStyleComment);
+                        scintilla.Style(1, CreditStyleComment);
                         startPos++;
                         break;
                 }

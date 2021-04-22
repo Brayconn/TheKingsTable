@@ -133,6 +133,7 @@
     <Compile Include="PropertyGridShell.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="ScintillaExtensions.cs" />
     <Compile Include="SharedGraphics.cs" />
     <Compile Include="FormStageEditor_TilesetDisplay.cs">
       <SubType>Form</SubType>
