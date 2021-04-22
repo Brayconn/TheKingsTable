@@ -580,31 +580,6 @@ namespace CaveStoryEditor
                 if(ofd.ShowDialog() == DialogResult.OK)
                 {
                     mod.Commands = CaveStoryModdingFramework.Compatability.TSCListTXT.Load(ofd.FileName);
-                    mod.Commands.Add(new Command()
-                    {
-                        ShortName = "<RNJ",
-                        LongName = "RaNdom Jump",
-                        Description = "Jumps to a random event",
-                        Arguments = new List<object>()
-                        {
-                            new Argument()
-                            {
-                                Name = "Event count"
-                            },
-                            new RepeatStructure()
-                            {
-                                RepeatType = RepeatTypes.GlobalIndex,
-                                Value = 0,
-                                Arguments = new List<object>()
-                                {
-                                    new Argument()
-                                    {
-                                        Type = ArgumentTypes.Event
-                                    }
-                                }
-                            }
-                        }
-                    });
                 }
             }
         }
