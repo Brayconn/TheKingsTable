@@ -41,6 +41,7 @@ namespace CaveStoryModdingFramework.TSC
     public class Argument
     {
         public const int DefaultArgumentLength = 4;
+        public const string DefaultSeparator = ":";
         public string Name { get; set; } = "";
 
         public ArgumentTypes Type { get; set; } = ArgumentTypes.Number;
@@ -53,17 +54,18 @@ namespace CaveStoryModdingFramework.TSC
         /// <summary>
         /// This is used in a regular string comparison if Length <= 0, otherwise it just uses the length of the string
         /// </summary>
-        public string Separator { get; set; } = ":";
+        public string Separator { get; set; } = DefaultSeparator;
 
         public Argument() { }
-        public Argument(string name) : this(name, DefaultArgumentLength, ArgumentTypes.Number) { }
+        public Argument(string name) : this(name, DefaultArgumentLength, ArgumentTypes.Number, DefaultSeparator) { }
         //TODO maybe mke a dictionary for auto names
-        public Argument(ArgumentTypes arg) : this(arg.ToString(), DefaultArgumentLength, arg) { }
-        public Argument(string name, int argLen, ArgumentTypes arg)
+        public Argument(ArgumentTypes arg) : this(arg.ToString(), DefaultArgumentLength, arg, DefaultSeparator) { }
+        public Argument(string name, int argLen, ArgumentTypes arg, string separator = DefaultSeparator)
         {
             Name = name;
             Length = argLen;
             Type = arg;
+            Separator = separator;
         }        
 
         internal static List<object> ParseArguments(object[] args)
@@ -76,13 +78,24 @@ namespace CaveStoryModdingFramework.TSC
                 int? argLen = null;
                 void AddWIPArg()
                 {
-                    if (shortName != null || argType != null || argLen != null)
-                    {
-                        arguments.Add(new Argument(shortName ?? "", argLen ?? DefaultArgumentLength, argType ?? ArgumentTypes.Number));
-                        shortName = null;
-                        argLen = null;
-                        argType = null;
-                    }
+                    //if nothing has been queued quit
+                    if (shortName == null && argType == null && argLen == null)
+                        return;
+                    //otherwise fill in the values
+                    if(argType == null)
+                        argType = ArgumentTypes.Number;
+                    if (shortName == null)
+                        shortName = argType.ToString();
+                    if (argLen == null)
+                        argLen = DefaultArgumentLength;
+
+                    //and add the argument
+                    arguments.Add(new Argument(shortName, (int)argLen, (ArgumentTypes)argType));
+                    
+                    //then reset
+                    shortName = null;
+                    argLen = null;
+                    argType = null;
                 }
 
                 for (int i = 0; i < args.Length; i++)
@@ -90,36 +103,41 @@ namespace CaveStoryModdingFramework.TSC
                     //Proper arguments are added normally
                     if (args[i] is Argument arg)
                     {
+                        AddWIPArg();
                         arguments.Add(arg);
                     }
                     //So are repeat structures
                     else if (args[i] is RepeatStructure rep)
                     {
+                        AddWIPArg();
                         arguments.Add(rep);
                     }
                     //strings get queued
                     else if (args[i] is string s)
                     {
-                        AddWIPArg();
+                        if(shortName != null)
+                            AddWIPArg();
                         shortName = s;
                     }
                     //so do arg lengths
                     else if(args[i] is int val)
                     {
-                        AddWIPArg();
+                        if(argLen != null)
+                            AddWIPArg();
                         argLen = val;
                     }
                     //and arg types
                     else if (args[i] is ArgumentTypes at)
                     {
-                        AddWIPArg();
+                        if (argType != null)
+                            AddWIPArg();
                         argType = at;
                     }
                     //anything else could be bad
                     else
                     {
                         throw new InvalidCastException($"Unable to recognize {args[i]} as a valid type!\n"
-                            + "(Argument, RepeatStructure, string, or ArgumentTypes)");
+                            + "(Argument, RepeatStructure, string, int, or ArgumentTypes)");
                     }
                 }
                 //catch any leftovers
@@ -180,7 +198,8 @@ namespace CaveStoryModdingFramework.TSC
         public List<object> Arguments { get; set; } = new List<object>();
         public CommandProperties Properties { get; set; }
 
-        public Command() { }
+        public Command(string shortName, string longName, string description)
+            : this(shortName, longName, description, CommandProperties.None, Array.Empty<object>()) { }
         public Command(string shortName, string longName, string description, params object[] args)
             : this(shortName, longName, description, CommandProperties.None, args) { }
         public Command(string shortName, string longName, string description, CommandProperties properties, params object[] args)

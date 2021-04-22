@@ -285,6 +285,8 @@ namespace CaveStoryModdingFramework
             BackgroundTypes = new Dictionary<long, string>(CaveStoryModdingFramework.BackgroundTypes.BackgroundTypeList);
 
             EntityInfos = new Dictionary<int, EntityInfo>(EntityList.EntityInfos);
+
+            Commands = new List<Command>(CommandList.Commands);
         }
 
         static Rectangle RectFromString(string input)

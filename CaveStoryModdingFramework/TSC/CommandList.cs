@@ -4,6 +4,9 @@ namespace CaveStoryModdingFramework.TSC
 {
     public static class CommandList
     {
+        /// <summary>
+        /// All default TSC commands in the order they appear in the TSC parser
+        /// </summary>
         public static readonly IReadOnlyList<Command> Commands = new List<Command>()
         {
             new Command("<END", "END",          TSCCommandDescriptions.END,     CommandProperties.EndsEvent | CommandProperties.ClearsTextbox),
@@ -90,9 +93,9 @@ namespace CaveStoryModdingFramework.TSC
             new Command("<SVP", "SaVe Profile", TSCCommandDescriptions.SVP),
             new Command("<LDP", "LoaD Profile", TSCCommandDescriptions.LDP, CommandProperties.EndsEvent),
             new Command("<FAC", "FACe",         TSCCommandDescriptions.FAC, ArgumentTypes.Face),
-            //new Command("<FAC", "FACe",         TSCCommandDescriptions.FAC, ArgumentTypes.Face),
+            //new Command("<FAC", "FACe",         TSCCommandDescriptions.FAC, ArgumentTypes.Face), //Duplicate FAC command
             new Command("<GIT", "Graphic ITem", TSCCommandDescriptions.GIT, ArgumentTypes.ItemGraphic),
-            new Command("<NUM", "NUMber",       TSCCommandDescriptions.NUM, new Argument()),
+            new Command("<NUM", "NUMber",       TSCCommandDescriptions.NUM, ArgumentTypes.Number),
             new Command("<CRE", "CREdits",      TSCCommandDescriptions.CRE),
             new Command("<SIL", "Show ILlustration", TSCCommandDescriptions.SIL, ArgumentTypes.CreditIllustration),
             new Command("<CIL", "Clear ILlustration", TSCCommandDescriptions.CIL),
@@ -100,12 +103,29 @@ namespace CaveStoryModdingFramework.TSC
             new Command("<ESC", "ESCape",       TSCCommandDescriptions.ESC, CommandProperties.EndsEvent),
         };
 
-        //TODO
+        /// <summary>
+        /// All commands included in the original TSC+ package
+        /// </summary>
         public static readonly IReadOnlyList<Command> TSCPlusCommands = new List<Command>()
         {
-
+            new Command("<LRX", "Left Right X", "Jump to W, X, or Y, if the player moves Left, Right, or Shoots",
+                "Left Event", ArgumentTypes.Event, "Right Event", ArgumentTypes.Event, "Shoot Event", ArgumentTypes.Event),
+            new Command("<FNJ", "Flag NotJump", "Jump if X is not set.", ArgumentTypes.NpcFlags, ArgumentTypes.Event),
+            new Command("<VAR", "VARiable set", "Puts X into variable W", ArgumentTypes.Number, ArgumentTypes.Number),
+            new Command("<VAZ", "VAriable Zero", "Zeros X variables, starting at variable W", ArgumentTypes.Number, ArgumentTypes.Number),
+            new Command("<VAO", "VAriable Operation", "Performs operation $ on W using X", ArgumentTypes.Number, ArgumentTypes.Number),
+            new Command("<VAJ", "VAriable Jump", "Compare X to W using method Y, if true jump to Z", ArgumentTypes.Number, ArgumentTypes.Number, ArgumentTypes.Number, ArgumentTypes.Event),
+            new Command("<RND", "RaNdoM", "Puts random # between W (min) and X (max) into variable Y", ArgumentTypes.Number, ArgumentTypes.Number, ArgumentTypes.Number),
+            new Command("<IMG", "tIMaGe", "Will set TimgFILE.bmp over the screen. The \"tag\" for the file name must be exactly 4 characters", ArgumentTypes.ASCII),
+            new Command("<PHY", "PHYsics define", "Change physics variables"),
+            //new Command("<NAM", "NAMe", "Displays a name", new Argument("Name", 0, ArgumentTypes.ASCII, "$")), //Only included in some versions of TSC+
         };
 
         //TODO maybe add a list for common custom commands?
+        /*
+         mod.Commands.Add(new Command("<RNJ", "RaNdom Jump", "Jumps to a random event",
+                            "Event count",
+                            new RepeatStructure(RepeatTypes.GlobalIndex, 0, ArgumentTypes.Event)));                
+         */
     }
 }

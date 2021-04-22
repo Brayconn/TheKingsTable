@@ -102,12 +102,7 @@ namespace CaveStoryModdingFramework.Compatability
 
         static Command ReadBase(string[] line)
         {
-            return new Command()
-            {
-                ShortName = line[ShortNameIndex],
-                LongName = line[LongNameIndex],
-                Description = line[DescriptionIndex]
-            };
+            return new Command(line[ShortNameIndex], line[LongNameIndex], line[DescriptionIndex]);
         }
 
         static Command ReadCELine(string[] line)
@@ -129,10 +124,7 @@ namespace CaveStoryModdingFramework.Compatability
             
             for(int i = 0; i < argCount; i++)
             {
-                var arg = new Argument()
-                {
-                    Type = CEArgumentTypesTable[argString[i]],
-                };
+                var arg = new Argument(CEArgumentTypesTable[argString[i]]);
                 switch(argString[i])
                 {
                     case '.':
