@@ -57,9 +57,12 @@ namespace CaveStoryModdingFramework.TSC
         public string Separator { get; set; } = DefaultSeparator;
 
         public Argument() { }
-        public Argument(string name) : this(name, DefaultArgumentLength, ArgumentTypes.Number, DefaultSeparator) { }
+        public Argument(string name, string separator = DefaultSeparator) : this(name, DefaultArgumentLength, ArgumentTypes.Number, DefaultSeparator) { }
         //TODO maybe mke a dictionary for auto names
         public Argument(ArgumentTypes arg) : this(arg.ToString(), DefaultArgumentLength, arg, DefaultSeparator) { }
+        public Argument(string name, int argLen) : this(name, argLen, ArgumentTypes.Number, DefaultSeparator) { }
+        public Argument(ArgumentTypes arg, string separator) : this(arg.ToString(), DefaultArgumentLength, arg, separator) { }
+        public Argument(string name, ArgumentTypes arg, string separator) : this(name, DefaultArgumentLength, arg, separator) { }
         public Argument(string name, int argLen, ArgumentTypes arg, string separator = DefaultSeparator)
         {
             Name = name;
