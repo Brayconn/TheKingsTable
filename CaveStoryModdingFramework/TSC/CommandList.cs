@@ -7,7 +7,7 @@ namespace CaveStoryModdingFramework.TSC
         /// <summary>
         /// All default TSC commands in the order they appear in the TSC parser
         /// </summary>
-        public static readonly IReadOnlyList<Command> Commands = new List<Command>()
+        public static readonly IReadOnlyList<Command> DefaultCommands = new List<Command>()
         {
             new Command("<END", "END",          TSCCommandDescriptions.END,     CommandProperties.EndsEvent | CommandProperties.ClearsTextbox),
             new Command("<LI+", "LIfe +",       TSCCommandDescriptions.LIPlus,  "Life"),
@@ -103,63 +103,47 @@ namespace CaveStoryModdingFramework.TSC
             new Command("<ESC", "ESCape",       TSCCommandDescriptions.ESC, CommandProperties.EndsEvent),
         };
 
-        /// <summary>
-        /// All commands included in the original TSC+ package
-        /// </summary>
-        public static readonly IReadOnlyList<Command> TSCPlusCommands = new List<Command>()
+        public static readonly IReadOnlyList<Command> FanCommands = new List<Command>()
         {
-            //included in BL's default list
-            //Noxid's
+            //Included in Noxid's "TSC+"/BL's built-in TSC+ command list
             new Command("<LRX", "Left Right X", "Jump to W, X, or Y, if the player moves Left, Right, or Shoots",
-                "Left Event", ArgumentTypes.Event, "Right Event", ArgumentTypes.Event, "Shoot Event", ArgumentTypes.Event),
-            new Command("<FNJ", "Flag NotJump", "Jump if X is not set.", ArgumentTypes.NpcFlags, ArgumentTypes.Event),
-            new Command("<VAR", "VARiable set", "Puts X into variable W", ArgumentTypes.Number, ArgumentTypes.Number),
-            new Command("<VAZ", "VAriable Zero", "Zeros X variables, starting at variable W", ArgumentTypes.Number, ArgumentTypes.Number),
-            new Command("<VAO", "VAriable Operation", "Performs operation $ on W using X", ArgumentTypes.Number, ArgumentTypes.Number),
-            new Command("<VAJ", "VAriable Jump", "Compare X to W using method Y, if true jump to Z", ArgumentTypes.Number, ArgumentTypes.Number, ArgumentTypes.Number, ArgumentTypes.Event),
-            new Command("<RND", "RaNdoM", "Puts random # between W (min) and X (max) into variable Y", ArgumentTypes.Number, ArgumentTypes.Number, ArgumentTypes.Number),
-            new Command("<IMG", "tIMaGe", "Will set TimgFILE.bmp over the screen. The \"tag\" for the file name must be exactly 4 characters", ArgumentTypes.ASCII),
-            //Voidmage_Lowell's
-            new Command("<PHY", "PHYsics define", "Change physics variables", "Parameter", ArgumentTypes.Number, "Value", ArgumentTypes.Number),
+                "Left Event", ArgumentTypes.Event, "Right Event", ArgumentTypes.Event, "Shoot Event", ArgumentTypes.Event){ Author = "Noxid" },
+            new Command("<FNJ", "Flag NotJump", "Jump if X is not set.", ArgumentTypes.NpcFlags, ArgumentTypes.Event){ Author = "Noxid" },
+            new Command("<VAR", "VARiable set", "Puts X into variable W", ArgumentTypes.Number, ArgumentTypes.Number){ Author = "Noxid" },
+            new Command("<VAZ", "VAriable Zero", "Zeros X variables, starting at variable W", ArgumentTypes.Number, ArgumentTypes.Number){ Author = "Noxid" },
+            new Command("<VAO", "VAriable Operation", "Performs operation $ on W using X", ArgumentTypes.Number, ArgumentTypes.Number){ Author = "Noxid" },
+            new Command("<VAJ", "VAriable Jump", "Compare X to W using method Y, if true jump to Z", ArgumentTypes.Number, ArgumentTypes.Number, ArgumentTypes.Number, ArgumentTypes.Event){ Author = "Noxid" },
+            new Command("<RND", "RaNdoM", "Puts random # between W (min) and X (max) into variable Y", ArgumentTypes.Number, ArgumentTypes.Number, ArgumentTypes.Number){ Author = "Noxid" },
+            new Command("<IMG", "tIMaGe", "Will set TimgFILE.bmp over the screen. The \"tag\" for the file name must be exactly 4 characters", ArgumentTypes.ASCII){ Author = "Noxid" },
+            //commision for Voidmage_Lowell
+            new Command("<PHY", "PHYsics define", "Change physics variables", "Parameter", ArgumentTypes.Number, "Value", ArgumentTypes.Number){ Author = "Noxid" },
             
-            //included in Serri's TSC+ Improved
-            //Noxid's (commision for Cultr1)
-            new Command("<NAM", "NAMe box", "Displays a name", new Argument("Name", 0, ArgumentTypes.ASCII, "$")),
-            //Lace's
-            new Command("<MIM", "infinite MIMiga mask", "Set the current mimiga mask graphic to graphic X", ArgumentTypes.Number),
-            //Hayden's
-            new Command("<CMN", "Change Map parts (No smoke)", "Same as <CMP but doesn't spawn smoke", ArgumentTypes.XCoord, ArgumentTypes.YCoord, ArgumentTypes.TileIndex ),
-            //Mint's
-            new Command("<OTR", "Optimized TRansfer stage", "Go to stage X with event Y. Preserves player coordinates", CommandProperties.EndsEvent, ArgumentTypes.Map, ArgumentTypes.Event),
-            //Serri/Txin's
-            new Command("<MS4", "MeSsage 4", "Displays an invisble message box at the bottom of the screen", CommandProperties.ClearsTextbox),
-            //BLink's
-            new Command("<BUY", "BUY", "Jump to event Y if you have less than X money", ArgumentTypes.Number, ArgumentTypes.Event),
-            new Command("<SEL", "SELl", "Earn X amount of money", ArgumentTypes.Number),
-            //Carrotlord's
-            new Command("<BBP", "Big BumP", "Bump the player in the direction X, with Y upward force", ArgumentTypes.Direction, ArgumentTypes.Number),
-        };
+            //Included in Serri's "TSC+ Improved"
+            //commision for Cultr1
+            new Command("<NAM", "NAMe box", "Displays a name", new Argument("Name", 0, ArgumentTypes.ASCII, "$")){ Author = "Noxid" },
+            new Command("<MIM", "infinite MIMiga mask", "Set the current mimiga mask graphic to graphic X", ArgumentTypes.Number){ Author = "Lace" },
+            new Command("<CMN", "Change Map parts (No smoke)", "Same as <CMP but doesn't spawn smoke", ArgumentTypes.XCoord, ArgumentTypes.YCoord, ArgumentTypes.TileIndex ){ Author = "HaydenStudios" },
+            new Command("<OTR", "Optimized TRansfer stage", "Go to stage X with event Y. Preserves player coordinates", CommandProperties.EndsEvent, ArgumentTypes.Map, ArgumentTypes.Event){ Author = "Mint" },
+            new Command("<MS4", "MeSsage 4", "Displays an invisble message box at the bottom of the screen", CommandProperties.ClearsTextbox){ Author = "Serri, Txin" },
+            new Command("<BUY", "BUY", "Jump to event Y if you have less than X money", ArgumentTypes.Number, ArgumentTypes.Event){ Author = "BLink" },
+            new Command("<SEL", "SELl", "Earn X amount of money", ArgumentTypes.Number){ Author = "BLink" },
+            new Command("<BBP", "Big BumP", "Bump the player in the direction X, with Y upward force", ArgumentTypes.Direction, ArgumentTypes.Number){ Author = "Carrotlord" },
 
-        public static readonly IReadOnlyList<Command> OtherCommands = new List<Command>()
-        {
-            //bigbadwolf/BLink's
-            new Command("<RNJ", "RaNdom Jump", "Jumps to a random event from the list of W supplied arguments", CommandProperties.EndsEvent, "Event count", new RepeatStructure(RepeatTypes.GlobalIndex, 0, ArgumentTypes.Event)),
-            //Cyber's
-            new Command("<RNJ", "RaNdom Jump", "Jumps to a random event between W and X (inclusive)", CommandProperties.EndsEvent, ArgumentTypes.Event, ArgumentTypes.Event),
-            new Command("<CNV", "Change Npc Variable", "Change variable X of the NPC with event W to the value Y", ArgumentTypes.NPCEvent, ArgumentTypes.Number, ArgumentTypes.Number),
-            //SIM's
-            new Command("<HEX", "HEX edit", "Set the four bytes at address W to the value X", new Argument("Address", 6, ArgumentTypes.Number), new Argument("Value", 2, ArgumentTypes.Number)),
-            //Txin's (RoB)
-            new Command("<CAL", "CALl", "Calls the function at address W", new Argument("Address", 8)),
+            new Command("<RNJ", "RaNdom Jump", "Jumps to a random event from the list of W supplied arguments", CommandProperties.EndsEvent, "Event count", new RepeatStructure(RepeatTypes.GlobalIndex, 0, ArgumentTypes.Event)){ Author = "bigbadwoof, BLink" },
+            new Command("<RNJ", "RaNdom Jump", "Jumps to a random event between W and X (inclusive)", CommandProperties.EndsEvent, ArgumentTypes.Event, ArgumentTypes.Event){ Author = "Cyber" },
+            new Command("<CNV", "Change Npc Variable", "Change variable X of the NPC with event W to the value Y", ArgumentTypes.NPCEvent, ArgumentTypes.Number, ArgumentTypes.Number){ Author = "Cyber" },
+            new Command("<HEX", "HEX edit", "Set the four bytes at address W to the value X", new Argument("Address", 6, ArgumentTypes.Number), new Argument("Value", 2, ArgumentTypes.Number)){ Author = "SlightlyIntelligentMonkey" },
+            //Made for Txin's mod "Rise of Ballos"
+            new Command("<CAL", "CALl", "Calls the function at address W", new Argument("Address", 8)){ Author = "Txin" },
             new Command("<CAC", "CAll Complex", "Pushes the value X, then calls the function at address W",
-                new Argument("Argument", 8, ArgumentTypes.Number, ""), new Argument("Address", 8)),
+                new Argument("Argument", 8, ArgumentTypes.Number, ""), new Argument("Address", 8)){ Author = "Txin" },
             new Command("<NPC", "setNPChar", "Call the SetNpChar function",
                 new Argument("code_char", ""), new Argument(ArgumentTypes.XCoord, ""), new Argument(ArgumentTypes.YCoord, ""),
-                new Argument("xm", ""), new Argument("ym", ""), new Argument("dir", ArgumentTypes.Direction, ""), new Argument("parent", ""), new Argument("draw order", "")),
-            new Command("<BSC", "Boss Script load Complex", "Custom boss health bar", ArgumentTypes.Number, new RepeatStructure(RepeatTypes.GlobalIndex, 0, "Boss", ArgumentTypes.NPCEvent)),
-            new Command("<MBI", "My Bump (I?)", "Unknown", ArgumentTypes.Number),
-            new Command("<CEX", "Create EXplosion", "Create an epxlosion", new Argument(ArgumentTypes.XCoord, ""), new Argument(ArgumentTypes.YCoord,""), new Argument(ArgumentTypes.Direction, "")),
-            new Command("<TXC", "TeXt Colour", "Set the text colour to the integer value X", new Argument("Colour", 8, ArgumentTypes.Number)),
+                new Argument("xm", ""), new Argument("ym", ""), new Argument("dir", ArgumentTypes.Direction, ""), new Argument("parent", ""), new Argument("draw order", "")){ Author = "Txin" },
+            new Command("<BSC", "Boss Script load Complex", "Custom boss health bar", ArgumentTypes.Number, new RepeatStructure(RepeatTypes.GlobalIndex, 0, "Boss", ArgumentTypes.NPCEvent)){ Author = "Txin" },
+            new Command("<MBI", "My Bump (I?)", "Unknown", ArgumentTypes.Number){ Author = "Txin" },
+            new Command("<CEX", "Create EXplosion", "Create an epxlosion", new Argument(ArgumentTypes.XCoord, ""), new Argument(ArgumentTypes.YCoord,""), new Argument(ArgumentTypes.Direction, "")){ Author = "Txin" },
+            new Command("<TXC", "TeXt Colour", "Set the text colour to the integer value X", new Argument("Colour", 8, ArgumentTypes.Number)){ Author = "Txin" },
         };
     }
 }
