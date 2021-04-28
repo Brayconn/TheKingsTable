@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace CaveStoryModdingFramework.TSC
 {
@@ -38,6 +39,7 @@ namespace CaveStoryModdingFramework.TSC
         ASCII,
     }
 
+    [DebuggerDisplay("Name = {Name} Type = {Type} Length = {Length} Separator = {Separator}")]
     public class Argument
     {
         public const int DefaultArgumentLength = 4;
@@ -158,6 +160,7 @@ namespace CaveStoryModdingFramework.TSC
         //LocalIndex
     }
 
+    [DebuggerDisplay("RepeatType = {RepeatType} Value = {Value}")]
     public class RepeatStructure
     {
         public RepeatTypes RepeatType { get; set; }
@@ -183,8 +186,10 @@ namespace CaveStoryModdingFramework.TSC
         ClearsTextbox
     }
 
+    [DebuggerDisplay("ShortName = {ShortName} LongName = {LongName} Author = {Author} Properties = {Properties}")]
     public class Command
     {
+        const string DefaultAuthor = "Pixel";
         public bool UsesRepeats
         {
             get
@@ -200,6 +205,7 @@ namespace CaveStoryModdingFramework.TSC
         public string Description { get; set; }
         public List<object> Arguments { get; set; } = new List<object>();
         public CommandProperties Properties { get; set; }
+        public string Author { get; set; } = DefaultAuthor;
 
         public Command(string shortName, string longName, string description)
             : this(shortName, longName, description, CommandProperties.None, Array.Empty<object>()) { }
