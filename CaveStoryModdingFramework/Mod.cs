@@ -286,7 +286,7 @@ namespace CaveStoryModdingFramework
 
             EntityInfos = new Dictionary<int, EntityInfo>(EntityList.EntityInfos);
 
-            Commands = new List<Command>(CommandList.DefaultCommands);
+            Commands = new List<Command>(CommandList.BaseCommands);
         }
 
         static Rectangle RectFromString(string input)

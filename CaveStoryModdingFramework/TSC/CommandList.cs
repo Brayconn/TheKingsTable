@@ -7,7 +7,7 @@ namespace CaveStoryModdingFramework.TSC
         /// <summary>
         /// All default TSC commands in the order they appear in the TSC parser
         /// </summary>
-        public static readonly IReadOnlyList<Command> DefaultCommands = new List<Command>()
+        public static readonly IReadOnlyList<Command> BaseCommands = new List<Command>()
         {
             new Command("<END", "END",          TSCCommandDescriptions.END,     CommandProperties.EndsEvent | CommandProperties.ClearsTextbox),
             new Command("<LI+", "LIfe +",       TSCCommandDescriptions.LIPlus,  "Life"),
@@ -103,8 +103,24 @@ namespace CaveStoryModdingFramework.TSC
             new Command("<ESC", "ESCape",       TSCCommandDescriptions.ESC, CommandProperties.EndsEvent),
         };
 
-        public static readonly IReadOnlyList<Command> FanCommands = new List<Command>()
+        public static readonly IReadOnlyList<Command> OtherCommands = new List<Command>()
         {
+            //CS+ exclusive
+            new Command("<I+N", "Item + N", "Add 1 of item X to the inventory, with a maximum of Y", ArgumentTypes.Item, ArgumentTypes.Number){ Author = "Nicalis" },
+            new Command("<2MV", "2nd player MoVe", "Moves the player who didn't trigger this event to the one who did. Values < 11 put the player one tile away, anything greater puts them X/10 pixels away", ArgumentTypes.Number){ Author = "Nicalis" },
+            new Command("<HM2", "Hide My character 2", "Hides only the player who triggered the event"){ Author = "Nicalis" },
+            new Command("<FF-", "First Flag -", "Unset the first NPC flag in the range X to Y (inclusive)", ArgumentTypes.NpcFlags, ArgumentTypes.NpcFlags){ Author = "Nicalis" },
+            new Command("<KE2", "KEy 2", "Use in an inventory item description to allow the user to move to a different item at any time. Lasts until the cursor moves, or until a <FR2"){ Author = "Nicalis" },
+            new Command("<FR2", "FRee 2", "Undoes <KE2"){ Author = "Nicalis" },
+            new Command("<2PJ", "2 Player Jump", "Jump to event X if playing in 2 player mode", ArgumentTypes.Event){ Author = "Nicalis" },
+            new Command("<INJ", "InveNtory Jump", "Jump to event Z if player has at least Y of X item", ArgumentTypes.Item, ArgumentTypes.Number, ArgumentTypes.Event){ Author = "Nicalis" },
+            new Command("<POP", "POP event", "Event stack pop; restores read position from top of event stack", CommandProperties.EndsEvent){ Author = "Nicalis" },
+            new Command("<PSH", "PuSH event", "Event stack push; saves the current read position (after this command) to the stack, then jumps to event X", ArgumentTypes.Event){ Author = "Nicalis" },
+            new Command("<ACH", "ACHievement", "Earn achievenement X", ArgumentTypes.Number){ Author = "Nicalis" },
+            //unused commands
+            new Command("<RFW", "Rapid Fire Weapon", "Toggles automatic firing of the Polar Star; Will attempt to fire a bullet every frame"){ Author = "Nicalis" },
+            new Command("<RSP", "ReSpawn Player", "Teleports all other players to player 1's position"){ Author = "Nicalis" },
+
             //Included in Noxid's "TSC+"/BL's built-in TSC+ command list
             new Command("<LRX", "Left Right X", "Jump to W, X, or Y, if the player moves Left, Right, or Shoots",
                 "Left Event", ArgumentTypes.Event, "Right Event", ArgumentTypes.Event, "Shoot Event", ArgumentTypes.Event){ Author = "Noxid" },
