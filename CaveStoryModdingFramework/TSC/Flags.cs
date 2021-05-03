@@ -1,19 +1,16 @@
 ﻿using System;
-using System.Linq;
 using System.Text;
 
 namespace CaveStoryModdingFramework.TSC
 {
     public static class FlagConverter
     {
-        /// <summary>
-        /// The address of the first flag 
-        /// </summary>
-        public const int FirstFlagAddress = 0x49DDA0;
+        public const int NPCFlagAddress = 0x49DDA0;
 
-        public const int LowestRealFlagNumber = -195536;
+        public const int SkipFlagAddress = 0x49DD98;
 
-        public const int HighestRealFlagNumber = 87769;
+        public const int MapFlagAddress = 0x49E5B8;
+
 
         #region samples
         /* Extremely basic sample methods. Useful for understanding the process
@@ -51,7 +48,22 @@ namespace CaveStoryModdingFramework.TSC
         /// </summary>
         /// <param name="flag">The flag number</param>
         /// <returns>The address of the </returns>
-        public static int FlagToAddress(string flag, int firstFlagAddress = FirstFlagAddress)
+        public static int FlagToAddress(string flag, out int bit, int firstFlagAddress = NPCFlagAddress)
+        {
+            var val = FlagToRealValue(flag);
+            var whole = Math.DivRem(val, 8, out bit) + firstFlagAddress;
+            if (val < 0 && bit != 0)
+                whole--;
+            bit = (8 + bit) % 8;
+            return whole;
+        }
+
+        /// <summary>
+        /// Get the address of a given flag
+        /// </summary>
+        /// <param name="flag">The flag number</param>
+        /// <returns>The address of the </returns>
+        public static int FlagToAddress(string flag, int firstFlagAddress = NPCFlagAddress)
         {
             return (FlagToRealValue(flag) / 8) + firstFlagAddress;
         }
@@ -64,11 +76,12 @@ namespace CaveStoryModdingFramework.TSC
         {
             //Input sanitation
             //sbyte[] input = flag.Select(x => (sbyte)x).ToArray();
-            sbyte[] input = Array.ConvertAll(flag.ToCharArray(), x => (sbyte)x);
+            byte[] input = Encoding.ASCII.GetBytes(flag);
+            //sbyte[] input = Array.ConvertAll(flag.ToCharArray(), x => (sbyte)x);
 
             int number = 0;
-            for (int i = 0; i < 4; i++)
-                number += (input[i] - 0x30) * (1000 / (int)Math.Pow(10, i));
+            for (int i = 0; i < input.Length; i++)
+                number += (input[i] - 0x30) * (int)Math.Pow(10, input.Length - 1 - i);
             return number;
         }
 
@@ -81,17 +94,58 @@ namespace CaveStoryModdingFramework.TSC
         /// </summary>
         /// <param name="number">The "real" flag number</param>
         /// <returns>The TSC flag</returns>
-        public static string RealValueToFlag(int number)
+        public static string RealValueToFlag(int number, int outputLength = 4, char minimum_character = ' ', char max_char = '~')
         {
             string flag = "";
-            for (int i = 0; i < 4; i++)
+            //If this number can be represented using just numbers
+            if (0 <= number && number <= (int)Math.Pow(10, outputLength - 1))
             {
-                int decimalPlace = 1000 / (int)Math.Pow(10, i);
-                //This value MUST be clamped to the range of numbers that FlagToRealValue would produce
-                var thisC = (number / decimalPlace).Clamp(sbyte.MinValue - 0x30, sbyte.MaxValue - 0x30);
-                //Then it can be used safely
-                number -= decimalPlace * thisC;
-                flag += (char)(byte)(thisC + 0x30);
+                //pad it and return
+                flag = number.ToString($"D{outputLength}");
+            }
+            //if it's within the range of "single OOB character" numbers, use that
+            else if (FlagToRealValue(minimum_character + new string('0', outputLength - 1)) <= number && number <= FlagToRealValue(max_char + new string('9', outputLength - 1)))
+            {
+                for (int dec_place = outputLength - 1; dec_place >= 0; dec_place--)
+                {
+                    var divisor = (int)Math.Pow(10, dec_place);
+                    var digit = Math.DivRem(number, divisor, out int rem);
+
+                    if (rem != 0 && digit < 0)
+                        digit--;
+
+                    flag += (char)(byte)(digit + 0x30);
+
+                    if (dec_place == 0)
+                        break;
+
+                    if (digit != 0)
+                    {
+                        if (number < 0)
+                            rem = (divisor + rem) % divisor;
+                        flag += rem.ToString($"D{dec_place}");
+                        break;
+                    }
+                }
+            }
+            /*outside the given bounds
+            else if (number < FlagToRealValue(new string(minimum_character, outputLength)) || FlagToRealValue(new string(max_char, outputLength)) < number)
+            {
+                //TODO ????
+            }
+            */
+            //otherwise just use the generic multi-character one
+            else //if (number < FlagToRealValue(minimum_character + new string('0', outputLength - 1)) || FlagToRealValue(max_char + new string('9', outputLength - 1)) < number)
+            {
+                for (int i = outputLength - 1; i >= 0; i--)
+                {
+                    int decimalPlace = (int)Math.Pow(10, i);
+                    //This value MUST be clamped to the range of numbers that FlagToRealValue would produce
+                    var thisC = (number / decimalPlace).Clamp((byte)(minimum_character - 0x30), (byte)(max_char - 0x30));
+                    //Then it can be used safely
+                    number -= decimalPlace * thisC;
+                    flag += (char)(byte)(thisC + 0x30);
+                }
             }
             return flag;
         }
@@ -100,7 +154,20 @@ namespace CaveStoryModdingFramework.TSC
         /// </summary>
         /// <param name="number">The real value of the flag</param>
         /// <returns>Address of the given flag</returns>
-        public static int RealValueToAddress(int number, int firstFlagAddress = FirstFlagAddress)
+        public static int RealValueToAddress(int number, out int bit, int firstFlagAddress = NPCFlagAddress)
+        {
+            var whole = Math.DivRem(number, 8, out bit) + firstFlagAddress;
+            if (number < 0 && bit != 0)
+                whole--;
+            bit = ((8 + bit) % 8);
+            return whole;
+        }
+        /// <summary>
+        /// Get the address of a "real" flag number
+        /// </summary>
+        /// <param name="number">The real value of the flag</param>
+        /// <returns>Address of the given flag</returns>
+        public static int RealValueToAddress(int number, int firstFlagAddress = NPCFlagAddress)
         {
             return (number / 8) + firstFlagAddress;
         }
@@ -113,18 +180,18 @@ namespace CaveStoryModdingFramework.TSC
         /// </summary>
         /// <param name="address">Address in the exe</param>
         /// <returns>First TSC flag corresponding to this address</returns>
-        public static string AddressToFlag(int address, int firstFlagAddress = FirstFlagAddress)
+        public static string AddressToFlag(int address, int bit = 0, int firstFlagAddress = NPCFlagAddress)
         {
-            return RealValueToFlag((address - firstFlagAddress) * 8);
+            return RealValueToFlag(((address - firstFlagAddress) * 8) + bit);
         }
         /// <summary>
         /// Get the real value of a given address
         /// </summary>
         /// <param name="address">Address in the exe</param>
         /// <returns>Real value of this address</returns>
-        public static int AddressToRealValue(int address, int firstFlagAddress = FirstFlagAddress)
+        public static int AddressToRealValue(int address, int bit = 0, int firstFlagAddress = NPCFlagAddress)
         {
-            return (address - firstFlagAddress) * 8;
+            return ((address - firstFlagAddress) * 8) + bit;
         }
         #endregion
     }
