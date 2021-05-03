@@ -66,6 +66,12 @@
     <Compile Include="EditorManager.cs" />
     <Compile Include="EditorSettings.cs" />
     <Compile Include="EnumColumn.cs" />
+    <Compile Include="FlagScratchPad.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FlagScratchPad.Designer.cs">
+      <DependentUpon>FlagScratchPad.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormAttributeEditor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -146,6 +152,9 @@
     </Compile>
     <EmbeddedResource Include="BitEditor.resx">
       <DependentUpon>BitEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FlagScratchPad.resx">
+      <DependentUpon>FlagScratchPad.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormAttributeEditor.resx">
       <DependentUpon>FormAttributeEditor.cs</DependentUpon>
