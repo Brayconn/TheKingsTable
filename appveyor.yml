@@ -1,0 +1,33 @@
+version: 1.0.{build}
+skip_tags: true
+configuration: Release
+clone_folder: c:\projects\CaveStoryEditor
+clone_script:
+- cmd: >-
+    git clone https://github.com/%APPVEYOR_REPO_NAME%.git %APPVEYOR_BUILD_FOLDER%
+
+    cd %APPVEYOR_BUILD_FOLDER%/../
+
+    git clone https://github.com/Brayconn/LayeredPictureBox.git
+
+    git clone https://github.com/Brayconn/PixelModdingFramework.git
+
+    git clone https://github.com/Brayconn/PETools.git
+
+    git clone https://github.com/Brayconn/LocalizeableComponentModel.git
+
+    git clone https://github.com/Brayconn/WinFormsKeybinds.git
+before_build:
+- cmd: >-
+    nuget restore %APPVEYOR_BUILD_FOLDER%/CaveStoryEditor.sln
+
+    dotnet restore %APPVEYOR_BUILD_FOLDER%
+build:
+  verbosity: minimal
+after_build:
+- cmd: >-
+    cd %APPVEYOR_BUILD_FOLDER%/CaveStoryEditor/bin/%CONFIGURATION%/
+
+    7z a %CONFIGURATION%.zip *.exe *.dll *.png
+
+    appveyor PushArtifact %CONFIGURATION%.zip
