@@ -1,12 +1,11 @@
-﻿using CaveStoryModdingFramework;
-using CaveStoryModdingFramework.Entities;
+﻿using CaveStoryModdingFramework.Entities;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 
-namespace CaveStoryEditor
+namespace CaveStoryModdingFramework
 {
     public class SpriteCache
     {

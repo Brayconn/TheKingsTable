@@ -144,7 +144,6 @@
     <Compile Include="FormStageEditor_TilesetDisplay.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SpriteCache.cs" />
     <Compile Include="UI.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>

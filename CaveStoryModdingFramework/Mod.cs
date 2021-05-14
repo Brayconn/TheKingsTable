@@ -48,10 +48,15 @@ namespace CaveStoryModdingFramework
 
         [Browsable(false)]
         public List<NPCTableEntry> NPCTable { get; private set; }
-                
+
         #region path/folder stuff
         [LocalizeableCategory(nameof(Dialog.FoldersCategory), typeof(Dialog))]
-        public string DataFolderPath { get; private set; }
+        public AssetManager FolderPaths { get; private set; }
+
+        /*
+        [LocalizeableCategory(nameof(Dialog.FoldersCategory), typeof(Dialog))]
+        public List<string> DataFolderPath { get; private set; }
+
         [LocalizeableCategory(nameof(Dialog.FoldersCategory), typeof(Dialog)), DefaultValue("Stage")]
         public string StageFolderPath { get; private set; } = "Stage"; //HACK hardcoded
         [LocalizeableCategory(nameof(Dialog.FoldersCategory), typeof(Dialog)), DefaultValue("Stage")]
@@ -59,6 +64,7 @@ namespace CaveStoryModdingFramework
 
         [LocalizeableCategory(nameof(Dialog.FoldersCategory), typeof(Dialog)), DefaultValue("Npc")]
         public string NpcFolderPath { get; private set; } = "Npc"; //HACK hardcoded
+        */
         #endregion
 
         [LocalizeableCategory(nameof(Dialog.TilesCategory), typeof(Dialog))]

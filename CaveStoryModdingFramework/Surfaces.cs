@@ -4,18 +4,6 @@ using System.Collections.ObjectModel;
 
 namespace CaveStoryModdingFramework
 {
-    public enum Folders
-    {
-        Data,
-        Stage,
-        Npc,
-    }
-    public enum Prefixes
-    {
-        None,
-        Spritesheet,
-        Tileset
-    }
     public interface ISurfaceSource : ICloneable
     {
         string DisplayName { get; }
@@ -118,7 +106,7 @@ namespace CaveStoryModdingFramework
             {31, new SurfaceSourceRuntime(SurfaceNames.TextLine2) },
             {32, new SurfaceSourceRuntime(SurfaceNames.TextLine3) },
             {33, new SurfaceSourceRuntime(SurfaceNames.TextLine4) },
-            {34, new SurfaceSourceRuntime(SurfaceNames.TextLine5) },
+            //{34, new SurfaceSourceRuntime(SurfaceNames.TextLine5) }, This one probably never existed
             {35, new SurfaceSourceRuntime(SurfaceNames.CreditsText) },
             {36, new SurfaceSourceRuntime(SurfaceNames.CreditsImage) },
             {37, new SurfaceSourceFile(Folders.Data, Prefixes.None, "casts", SurfaceNames.Casts) },
