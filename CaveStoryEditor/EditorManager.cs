@@ -87,6 +87,7 @@ namespace CaveStoryEditor
         public void OpenTileEditor(StageEntry entry)
         {
             FormStageEditor editor = null;
+            //check if an editor is already open for this entry
             foreach(var e in TileEditors)
             {
                 if(e.stageEntry == entry)
@@ -95,6 +96,7 @@ namespace CaveStoryEditor
                     break;
                 }
             }
+            //if not, create it
             if (editor == null)
             {
                 //HACK(?) todictionary()
@@ -112,6 +114,7 @@ namespace CaveStoryEditor
         public void OpenScriptEditor(string path)
         {
             FormScriptEditor editor = null;
+            //check if an editor is already open for this script
             foreach(var e in ScriptEditors)
             {
                 if(e.Fullpath == path)
@@ -120,6 +123,7 @@ namespace CaveStoryEditor
                     break;
                 }
             }
+            //if not, create it
             if (editor == null)
             {
                 editor = new FormScriptEditor(parentMod, path);
