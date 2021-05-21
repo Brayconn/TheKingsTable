@@ -130,7 +130,7 @@ namespace CaveStoryEditor
         {
 
         }
-        string mapPath => Path.Combine(parentMod.DataFolderPath, parentMod.StageFolderPath, stageEntry.Filename + "." + parentMod.StageExtension);
+        string mapPath;
         void LoadTiles()
         {
             //TODO TEMP auto creation
@@ -143,12 +143,12 @@ namespace CaveStoryEditor
             mapResizeControl.InitSize(map.Width, map.Height, map.CurrentBufferSize);
             InitMapImage();
         }
-        string tilesetPath => Path.Combine(parentMod.DataFolderPath, parentMod.StageFolderPath, parentMod.TilesetPrefix + stageEntry.TilesetName + "." + parentMod.ImageExtension);
+        string tilesetPath;
         void LoadTileset()
         {
             InitTilesetAndTileTypes(new Bitmap(tilesetPath));
         }
-        string attributePath => Path.Combine(parentMod.DataFolderPath, parentMod.StageFolderPath, stageEntry.TilesetName + "." + parentMod.AttributeExtension);
+        string attributePath;
         void LoadAttributes()
         {
             //TODO TEMP autocreation
@@ -158,7 +158,7 @@ namespace CaveStoryEditor
                 attributes = new CaveStoryModdingFramework.Maps.Attribute();
         }
 
-        string entityPath => Path.Combine(parentMod.DataFolderPath, parentMod.StageFolderPath, stageEntry.Filename + "." + parentMod.EntityExtension);
+        string entityPath;
         void LoadEntities()
         {
             //clear existing
@@ -192,7 +192,13 @@ namespace CaveStoryEditor
             Keybinds = keybinds;
             stageEntry = entry;
             Cache = cache;
-            
+
+            mapPath = parentMod.FolderPaths.GetFile(SearchLocations.Stage, entry.Filename, Extension.TileData);
+            entityPath = parentMod.FolderPaths.GetFile(SearchLocations.Stage, entry.Filename, Extension.EntityData);
+            tilesetPath = parentMod.FolderPaths.GetFile(SearchLocations.Stage, Prefixes.Tileset, entry.Filename, Extension.Image);
+            attributePath = parentMod.FolderPaths.GetFile(SearchLocations.Stage, entry.Filename, Extension.TilesetData);
+
+
             void GenerateMany(SurfaceSourceFile file, int index)
             {
                 foreach(var surf in parentMod.SurfaceDescriptors)
@@ -358,10 +364,10 @@ namespace CaveStoryEditor
             mouseOverlay.Shown = mShown;
         }
         int[] EntityIconsTransferIndexes;
-        SurfaceSourceFile tilesetSurfaceSource => new SurfaceSourceFile(Folders.Stage, Prefixes.Tileset, stageEntry.TilesetName, "");
-        SurfaceSourceFile backgroundSurfaceSource => new SurfaceSourceFile(Folders.Data, Prefixes.None, stageEntry.BackgroundName, "");
-        SurfaceSourceFile spritesheet1SurfaceSource => new SurfaceSourceFile(Folders.Npc, Prefixes.Spritesheet, stageEntry.Spritesheet1, "");
-        SurfaceSourceFile spritesheet2SurfaceSource => new SurfaceSourceFile(Folders.Npc, Prefixes.Spritesheet, stageEntry.Spritesheet2, "");
+        SurfaceSourceFile tilesetSurfaceSource => new SurfaceSourceFile(SearchLocations.Stage, Prefixes.Tileset, stageEntry.TilesetName, "");
+        SurfaceSourceFile backgroundSurfaceSource => new SurfaceSourceFile(SearchLocations.Data, Prefixes.None, stageEntry.BackgroundName, "");
+        SurfaceSourceFile spritesheet1SurfaceSource => new SurfaceSourceFile(SearchLocations.Npc, Prefixes.Spritesheet, stageEntry.Spritesheet1, "");
+        SurfaceSourceFile spritesheet2SurfaceSource => new SurfaceSourceFile(SearchLocations.Npc, Prefixes.Spritesheet, stageEntry.Spritesheet2, "");
         void UpdateEntityIcons()
         {
             EntityIcons.Images.Clear();

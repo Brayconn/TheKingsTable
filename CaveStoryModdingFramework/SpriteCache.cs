@@ -30,31 +30,7 @@ namespace CaveStoryModdingFramework
         }
         string ResolveSurfacePath(SurfaceSourceFile surfaceSource)
         {
-            string path = parentMod.DataFolderPath;
-            switch (surfaceSource.Folder)
-            {
-                case Folders.Npc:
-                    path = Path.Combine(path, parentMod.NpcFolderPath);
-                    break;
-                case Folders.Stage:
-                    path = Path.Combine(path, parentMod.StageFolderPath);
-                    break;
-            }
-            string name;
-            switch (surfaceSource.Prefix)
-            {
-                case Prefixes.Spritesheet:
-                    name = parentMod.SpritesheetPrefix;
-                    break;
-                case Prefixes.Tileset:
-                    name = parentMod.TilesetPrefix;
-                    break;
-                default:
-                    name = "";
-                    break;
-            }
-            name += surfaceSource.Filename + "." + parentMod.ImageExtension;
-            return Path.Combine(path, name);
+            return parentMod.FolderPaths.GetFile(surfaceSource.Folder, surfaceSource.Prefix, surfaceSource.Filename, Extension.Image);
         }
 
         bool TryGetSurfaceSource<T>(int num, out T surface) where T : class, ISurfaceSource

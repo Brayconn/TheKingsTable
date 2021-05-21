@@ -50,21 +50,18 @@ namespace CaveStoryModdingFramework
         public List<NPCTableEntry> NPCTable { get; private set; }
 
         #region path/folder stuff
+
         [LocalizeableCategory(nameof(Dialog.FoldersCategory), typeof(Dialog))]
+        public string EXEPath { get; set; }
+        
+        [LocalizeableCategory(nameof(Dialog.FoldersCategory), typeof(Dialog))]
+        public string BaseDataPath { get; set; }
+
+        [LocalizeableCategory(nameof(Dialog.FoldersCategory), typeof(Dialog))]
+        public string NpcTablePath { get; set; }
+
+        [LocalizeableCategory(nameof(Dialog.FoldersCategory), typeof(Dialog)), TypeConverter(typeof(ExpandableObjectConverter))]
         public AssetManager FolderPaths { get; private set; }
-
-        /*
-        [LocalizeableCategory(nameof(Dialog.FoldersCategory), typeof(Dialog))]
-        public List<string> DataFolderPath { get; private set; }
-
-        [LocalizeableCategory(nameof(Dialog.FoldersCategory), typeof(Dialog)), DefaultValue("Stage")]
-        public string StageFolderPath { get; private set; } = "Stage"; //HACK hardcoded
-        [LocalizeableCategory(nameof(Dialog.FoldersCategory), typeof(Dialog)), DefaultValue("Stage")]
-        public string ScriptFolderPath { get; private set; } = "Stage";
-
-        [LocalizeableCategory(nameof(Dialog.FoldersCategory), typeof(Dialog)), DefaultValue("Npc")]
-        public string NpcFolderPath { get; private set; } = "Npc"; //HACK hardcoded
-        */
         #endregion
 
         [LocalizeableCategory(nameof(Dialog.TilesCategory), typeof(Dialog))]
@@ -258,7 +255,9 @@ namespace CaveStoryModdingFramework
             if (!File.Exists(stage))
                 throw new FileNotFoundException();
 
-            DataFolderPath = data;
+            BaseDataPath = data;
+
+            FolderPaths = new AssetManager(this, "Stage", "Npc");
 
             StageTableLocation = stage;
             StageTableFormat = type;
@@ -270,6 +269,7 @@ namespace CaveStoryModdingFramework
                 case StageTableTypes.stagetbl:
                     TileSize = 32;
                     goto default;
+                case StageTableTypes.swdata:
                 case StageTableTypes.doukutsuexe:
                     ImageExtension = Images.DefaultImageExtension;
                     break;
@@ -278,7 +278,9 @@ namespace CaveStoryModdingFramework
                     break;
             }
 
-            NPCTable = Entities.NPCTable.Load(Path.Combine(DataFolderPath, Entities.NPCTable.NPCTBL));
+            NpcTablePath = Path.Combine(BaseDataPath, Entities.NPCTable.NPCTBL);
+            if(File.Exists(NpcTablePath))
+                NPCTable = Entities.NPCTable.Load(NpcTablePath);
 
             //TODO test if this is really needed...
             foreach (var surface in Surfaces.SurfaceList)
@@ -311,8 +313,9 @@ namespace CaveStoryModdingFramework
         /// <param name="path"></param>
         public void Save(string path)
         {
-            var relativeDataPath = new Uri(path).MakeRelativeUri(new Uri(DataFolderPath));
-            var relativeStageTablePath =  new Uri(path).MakeRelativeUri(new Uri(StageTableLocation));
+            var relativeDataPath = AssetManager.MakeRelative(path, BaseDataPath);
+            var relativeStageTablePath = AssetManager.MakeRelative(path, StageTableLocation);
+            var relativeNpcTablePath = AssetManager.MakeRelative(path, NpcTablePath);
 
             XElement SerializeEntities(IDictionary<int, EntityInfo> dict, string name, string valName, string keyName = "Key")
             {
@@ -380,13 +383,14 @@ namespace CaveStoryModdingFramework
             new XDocument(
                 new XElement("CaveStoryMod",
                     new XElement("Paths", 
-                        new XElement("DataPath", Uri.UnescapeDataString(relativeDataPath.ToString())),
-                        new XElement("StageFolder", StageFolderPath),
-                        new XElement("ScriptFolder", ScriptFolderPath),
-                        new XElement("NpcFolder", NpcFolderPath)
+                        new XElement("BaseDataPath", relativeDataPath),
+                        new XElement("DataFolders", FolderPaths.DataPaths),
+                        new XElement("StageFolders", FolderPaths.StagePaths),
+                        new XElement("NpcFolders", FolderPaths.NpcPaths),
+                        new XElement("NpcTablePath", relativeNpcTablePath)
                     ),
                     new XElement("StageTable",
-                        new XElement("Location", Uri.UnescapeDataString(relativeStageTablePath.ToString())),
+                        new XElement("Location", relativeStageTablePath),
                         new XElement("Type", StageTableFormat),
                         StageTableSettings.ToXML("StageTableSettings")
                     ),
@@ -438,10 +442,10 @@ namespace CaveStoryModdingFramework
             var dataPath = root["Paths"]?["DataPath"]?.InnerText;
             if (dataPath == null)
                 throw new ArgumentNullException();
-            dataPath = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(path), dataPath));
+            dataPath = AssetManager.MakeAbsolute(Path.GetDirectoryName(path), dataPath);
             if (!Directory.Exists(dataPath))
                 throw new DirectoryNotFoundException();
-            DataFolderPath = dataPath;
+            BaseDataPath = dataPath;
 
             void LoadEntities(XmlElement element, IDictionary<int, EntityInfo> dict)
             {
@@ -472,7 +476,7 @@ namespace CaveStoryModdingFramework
                     {
                         case "File":
                             dict.Add(key, new SurfaceSourceFile(
-                                (Folders)Enum.Parse(typeof(Folders), item.Attributes["Folder"].InnerText),
+                                (SearchLocations)Enum.Parse(typeof(SearchLocations), item.Attributes["Folder"].InnerText),
                                 (Prefixes)Enum.Parse(typeof(Prefixes), item.Attributes["Prefix"].InnerText),
                                 item.Attributes["Filename"].InnerText,
                                 item.InnerText));
@@ -500,11 +504,21 @@ namespace CaveStoryModdingFramework
                     dict.Add(long.Parse(item.GetAttribute("Key")), item.InnerText);
                 }
             }
+            void LoadList(XmlElement element, List<string> list)
+            {
+                foreach(XmlElement item in element.ChildNodes)
+                {
+                    list.Add(item.InnerText);
+                }
+            }
 
             var paths = root["Paths"];
-            StageFolderPath = paths["StageFolder"].InnerText;
-            ScriptFolderPath = paths["ScriptFolderPath"]?.InnerText ?? ScriptFolderPath;
-            NpcFolderPath = paths["NpcFolder"].InnerText;
+            LoadList(paths["DataFolders"], FolderPaths.DataPaths);
+            LoadList(paths["StageFolders"], FolderPaths.StagePaths);
+            LoadList(paths["NpcFolders"], FolderPaths.NpcPaths);
+            //TODO failsafe might not be safe
+            NpcTablePath = AssetManager.MakeAbsolute(BaseDataPath, paths["NpcTablePath"]?.InnerText ?? Entities.NPCTable.NPCTBL);
+
 
             var st = root["StageTable"];
             if(st != null)
@@ -557,7 +571,10 @@ namespace CaveStoryModdingFramework
             LoadLongDict(root["BackgroundTypes"], BackgroundTypes);
 
             StageTable = Stages.StageTable.Load(StageTableLocation, StageTableFormat);
-            NPCTable = Entities.NPCTable.Load(Path.Combine(DataFolderPath, Entities.NPCTable.NPCTBL));
+
+            //TODO check npc table loading from project file
+            if(File.Exists(NpcTablePath))
+                NPCTable = Entities.NPCTable.Load(NpcTablePath);
         }
     }
 }

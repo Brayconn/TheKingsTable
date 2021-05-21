@@ -669,7 +669,7 @@ namespace CaveStoryEditor
         #region saving
         private void saveNPCTableToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            NPCTable.Save(mod.NPCTable, Path.Combine(mod.DataFolderPath, NPCTable.NPCTBL));
+            NPCTable.Save(mod.NPCTable, mod.NpcTablePath);
             NPCTableUnsaved = false;
         }
 

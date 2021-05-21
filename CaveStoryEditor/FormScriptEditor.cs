@@ -1,4 +1,5 @@
 ﻿using CaveStoryModdingFramework;
+using CaveStoryModdingFramework.Stages;
 using CaveStoryModdingFramework.TSC;
 using System;
 using System.Collections.Generic;
@@ -12,24 +13,14 @@ namespace CaveStoryEditor
     {
         public bool UnsavedChanges { get; private set; } = false;
         readonly Mod parentMod;
-        public bool IsInStageFolder
+        public StageEntry stageEntry { get; private set; } = null;
+        public string Fullpath { get; private set; } = "";
+
+        public FormScriptEditor(Mod m, StageEntry entry)
         {
-            get
-            {
-                //HACK not the most efficient way to check if a file is in a folder...
-                var folder = Path.Combine(parentMod.DataFolderPath, parentMod.StageFolderPath);
-                var s = Fullpath;
-                do
-                {
-                    if (folder == (s = Path.GetDirectoryName(s)))
-                    {
-                        return true;
-                    }
-                } while (s.Length > 0);
-                return false;
-            }
+            stageEntry = entry;
+            //TODO subscribe to the entry
         }
-        public string Fullpath { get; private set; }
         public FormScriptEditor(Mod m, string path)
         {
             parentMod = m;

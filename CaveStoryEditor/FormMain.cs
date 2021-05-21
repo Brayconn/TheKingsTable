@@ -69,11 +69,11 @@ namespace CaveStoryEditor
             lockMod = false;
 
             //asset tab
-            FillListbox(pxmListBox, mod.StageExtension);
-            FillListbox(pxeListBox, mod.EntityExtension);
-            FillListbox(imageListBox, mod.ImageExtension);
-            FillListbox(scriptListBox, mod.TSCExtension);
-            FillListbox(attributeListBox, mod.AttributeExtension);
+            FillListbox(pxmListBox, SearchLocations.Stage, Prefixes.None, Extension.TileData);
+            FillListbox(pxeListBox, SearchLocations.Stage, Prefixes.None, Extension.EntityData);
+            FillImagesListbox();
+            FillScriptListBox();
+            FillListbox(attributeListBox, SearchLocations.Stage, Prefixes.None, Extension.TilesetData);
 
             //Menu buttons
             saveStageTableToolStripMenuItem.Enabled = true;
@@ -122,7 +122,7 @@ namespace CaveStoryEditor
 
         private void Mod_TSCExtensionChanged(object sender, EventArgs e)
         {
-            FillListbox(scriptListBox, mod.TSCExtension);
+            FillScriptListBox();
             DestroyScriptWatcher();
         }
 
@@ -136,7 +136,7 @@ namespace CaveStoryEditor
         }
         private void InitScriptWatcher()
         {
-            scriptWatcher = new FileSystemWatcher(mod.DataFolderPath, "*." + mod.TSCExtension)
+            scriptWatcher = new FileSystemWatcher(mod.BaseDataPath, "*." + mod.TSCExtension)
             {
                 IncludeSubdirectories = true,
             };
@@ -233,20 +233,40 @@ namespace CaveStoryEditor
 
         #endregion
 
-        void FillListbox(ListBox l, string filter)
+        void FillListbox(ListBox l, SearchLocations folder, Prefixes prefix, Extension extension, string baseOverride = null)
         {
-            l.Items.Clear();
-            foreach(var file in Directory.EnumerateFiles(mod.DataFolderPath, "*." + filter, SearchOption.AllDirectories))
+            string @base = baseOverride;
+            if (baseOverride == null)
             {
-                //HACK that remove might be unsafe with different seperators?
-                l.Items.Add(file.Substring((mod.DataFolderPath + Path.DirectorySeparatorChar).Length));
+                mod.FolderPaths.TryGetList(folder, out var list);
+                @base = list.Count == 1 ? mod.FolderPaths.MakeAbsoluteFromBase(list[0]) : mod.BaseDataPath;
             }
+
+            foreach(var file in mod.FolderPaths.EnumerateFiles(folder, prefix, extension))
+            {
+                l.Items.Add(AssetManager.MakeRelative(@base, file));
+            }
+        }
+        void FillImagesListbox()
+        {
+            imageListBox.Items.Clear();
+            FillListbox(imageListBox, SearchLocations.Data, Prefixes.None, Extension.Image);
+            FillListbox(imageListBox, SearchLocations.Npc, Prefixes.None, Extension.Image);
+            FillListbox(imageListBox, SearchLocations.Stage, Prefixes.None, Extension.Image);
+        }
+        void FillScriptListBox()
+        {
+            scriptListBox.Items.Clear();
+            FillListbox(scriptListBox, SearchLocations.Data, Prefixes.None, Extension.Script, mod.BaseDataPath);
+            FillListbox(scriptListBox, SearchLocations.Stage, Prefixes.None, Extension.Script, mod.BaseDataPath);
         }
 
         private void Mod_ImageExtensionChanged(object sender, EventArgs e)
         {
             cache.GenerateGlobal(true);
-            FillListbox(imageListBox, mod.ImageExtension);
+
+            FillImagesListbox();
+
             DestroyImageWatcher();
             if (mod.CopyrightText.Length > 0)
             {
@@ -264,7 +284,7 @@ namespace CaveStoryEditor
         void InitImageWatcher()
         {
             DestroyImageWatcher();
-            imageWatcher = new FileSystemWatcher(mod.DataFolderPath, "*." + mod.ImageExtension)
+            imageWatcher = new FileSystemWatcher(mod.BaseDataPath, "*." + mod.ImageExtension)
             {
                 IncludeSubdirectories = true,
             };
@@ -293,7 +313,7 @@ namespace CaveStoryEditor
         {
             foreach(string item in imageListBox.SelectedItems)
             {
-                string path = Path.Combine(mod.DataFolderPath, item);
+                string path = mod.FolderPaths.MakeAbsoluteFromBase(item);
                 try
                 {
                     bool success = Images.UpdateCopyright(path);
@@ -334,7 +354,7 @@ namespace CaveStoryEditor
 
         void GetTXTAndTSC(string file, out string txtPath, out string tscPath)
         {
-            var @base = Path.Combine(mod.DataFolderPath, file);
+            var @base = mod.FolderPaths.MakeAbsoluteFromBase(file);
             txtPath = Path.ChangeExtension(@base, "txt");
             tscPath = Path.ChangeExtension(@base, "tsc");
         }
@@ -374,7 +394,7 @@ namespace CaveStoryEditor
         {
             foreach(string item in scriptListBox.SelectedItems)
             {
-                manager.OpenScriptEditor(Path.Combine(mod.DataFolderPath, item));
+                manager.OpenScriptEditor(mod.FolderPaths.MakeAbsoluteFromBase(item));
             }
         }
 
@@ -397,7 +417,7 @@ namespace CaveStoryEditor
 
         private void OpenAttribute_Click(object sender, EventArgs e)
         {
-            manager.OpenAttributeFile(Path.Combine(mod.DataFolderPath, attributeListBox.SelectedItem.ToString()));
+            manager.OpenAttributeFile(mod.FolderPaths.MakeAbsoluteFromBase(attributeListBox.SelectedItem.ToString()));
         }
 
         StageEntry selectedStageTableEntry => mod.StageTable[stageTableDataGridView.SelectedRows[0].Index];
@@ -409,13 +429,13 @@ namespace CaveStoryEditor
 
         private void openScriptButton_Click(object sender, EventArgs e)
         {
-            manager.OpenScriptEditor(Path.Combine(mod.DataFolderPath, mod.ScriptFolderPath, selectedStageTableEntry.Filename + "." + mod.TSCExtension));
+            manager.OpenScriptEditor(mod.FolderPaths.GetFile(SearchLocations.Stage, Prefixes.None, selectedStageTableEntry.Filename, Extension.Script));
         }
 
         private void openBothButton_Click(object sender, EventArgs e)
         {
             manager.OpenTileEditor(selectedStageTableEntry);
-            manager.OpenScriptEditor(Path.Combine(mod.DataFolderPath, mod.ScriptFolderPath, selectedStageTableEntry.Filename + "." + mod.TSCExtension));
+            manager.OpenScriptEditor(mod.FolderPaths.GetFile(SearchLocations.Stage, Prefixes.None, selectedStageTableEntry.Filename, Extension.Script));
         }
 
         private void loadEntityInfotxtToolStripMenuItem_Click(object sender, EventArgs e)
@@ -543,17 +563,17 @@ namespace CaveStoryEditor
             }
 
             //global tsc files
-            foreach (var tsc in Directory.EnumerateFiles(mod.DataFolderPath, "*." + mod.TSCExtension))
+            foreach (var tsc in mod.FolderPaths.EnumerateFiles(SearchLocations.Data, Extension.Script))
                 AddTSC(tsc, tsc.Contains("Credit"));
 
             //stage table
             foreach(var entry in mod.StageTable)
             {
-                var tscPath = Path.Combine(mod.DataFolderPath, mod.ScriptFolderPath, entry.Filename + "." + mod.TSCExtension);
-                AddTSC(tscPath);
+                if(mod.FolderPaths.TryGetFile(SearchLocations.Stage, entry.Filename, Extension.Script, out string tscPath))
+                    AddTSC(tscPath);
 
-                var pxePath = Path.Combine(mod.DataFolderPath, mod.StageFolderPath, entry.Filename + "." + mod.EntityExtension);
-                AddPXE(pxePath, EntityFlags.AppearWhenFlagSet | EntityFlags.HideWhenFlagSet);
+                if(mod.FolderPaths.TryGetFile(SearchLocations.Stage, entry.Filename, Extension.EntityData, out string pxePath))
+                    AddPXE(pxePath, EntityFlags.AppearWhenFlagSet | EntityFlags.HideWhenFlagSet);
             }
 
             //save the file
