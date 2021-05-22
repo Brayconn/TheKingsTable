@@ -1,4 +1,5 @@
 ﻿using CaveStoryModdingFramework;
+using CaveStoryModdingFramework.Compatability;
 using CaveStoryModdingFramework.Stages;
 using CaveStoryModdingFramework.TSC;
 using System;
@@ -11,50 +12,165 @@ namespace CaveStoryEditor
 {
     public partial class FormScriptEditor : Form
     {
-        public bool UnsavedChanges { get; private set; } = false;
+        bool unsavedChanges = false;
+        public bool UnsavedChanges
+        {
+            get => unsavedChanges;
+            private set
+            { 
+                if(value != unsavedChanges)
+                {
+                    if (value)
+                    {
+                        this.Text += "*";
+                    }
+                    else
+                    {
+                        this.Text = this.Text.Substring(0, this.Text.Length - 1);
+                    }
+                    unsavedChanges = value;
+                }
+            }
+        }
         readonly Mod parentMod;
         public StageEntry stageEntry { get; private set; } = null;
         public string Fullpath { get; private set; } = "";
 
-        public FormScriptEditor(Mod m, StageEntry entry)
+        bool UseScriptSource;
+        bool Encrypted;
+
+
+
+        bool ReloadNeeded = false;
+        private void FormScriptEditor_Activated(object sender, EventArgs e)
         {
-            stageEntry = entry;
-            //TODO subscribe to the entry
-        }
-        public FormScriptEditor(Mod m, string path)
-        {
-            parentMod = m;
-            Fullpath = path;
-
-            InitializeComponent();
-
-            if (Path.GetFileNameWithoutExtension(Fullpath).Contains("Credit"))
-                ParserMode = ParserModes.Credits;
-            else
-                ParserMode = ParserModes.Default;
-
-            Text = Path.GetFileName(Fullpath);
-
-            if (File.Exists(path))
+            if (ReloadNeeded)
             {
-                byte[] input = File.ReadAllBytes(Fullpath);
-                if (parentMod.TSCEncrypted)
-                    Encryptor.DecryptInPlace(input, parentMod.DefaultKey);
-                mainScintilla.Text = parentMod.TSCEncoding.GetString(input);
+                if(MessageBox.Show("Hey the stage entry's filename was changed, want to reload the new value?", "Warning", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    Reload();
+                }
             }
         }
+
+        #region loading
+
+        string LoadScript(string path, bool encrypted)
+        {
+            byte[] input = File.ReadAllBytes(path);
+            if (encrypted)
+                Encryptor.DecryptInPlace(input, parentMod.DefaultKey);
+            return parentMod.TSCEncoding.GetString(input);
+        }
+        void Reload()
+        {
+            //if the stageEntry is set, that means this is a linked editor, so we need to update all settings
+            if (stageEntry != null)
+            {
+                Encrypted = parentMod.TSCEncrypted;
+                UseScriptSource = parentMod.UseScriptSource;
+                Fullpath = parentMod.FolderPaths.GetFile(SearchLocations.Stage, stageEntry.Filename, Extension.Script);
+                //if we're in scriptsource mode, we have to get the actual scriptsource path
+                if (UseScriptSource)
+                {
+                    Fullpath = ScriptSource.GetScriptSourcePath(Fullpath);
+                }
+            }
+
+            this.Text = Path.GetFileName(Fullpath);
+            if (UseScriptSource)
+                this.Text += $" ({ScriptSource.ScriptSource_Name})";
+
+            string altPath;
+            //check the main path
+            if (File.Exists(Fullpath))
+            {
+                //The only way for this to be encrypted is if we AREN'T using ScriptSource, and it's set as encrypted
+                mainScintilla.Text = LoadScript(Fullpath, !UseScriptSource && Encrypted);
+            }
+            //if that file didn't exist, but we're using ScriptSource, check the original script path
+            else if (UseScriptSource && File.Exists(altPath = ScriptSource.GetScriptPath(Fullpath, parentMod.TSCExtension)))
+            {
+                mainScintilla.Text = LoadScript(altPath, Encrypted);
+            }
+            //if both those fail, this must be a new file
+            else
+            {
+                mainScintilla.Text = "";
+            }
+            UnsavedChanges = false;
+        }
+
+        #endregion
+
+        private FormScriptEditor(Mod m)
+        {
+            parentMod = m;
+
+            InitializeComponent();
+        }
+        public FormScriptEditor(Mod m, StageEntry entry) : this(m)
+        {
+            Encrypted = parentMod.TSCEncrypted;
+            UseScriptSource = parentMod.UseScriptSource;
+            stageEntry = entry;
+
+            Reload();
+            AutoDetectParserMode();
+        }
+        public FormScriptEditor(Mod m, string path, bool encrypted, bool useScriptSource) : this(m)
+        {
+            Encrypted = encrypted;
+            UseScriptSource = useScriptSource;
+            Fullpath = UseScriptSource ? ScriptSource.GetScriptSourcePath(path) : path;
+
+            Reload();
+            AutoDetectParserMode();
+        }
+
+        void AutoDetectParserMode()
+        {
+            //TODO this is a bad check for credits tbh
+            if (Path.GetFileNameWithoutExtension(Fullpath).Contains("Credit"))
+                ParserMode = ParserModes.Credits;
+            else if (parentMod.UseScriptSource)
+                ParserMode = ParserModes.Scriptsource;
+            else
+                ParserMode = ParserModes.Default;
+        }
+
+        #region saving
 
         public event EventHandler ScriptSaved;
 
         void Save(string path)
         {
             var bytes = parentMod.TSCEncoding.GetBytes(mainScintilla.Text);
+            if (parentMod.UseScriptSource)
+            {
+                string ssdir = Path.GetDirectoryName(path);
+                if (!Directory.Exists(ssdir))
+                    Directory.CreateDirectory(ssdir);
+                File.WriteAllBytes(path, bytes);
+                path = ScriptSource.GetScriptPath(path, parentMod.TSCExtension);
+            }
             if (parentMod.TSCEncrypted)
-                Encryptor.EncryptInPlace(bytes);
+                Encryptor.EncryptInPlace(bytes, parentMod.DefaultKey);
+
             File.WriteAllBytes(path, bytes);
             
             UnsavedChanges = false;
+            ScriptSaved?.Invoke(this, new EventArgs());
+        }
+        void Save(string path, bool encrypt)
+        {
+            var bytes = parentMod.TSCEncoding.GetBytes(mainScintilla.Text);
+            if(encrypt)
+                Encryptor.EncryptInPlace(bytes, parentMod.DefaultKey);
 
+            File.WriteAllBytes(path, bytes);
+
+            UnsavedChanges = false;
             ScriptSaved?.Invoke(this, new EventArgs());
         }
 
@@ -63,19 +179,35 @@ namespace CaveStoryEditor
             Save(Fullpath);
         }
 
-        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void saveAsTextToolStripMenuItem_Click(object sender, EventArgs e)
         {
             using (var sfd = new SaveFileDialog()
             {
-                Filter = string.Join("|", $"TSC Files (*.{parentMod.TSCExtension})|*.{parentMod.TSCExtension}", FormMain.AllFilesFilter)
+                Filter = string.Join("|", "Text Files (*.txt)|*.txt", FormMain.AllFilesFilter)
             })
             {
                 if(sfd.ShowDialog() == DialogResult.OK)
                 {
-                    Save(sfd.FileName);
+                    Save(sfd.FileName, false);
                 }
             }            
         }
+        private void saveAsencryptedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var ScriptFilter = Path.ChangeExtension("*", parentMod.TSCExtension);
+            using (var sfd = new SaveFileDialog()
+            {
+                Filter = string.Join("|", $"TSC Files ({ScriptFilter})|{ScriptFilter}", FormMain.AllFilesFilter)
+            })
+            {
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    Save(sfd.FileName, true);
+                }
+            }
+        }
+
+        #endregion
 
         private void mainScintilla_TextChanged(object sender, EventArgs e)
         {
@@ -104,6 +236,8 @@ namespace CaveStoryEditor
                 }
             }
         }
+
+        #region styling
 
         private void InitParserStyles(ParserModes mode, ScintillaNET.Scintilla scintilla)
         {
@@ -471,6 +605,8 @@ namespace CaveStoryEditor
                 }
             }
         }
+
+        #endregion
 
         private void defaultToolStripMenuItem_Click(object sender, EventArgs e)
         {

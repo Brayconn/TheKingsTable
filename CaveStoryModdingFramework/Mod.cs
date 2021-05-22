@@ -198,7 +198,8 @@ namespace CaveStoryModdingFramework
         #endregion
 
         #region TSC
-
+        [LocalizeableCategory(nameof(Dialog.ModTSCOptions), typeof(Dialog)), DefaultValue(false)]
+        public bool UseScriptSource { get; set; } = false;
         [LocalizeableCategory(nameof(Dialog.ModTSCOptions),typeof(Dialog)), DefaultValue(true)]
         public bool TSCEncrypted { get; set; } = true;
         [LocalizeableCategory(nameof(Dialog.ModTSCOptions), typeof(Dialog)), DefaultValue(7)]
@@ -266,13 +267,16 @@ namespace CaveStoryModdingFramework
 
             switch(type)
             {
+                case StageTableTypes.doukutsuexe:
+                case StageTableTypes.swdata:
+                    ImageExtension = Images.DefaultImageExtension;
+                    break;
+                case StageTableTypes.csmap:
+                    UseScriptSource = true;
+                    goto default;
                 case StageTableTypes.stagetbl:
                     TileSize = 32;
                     goto default;
-                case StageTableTypes.swdata:
-                case StageTableTypes.doukutsuexe:
-                    ImageExtension = Images.DefaultImageExtension;
-                    break;
                 default:
                     ImageExtension = "bmp";
                     break;
@@ -409,6 +413,7 @@ namespace CaveStoryModdingFramework
                         new XElement("AttributeExtension", AttributeExtension)
                     ),
                     new XElement("TSC",
+                        new XElement("UseScriptSource", UseScriptSource),
                         new XElement("TSCEncrypted", TSCEncrypted),
                         new XElement("DefaultKey", DefaultKey),
                         new XElement("TSCEncoding", TSCEncoding.WebName)
@@ -552,6 +557,7 @@ namespace CaveStoryModdingFramework
             var tsc = root["TSC"];
             if(tsc != null)
             {
+                UseScriptSource = bool.Parse(tsc["UseScriptSource"].InnerText);
                 TSCEncrypted = bool.Parse(tsc["TSCEncrypted"].InnerText);
                 DefaultKey = byte.Parse(tsc["DefaultKey"].InnerText);
                 TSCEncoding = Encoding.GetEncoding(tsc["TSCEncoding"].InnerText);

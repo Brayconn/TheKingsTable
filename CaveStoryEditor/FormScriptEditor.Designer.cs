@@ -31,6 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormScriptEditor));
             this.mainScintilla = new ScintillaNET.Scintilla();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.panel1 = new CaveStoryEditor.FlagScratchPad();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -39,7 +40,7 @@
             this.tSCParserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.defaultToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.creditsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.panel1 = new CaveStoryEditor.FlagScratchPad();
+            this.saveAsencryptedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -76,6 +77,13 @@
             this.splitContainer1.SplitterDistance = 266;
             this.splitContainer1.TabIndex = 1;
             // 
+            // panel1
+            // 
+            this.panel1.Location = new System.Drawing.Point(12, 12);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(251, 402);
+            this.panel1.TabIndex = 0;
+            // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -92,7 +100,8 @@
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.saveToolStripMenuItem,
-            this.saveAsToolStripMenuItem});
+            this.saveAsToolStripMenuItem,
+            this.saveAsencryptedToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
@@ -100,16 +109,16 @@
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(121, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(121, 22);
-            this.saveAsToolStripMenuItem.Text = "Save as...";
-            this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveAsToolStripMenuItem.Text = "Save as text...";
+            this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsTextToolStripMenuItem_Click);
             // 
             // editToolStripMenuItem
             // 
@@ -140,12 +149,12 @@
             this.creditsToolStripMenuItem.Text = "Credits";
             this.creditsToolStripMenuItem.Click += new System.EventHandler(this.creditsToolStripMenuItem_Click);
             // 
-            // panel1
+            // saveAsencryptedToolStripMenuItem
             // 
-            this.panel1.Location = new System.Drawing.Point(12, 12);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(251, 402);
-            this.panel1.TabIndex = 0;
+            this.saveAsencryptedToolStripMenuItem.Name = "saveAsencryptedToolStripMenuItem";
+            this.saveAsencryptedToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveAsencryptedToolStripMenuItem.Text = "Save as encrypted...";
+            this.saveAsencryptedToolStripMenuItem.Click += new System.EventHandler(this.saveAsencryptedToolStripMenuItem_Click);
             // 
             // FormScriptEditor
             // 
@@ -158,6 +167,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "FormScriptEditor";
             this.Text = "FormScriptEditor";
+            this.Activated += new System.EventHandler(this.FormScriptEditor_Activated);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
@@ -182,5 +192,6 @@
         private System.Windows.Forms.ToolStripMenuItem defaultToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem creditsToolStripMenuItem;
         private CaveStoryEditor.FlagScratchPad panel1;
+        private System.Windows.Forms.ToolStripMenuItem saveAsencryptedToolStripMenuItem;
     }
 }

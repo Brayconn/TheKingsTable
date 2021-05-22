@@ -394,7 +394,7 @@ namespace CaveStoryEditor
         {
             foreach(string item in scriptListBox.SelectedItems)
             {
-                manager.OpenScriptEditor(mod.FolderPaths.MakeAbsoluteFromBase(item));
+                manager.OpenScriptEditor(mod.FolderPaths.MakeAbsoluteFromBase(item), mod.TSCEncrypted, mod.UseScriptSource);
             }
         }
 
@@ -429,13 +429,13 @@ namespace CaveStoryEditor
 
         private void openScriptButton_Click(object sender, EventArgs e)
         {
-            manager.OpenScriptEditor(mod.FolderPaths.GetFile(SearchLocations.Stage, Prefixes.None, selectedStageTableEntry.Filename, Extension.Script));
+            manager.OpenScriptEditor(selectedStageTableEntry);
         }
 
         private void openBothButton_Click(object sender, EventArgs e)
         {
             manager.OpenTileEditor(selectedStageTableEntry);
-            manager.OpenScriptEditor(mod.FolderPaths.GetFile(SearchLocations.Stage, Prefixes.None, selectedStageTableEntry.Filename, Extension.Script));
+            manager.OpenScriptEditor(selectedStageTableEntry);
         }
 
         private void loadEntityInfotxtToolStripMenuItem_Click(object sender, EventArgs e)

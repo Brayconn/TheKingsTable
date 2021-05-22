@@ -86,16 +86,7 @@ namespace CaveStoryEditor
 
         public void OpenTileEditor(StageEntry entry)
         {
-            FormStageEditor editor = null;
-            //check if an editor is already open for this entry
-            foreach(var e in TileEditors)
-            {
-                if(e.stageEntry == entry)
-                {
-                    editor = e;
-                    break;
-                }
-            }
+            FormStageEditor editor = TileEditors.Find(x => x.stageEntry == entry);
             //if not, create it
             if (editor == null)
             {
@@ -107,26 +98,28 @@ namespace CaveStoryEditor
             editor.Show();
             editor.Focus();
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="path">Full path of the tsc file to edit</param>
-        public void OpenScriptEditor(string path)
+
+        public void OpenScriptEditor(StageEntry entry)
         {
-            FormScriptEditor editor = null;
-            //check if an editor is already open for this script
-            foreach(var e in ScriptEditors)
-            {
-                if(e.Fullpath == path)
-                {
-                    editor = e;
-                    break;
-                }
-            }
+            FormScriptEditor editor = ScriptEditors.Find(x => x.stageEntry == entry);
             //if not, create it
             if (editor == null)
             {
-                editor = new FormScriptEditor(parentMod, path);
+                editor = new FormScriptEditor(parentMod, entry);
+                editor.FormClosed += RemoveEditor;
+                editor.ScriptSaved += Editor_ScriptSaved;
+                ScriptEditors.Add(editor);
+            }
+            editor.Show();
+            editor.Focus();
+        }
+        public void OpenScriptEditor(string path, bool encrypted, bool useScriptSource)
+        {
+            FormScriptEditor editor = ScriptEditors.Find(x => x.Fullpath == path);
+            //if not, create it
+            if (editor == null)
+            {
+                editor = new FormScriptEditor(parentMod, path, encrypted, useScriptSource);
                 editor.FormClosed += RemoveEditor;
                 editor.ScriptSaved += Editor_ScriptSaved;
                 ScriptEditors.Add(editor);
@@ -136,15 +129,7 @@ namespace CaveStoryEditor
         }
         public void OpenAttributeFile(string path)
         {
-            FormAttributeEditor editor = null;
-            foreach(var e in AttributeEditors)
-            {
-                if(e.AttributeFilename == path)
-                {
-                    editor = e;
-                    break;
-                }
-            }
+            FormAttributeEditor editor = AttributeEditors.Find(x => x.AttributeFilename == path);
             if (editor == null)
             {
                 editor = new FormAttributeEditor(parentMod, path, Editor.Default.TileTypePath, Keybinds.Default.StageEditor.ToDictionary());
