@@ -361,12 +361,17 @@ namespace CaveStoryEditor
         
 
         const int TEMPHEADLASTFLAG = 49;
+        const char EventStart_Char = '#';
+        const string EventStart_String = "#";
+        const int EventValueLength = 4;
+        const int EventTotalLength = 1 + EventValueLength;
+        const char CommandStart_Char = '<';
         private void StyleTSC(ScintillaNET.Scintilla scintilla, int startPos, int endPos)
         {
             if ((parentMod.Commands?.Count ?? 0) <= 0)
                 return;
             HashSet<Command> stopCommands = new HashSet<Command>();
-            List<string> stopStrings = new List<string>() { "#" };
+            List<string> stopStrings = new List<string>() { EventStart_String };
             foreach (var cmd in parentMod.Commands)
             {
                 if ((cmd.Properties & CommandProperties.EndsEvent) != 0)
@@ -383,26 +388,77 @@ namespace CaveStoryEditor
             scintilla.StartStyling(startPos);
             //TODO if we reached 0 we need to check head
             var firstChar = (char)scintilla.GetCharAt(startPos);
-            bool inEvent =  firstChar == '#' || firstChar == '<';
+            bool inEvent =  firstChar == EventStart_Char || firstChar == CommandStart_Char;
             while (startPos < endPos)
             {
                 var currChar = (char)scintilla.GetCharAt(startPos);
                 switch (currChar)
                 {
-                    case '#':
+                    case EventStart_Char:
                         inEvent = true;
 
-                        var eventValue = FlagConverter.FlagToRealValue(scintilla.GetTextRange(startPos + 1, 4));
+                        List<Tuple<int,int>> eventIndexes;
 
-                        var prevEventIndex = LookBackUntil(scintilla, startPos, '#');
-                        int prevEventValue = (prevEventIndex == startPos || (char)scintilla.GetCharAt(prevEventIndex) != '#')
+                        //find the previous event
+                        var prevEventIndex = LookBackUntil(scintilla, startPos, EventStart_Char);
+                        //if we didn't move, or just reached the start of the file (where that character isn't a #)
+                        int prevEventValue = (prevEventIndex == startPos || (char)scintilla.GetCharAt(prevEventIndex) != EventStart_Char)
+                            //load from head.tsc
                             ? TEMPHEADLASTFLAG
-                            : FlagConverter.FlagToRealValue(scintilla.GetTextRange(prevEventIndex + 1, 4));
+                            //otherwise, read the value
+                            : FlagConverter.FlagToRealValue(scintilla.GetTextRange(prevEventIndex + 1, EventValueLength));
 
-                        scintilla.Style(5, eventValue > prevEventValue ? TSCStyleEvent : TSCStyleError);
-                        startPos += 5;
+                        //init the event indexes list with the value from above (index = -1 because it will never be read anyways)
+                        eventIndexes = new List<Tuple<int, int>>() { new Tuple<int, int>(-1, prevEventValue) };
+
+                        int lineEndIndex = scintilla.TextLength;
+
+                        //Until we reach a new line...
+                        for(int i = startPos; i < scintilla.TextLength; i++)
+                        {
+                            char c = (char)scintilla.GetCharAt(i);
+                            //find each possible event that is on this line
+
+                            if (c == EventStart_Char)
+                            {
+                                //and add it to the list
+                                eventIndexes.Add(new Tuple<int, int>(i, FlagConverter.FlagToRealValue(scintilla.GetTextRange(i + 1, EventValueLength))));
+                            }
+                            else if (c == '\n')
+                            {
+                                lineEndIndex = i;
+                                break;
+                            }
+                        }
+
+                        //now we can just iterate the list and style everything
+                        for(int i = 1; i < eventIndexes.Count; i++)
+                        {
+                            //distance between the current event and the next one, default to 5 for the last entry
+                            var styleLength = i < eventIndexes.Count - 1 ? eventIndexes[i + 1].Item1 - eventIndexes[i].Item1 : EventTotalLength;
+                            //events must be in increasing order
+                            var valid = eventIndexes[i - 1].Item2 < eventIndexes[i].Item2 ? TSCStyleEvent : TSCStyleError;
+
+                            //if the next event is in MORE than 5 characters, those would actually be ignored, so we need to include a comment
+                            if(styleLength > EventTotalLength)
+                            {
+                                scintilla.Style(EventTotalLength, valid);
+                                scintilla.Style(styleLength - EventTotalLength, TSCStyleComment);
+                            }
+                            else
+                            {
+                                scintilla.Style(styleLength, valid);
+                            }
+                            startPos += styleLength;
+                        }
+                        //style any remaining space until the newline (or end of file) as a comment
+                        while(startPos < lineEndIndex && (char)scintilla.GetCharAt(startPos) != '\n')
+                        {
+                            scintilla.Style(1, TSCStyleComment);
+                            startPos++;
+                        }
                         break;
-                    case '<' when inEvent:
+                    case CommandStart_Char when inEvent:
                         string cmdText = scintilla.GetTextRange(startPos, parentMod.Commands[0].ShortName.Length);
                         Command foundCommand = null;
                         foreach(var cmd in parentMod.Commands)
