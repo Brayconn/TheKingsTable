@@ -9,7 +9,7 @@ In the future there will be more of a description here, but for now, I'm assumin
 
 ## Windows
 
-Check the releases page and download that exe!
+Check the ~~releases~~ [Appveyor](https://ci.appveyor.com/api/projects/brayconn/thekingstable/artifacts/Release.zip) page and download that exe!
 
 ## Mac
 
