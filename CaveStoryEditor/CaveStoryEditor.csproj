@@ -78,6 +78,12 @@
     <Compile Include="FormAttributeEditor.designer.cs">
       <DependentUpon>FormAttributeEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormGoto.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormGoto.Designer.cs">
+      <DependentUpon>FormGoto.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -157,6 +163,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormAttributeEditor.resx">
       <DependentUpon>FormAttributeEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormGoto.resx">
+      <DependentUpon>FormGoto.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>

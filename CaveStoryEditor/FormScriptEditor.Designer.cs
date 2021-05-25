@@ -36,11 +36,11 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveAsencryptedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tSCParserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.defaultToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.creditsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveAsencryptedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -109,16 +109,23 @@
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.saveAsToolStripMenuItem.Text = "Save as text...";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsTextToolStripMenuItem_Click);
+            // 
+            // saveAsencryptedToolStripMenuItem
+            // 
+            this.saveAsencryptedToolStripMenuItem.Name = "saveAsencryptedToolStripMenuItem";
+            this.saveAsencryptedToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.saveAsencryptedToolStripMenuItem.Text = "Save as encrypted...";
+            this.saveAsencryptedToolStripMenuItem.Click += new System.EventHandler(this.saveAsencryptedToolStripMenuItem_Click);
             // 
             // editToolStripMenuItem
             // 
@@ -148,13 +155,6 @@
             this.creditsToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
             this.creditsToolStripMenuItem.Text = "Credits";
             this.creditsToolStripMenuItem.Click += new System.EventHandler(this.creditsToolStripMenuItem_Click);
-            // 
-            // saveAsencryptedToolStripMenuItem
-            // 
-            this.saveAsencryptedToolStripMenuItem.Name = "saveAsencryptedToolStripMenuItem";
-            this.saveAsencryptedToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.saveAsencryptedToolStripMenuItem.Text = "Save as encrypted...";
-            this.saveAsencryptedToolStripMenuItem.Click += new System.EventHandler(this.saveAsencryptedToolStripMenuItem_Click);
             // 
             // FormScriptEditor
             // 

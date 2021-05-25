@@ -237,6 +237,91 @@ namespace CaveStoryEditor
             }
         }
 
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == (Keys.Control | Keys.G))
+            {
+                switch (ParserMode)
+                {
+                    case ParserModes.Scriptsource:
+                    case ParserModes.Default:
+                    case ParserModes.Credits:
+                        using(var g = new FormGoto())
+                        {
+                            if(g.ShowDialog() == DialogResult.OK)
+                            {
+                                var val = FlagConverter.FlagToRealValue(g.Value);
+                                var index = FindEvent(mainScintilla, val);
+                                if (index != -1)
+                                {
+                                    mainScintilla.SelectionStart = index;
+                                    mainScintilla.SelectionEnd = index + EventTotalLength;
+                                    mainScintilla.ScrollCaret();
+                                }
+                                else
+                                {
+                                    MessageBox.Show($"Couldn't find event \"{val}\"!");
+                                }
+                            }
+                        }                        
+                        break;
+                    default:
+                        MessageBox.Show("Sorry, can't use that feature!");
+                        break;
+                }
+                return true;
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        const bool TEMP_orderedEvents = true;
+        int FindEvent(ScintillaNET.Scintilla scintilla, int eventNum)
+        {
+            int index = 0;
+            switch (parserMode)
+            {
+                case ParserModes.Scriptsource:
+                case ParserModes.Default:
+                    while (index < scintilla.TextLength)
+                    {
+                        if ((char)scintilla.GetCharAt(index) == EventStart_Char)
+                        {
+                            var val = FlagConverter.FlagToRealValue(scintilla.GetTextRange(index + 1, EventValueLength));
+                            if (val == eventNum || (TEMP_orderedEvents && val > eventNum))
+                                return index;
+                        }
+                        index++;
+                    }
+                    break;
+                case ParserModes.Credits:
+                    bool inBrackets = false;
+                    while (index < scintilla.TextLength)
+                    {
+                        switch((char)scintilla.GetCharAt(index))
+                        {
+                            case '[':
+                                inBrackets = true;
+                                break;
+                            case ']':
+                                inBrackets = false;
+                                break;
+                            case 'l' when !inBrackets:
+                                var val = FlagConverter.FlagToRealValue(scintilla.GetTextRange(index + 1, EventValueLength));
+                                if (val == eventNum)
+                                    return index;
+                                break;
+                        }
+                        index++;
+                    }
+                    break;
+                default:
+                    return -1;
+            }
+
+            
+            return -1;
+        }
+
         #region styling
 
         private void InitParserStyles(ParserModes mode, ScintillaNET.Scintilla scintilla)
@@ -361,8 +446,8 @@ namespace CaveStoryEditor
         
 
         const int TEMPHEADLASTFLAG = 49;
-        const char EventStart_Char = '#';
-        const string EventStart_String = "#";
+        public const char EventStart_Char = '#';
+        public const string EventStart_String = "#";
         const int EventValueLength = 4;
         const int EventTotalLength = 1 + EventValueLength;
         const char CommandStart_Char = '<';
