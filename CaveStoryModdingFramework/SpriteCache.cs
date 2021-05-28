@@ -25,8 +25,7 @@ namespace CaveStoryModdingFramework
         }
         bool TryResolveSurfacePath(SurfaceSourceFile surfaceSource, out string path)
         {
-            path = ResolveSurfacePath(surfaceSource);
-            return File.Exists(path);
+            return parentMod.FolderPaths.TryGetFile(surfaceSource.Folder, surfaceSource.Prefix, surfaceSource.Filename, Extension.Image, out path) && File.Exists(path);
         }
         string ResolveSurfacePath(SurfaceSourceFile surfaceSource)
         {
