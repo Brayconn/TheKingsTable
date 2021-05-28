@@ -195,8 +195,8 @@ namespace CaveStoryEditor
 
             mapPath = parentMod.FolderPaths.GetFile(SearchLocations.Stage, entry.Filename, Extension.TileData);
             entityPath = parentMod.FolderPaths.GetFile(SearchLocations.Stage, entry.Filename, Extension.EntityData);
-            tilesetPath = parentMod.FolderPaths.GetFile(SearchLocations.Stage, Prefixes.Tileset, entry.Filename, Extension.Image);
-            attributePath = parentMod.FolderPaths.GetFile(SearchLocations.Stage, entry.Filename, Extension.TilesetData);
+            tilesetPath = parentMod.FolderPaths.GetFile(SearchLocations.Stage, Prefixes.Tileset, entry.TilesetName, Extension.Image);
+            attributePath = parentMod.FolderPaths.GetFile(SearchLocations.Stage, entry.TilesetName, Extension.TilesetData);
 
 
             void GenerateMany(SurfaceSourceFile file, int index)
