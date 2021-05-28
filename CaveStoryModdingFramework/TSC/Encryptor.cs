@@ -29,6 +29,8 @@ namespace CaveStoryModdingFramework.TSC
 
         public static void DecryptInPlace<T>(T input, byte defaultKey = DefaultKey) where T : IList<byte>
         {
+            if (input.Count == 0)
+                return;
             var key = input[input.Count / 2];
             if (key == 0)
                 key = defaultKey;
