@@ -19,19 +19,44 @@ namespace CaveStoryModdingFramework
     {
         public static readonly string CaveStoryProjectFilter = $"{Dialog.ModFilterText} (*.cav)|*.cav";
         #region stage table
-
+        
         public event EventHandler StageTableTypeChanged;
-        StageTableTypes stageTableType;
+        
         [LocalizeableCategory(nameof(Dialog.ModStageTableCategory), typeof(Dialog))]
-        public StageTableTypes StageTableFormat
+        public StageTablePresets StageTablePreset
         {
-            get => stageTableType;
+            get
+            {
+                if (StageTableLocation.Presets.TryGetValue(StageTableLocation, out var loc) &&
+                    (StageTableLocation.DataLocationType == DataLocationTypes.Internal) == (StageTableLocation.Filename == EXEPath) &&
+                    StageEntrySettings.Presets.TryGetValue(StageTableSettings, out var ent) &&
+                    loc == ent)
+                    return loc;
+                else
+                    return StageTablePresets.custom;
+            }
             set
             {
-                if(stageTableType != value)
+                if(value != StageTablePresets.custom && StageTablePreset != value)
                 {
-                    stageTableType = value;
-                    StageTableTypeChanged?.Invoke(this, new EventArgs());
+                    StageTableLocation.ResetToDefault(value);
+                    switch (value)
+                    {
+                        case StageTablePresets.doukutsuexe:
+                        case StageTablePresets.csmap:
+                        case StageTablePresets.swdata:
+                            StageTableLocation.Filename = EXEPath;
+                            break;
+                        case StageTablePresets.stagetbl:
+                        case StageTablePresets.mrmapbin:
+                            StageTableLocation.Filename = Path.Combine(BaseDataPath,
+                                    value == StageTablePresets.stagetbl
+                                    ? Stages.StageTable.STAGETBL
+                                    : Stages.StageTable.MRMAPBIN
+                                );
+                            break;
+                    }
+                    StageTableSettings.Reset(value);
                 }
             }
         }
@@ -39,8 +64,8 @@ namespace CaveStoryModdingFramework
         [LocalizeableCategory(nameof(Dialog.ModStageTableCategory), typeof(Dialog)), TypeConverter(typeof(ExpandableObjectConverter))]
         public StageEntrySettings StageTableSettings { get; }
         
-        [LocalizeableCategory(nameof(Dialog.ModStageTableCategory), typeof(Dialog))]
-        public string StageTableLocation { get; set; }
+        [LocalizeableCategory(nameof(Dialog.ModStageTableCategory), typeof(Dialog)), TypeConverter(typeof(ExpandableObjectConverter))]
+        public StageTableLocation StageTableLocation { get; set; }
         #endregion
 
         [Browsable(false)]
@@ -249,7 +274,7 @@ namespace CaveStoryModdingFramework
         /// <param name="data"></param>
         /// <param name="stage"></param>
         /// <param name="type"></param>
-        public Mod(string data, string stage, StageTableTypes type)
+        public Mod(string data, string stage, StageTablePresets type)
         {
             if (!Directory.Exists(data))
                 throw new DirectoryNotFoundException();
@@ -260,21 +285,21 @@ namespace CaveStoryModdingFramework
 
             FolderPaths = new AssetManager(this, "Stage", "Npc");
 
-            StageTableLocation = stage;
-            StageTableFormat = type;
+            StageTableLocation = new StageTableLocation(stage, type);
+            //StageTablePreset = type;
             StageTableSettings = new StageEntrySettings(type);
-            StageTable = Stages.StageTable.Load(stage, type);
+            StageTable = StageTableLocation.Read(StageTableSettings);
 
             switch(type)
             {
-                case StageTableTypes.doukutsuexe:
-                case StageTableTypes.swdata:
+                case StageTablePresets.doukutsuexe:
+                case StageTablePresets.swdata:
                     ImageExtension = Images.DefaultImageExtension;
                     break;
-                case StageTableTypes.csmap:
+                case StageTablePresets.csmap:
                     UseScriptSource = true;
                     goto default;
-                case StageTableTypes.stagetbl:
+                case StageTablePresets.stagetbl:
                     TileSize = 32;
                     goto default;
                 default:
@@ -318,7 +343,6 @@ namespace CaveStoryModdingFramework
         public void Save(string path)
         {
             var relativeDataPath = AssetManager.MakeRelative(path, BaseDataPath);
-            var relativeStageTablePath = AssetManager.MakeRelative(path, StageTableLocation);
             var relativeNpcTablePath = AssetManager.MakeRelative(path, NpcTablePath);
 
             XElement SerializeEntities(IDictionary<int, EntityInfo> dict, string name, string valName, string keyName = "Key")
@@ -394,8 +418,8 @@ namespace CaveStoryModdingFramework
                         new XElement("NpcTablePath", relativeNpcTablePath)
                     ),
                     new XElement("StageTable",
-                        new XElement("Location", relativeStageTablePath),
-                        new XElement("Type", StageTableFormat),
+                        StageTableLocation.ToXML("Location", BaseDataPath),
+                        //new XElement("Type", StageTableFormat),
                         StageTableSettings.ToXML("StageTableSettings")
                     ),
                     new XElement("TileSize", TileSize),
@@ -528,8 +552,9 @@ namespace CaveStoryModdingFramework
             var st = root["StageTable"];
             if(st != null)
             {
-                StageTableLocation = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(path), st["Location"].InnerText));
-                StageTableFormat =  (StageTableTypes)Enum.Parse(typeof(StageTableTypes), st["Type"].InnerText);
+                StageTableLocation = new StageTableLocation(AssetManager.MakeAbsolute(BaseDataPath, st[nameof(StageTableLocation.Filename)].InnerText));
+                //TODO saving is still broken btw
+                //StageTableFormat =  (StageTablePresets)Enum.Parse(typeof(StageTablePresets), st["Type"].InnerText);
                 StageTableSettings = new StageEntrySettings(st["StageTableSettings"]);
             }
 
@@ -576,8 +601,7 @@ namespace CaveStoryModdingFramework
             LoadLongDict(root["BossNumbers"], BossNumbers);
             LoadLongDict(root["BackgroundTypes"], BackgroundTypes);
 
-            StageTable = Stages.StageTable.Load(StageTableLocation, StageTableFormat);
-
+            StageTable = StageTableLocation.Read(StageTableSettings);
             //TODO check npc table loading from project file
             if(File.Exists(NpcTablePath))
                 NPCTable = Entities.NPCTable.Load(NpcTablePath);

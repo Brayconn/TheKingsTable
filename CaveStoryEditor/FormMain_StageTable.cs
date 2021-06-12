@@ -1,4 +1,5 @@
-﻿using CaveStoryModdingFramework.Stages;
+﻿using CaveStoryModdingFramework;
+using CaveStoryModdingFramework.Stages;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -64,7 +65,7 @@ namespace CaveStoryEditor
             //adding the actual content
             AddColumn("Map Name", nameof(StageEntry.MapName));
             //TODO need to add/remove Japanese Name column as needed
-            if (mod.StageTableFormat == StageTableTypes.stagetbl)
+            if (mod.StageTablePreset == StageTablePresets.stagetbl)
                 AddColumn("Japanese Name", nameof(StageEntry.JapaneseName));
             AddColumn("Tileset", nameof(StageEntry.TilesetName));
             AddColumn("Filename", nameof(StageEntry.Filename));
@@ -174,18 +175,12 @@ namespace CaveStoryEditor
 
         void UpdateCanAddStageTableEntries()
         {
-            switch (mod.StageTableFormat)
-            {
-                case StageTableTypes.doukutsuexe:
-                    stageTableDataGridView.AllowUserToAddRows = mod.StageTable.Count * mod.StageTableSettings.Size < StageTable.CSStageTableSize;
-                    break;
-                case StageTableTypes.stagetbl:
-                    //TODO max value is 95 or something?
-                default:
-                    stageTableDataGridView.AllowUserToAddRows = true;
-                    break;
-            }
-            insertButton.Enabled = stageTableDataGridView.AllowUserToAddRows;
+            //you can only add new stages if...
+            insertButton.Enabled = stageTableDataGridView.AllowUserToAddRows =
+                //the stage table doesn't have a max size
+                mod.StageTableLocation.MaximumSize <= 0 ||
+                //or if it does have a max size, you haven't hit it yet
+                mod.StageTable.Count * mod.StageTableSettings.Size < mod.StageTableLocation.MaximumSize;
         }
 
         private void stageTableDataGridView_UserAddedRow(object sender, DataGridViewRowEventArgs e)
@@ -202,42 +197,57 @@ namespace CaveStoryEditor
 
         private void saveStageTableToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //check that the actual format is ok
-            if (!StageTable.VerifyStageTable(mod.StageTable, mod.StageTableFormat, mod.StageTableSettings))
+            //maximum size check
+            if(mod.StageTableLocation.MaximumSize > 0)
             {
-                MessageBox.Show("Error: something broke before we got very far");
+                var diff = StageTable.GetBufferSize(mod.StageTableLocation.StageTableFormat, mod.StageTable.Count, mod.StageTableSettings) - mod.StageTableLocation.MaximumSize;
+                if (diff > 0)
+                {
+                    MessageBox.Show($"Error: Your stage table exceeds the maximum size you set! Cut it back by {diff} bytes and try again.");
+                    return;
+                }
+            }
+
+            if(mod.StageTableLocation.DataLocationType == DataLocationTypes.External
+                && mod.StageTableLocation.Filename == mod.EXEPath)
+            {
+                MessageBox.Show("Error: You tried to save an external stage table over your exe");
+                return;
+            }
+            else if(mod.StageTableLocation.DataLocationType == DataLocationTypes.Internal
+                && mod.StageTableLocation.Filename != mod.EXEPath)
+            {
+                MessageBox.Show("Error: You just tried to save an internal stage table to something other than your exe");
                 return;
             }
 
-            //safety check that you won't overwrite something important
-            bool VerifyExtension(string ext)
-            {
-                return mod.StageTableLocation.EndsWith(ext)
-                    || MessageBox.Show("Warning: You might be about to save over the wrong file, are you sure you want to continue?", "Warning", MessageBoxButtons.YesNo) == DialogResult.Yes;
-            }
+            //TODO maybe bring this kind of thing back?
+            /*
             bool result = false;
             switch (mod.StageTableFormat)
             {
-                case StageTableTypes.doukutsuexe:
-                case StageTableTypes.swdata:
-                case StageTableTypes.csmap:
+                case StageTablePresets.doukutsuexe:
+                case StageTablePresets.swdata:
+                case StageTablePresets.csmap:
                     result = VerifyExtension("exe");
                     break;
-                case StageTableTypes.stagetbl:
+                case StageTablePresets.stagetbl:
                     result = VerifyExtension("tbl");
                     break;
-                case StageTableTypes.mrmapbin:
+                case StageTablePresets.mrmapbin:
                     result = VerifyExtension("bin");
                     break;
             }
             if (!result)
                 return;
+            */
 
-            //actually do the writing
-            StageTable.Write(mod.StageTable, mod.StageTableLocation, mod.StageTableFormat);
-
+            mod.StageTableLocation.Write(mod.StageTable, mod.StageTableSettings);
+            
             //final check if SW worked
-            if (mod.StageTableFormat == StageTableTypes.swdata && !StageTable.VerifySW(mod.StageTableLocation))
+            if (mod.StageTableLocation.StageTableFormat == StageTableFormats.swdata
+                && mod.StageTableLocation.DataLocationType == DataLocationTypes.Internal
+                && !StageTable.VerifySW(mod.StageTableLocation.Filename)) //TODO
                 MessageBox.Show("Warning: SW won't be able to load this exe, sorry.");
 
             StageTableUnsaved = false;

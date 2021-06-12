@@ -62,10 +62,10 @@ namespace CaveStoryEditor
 
             //setup stage table type quick switcher
             if(stageTableFormatComboBox.DataSource == null)
-                stageTableFormatComboBox.DataSource = Enum.GetValues(typeof(StageTableTypes));
+                stageTableFormatComboBox.DataSource = Enum.GetValues(typeof(StageTablePresets));
             stageTableFormatComboBox.Enabled = true;
             lockMod = true;
-            stageTableFormatComboBox.SelectedItem = mod.StageTableFormat;
+            stageTableFormatComboBox.SelectedItem = mod.StageTablePreset;
             lockMod = false;
 
             //asset tab
@@ -99,8 +99,7 @@ namespace CaveStoryEditor
             {
                 lockMod = true;
                 
-                mod.StageTableFormat = (StageTableTypes)stageTableFormatComboBox.SelectedItem;
-                mod.StageTableSettings.Reset(mod.StageTableFormat);
+                mod.StageTablePreset = (StageTablePresets)stageTableFormatComboBox.SelectedItem;
                 UpdateCanAddStageTableEntries();
                 
                 lockMod = false;
@@ -113,7 +112,7 @@ namespace CaveStoryEditor
             {
                 lockMod = true;
 
-                stageTableFormatComboBox.SelectedItem = mod.StageTableFormat;
+                stageTableFormatComboBox.SelectedItem = mod.StageTablePreset;
                 UpdateCanAddStageTableEntries();
                 
                 lockMod = false;
@@ -161,7 +160,7 @@ namespace CaveStoryEditor
                 {
                     string data;
                     string stage = ofd.FileName;
-                    StageTableTypes type;
+                    StageTablePresets type;
                     switch(ofd.FilterIndex)
                     {
                         case 4: //EXE filter
@@ -175,11 +174,11 @@ namespace CaveStoryEditor
                             break;
                         case 2: //CSE2
                             data = Path.GetDirectoryName(ofd.FileName);
-                            type = StageTableTypes.mrmapbin;
+                            type = StageTablePresets.mrmapbin;
                             break;
                         case 3: //CS+
                             data = Path.GetDirectoryName(ofd.FileName);
-                            type = StageTableTypes.stagetbl;
+                            type = StageTablePresets.stagetbl;
                             break;
                         default:
                             throw new ArgumentException();

@@ -54,8 +54,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>BackgroundTypeNames.resx</DependentUpon>
     </Compile>
+    <Compile Include="Compatability\Patcher.cs" />
     <Compile Include="Compatability\Scriptsource.cs" />
     <Compile Include="Compatability\TSCListTXT.cs" />
+    <Compile Include="DataLocation.cs" />
     <Compile Include="Lists\BackgroundTypes.cs" />
     <Compile Include="Lists\Bosses.cs" />
     <Compile Include="BossNames.Designer.cs">

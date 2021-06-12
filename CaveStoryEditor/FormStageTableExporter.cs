@@ -21,8 +21,8 @@ namespace CaveStoryEditor
                 }
             }
         }
-        StageTableTypes exportType = StageTableTypes.doukutsuexe;
-        StageTableTypes ExportType
+        StageTablePresets exportType = StageTablePresets.doukutsuexe;
+        StageTablePresets ExportType
         {
             get => exportType;
             set
@@ -39,7 +39,7 @@ namespace CaveStoryEditor
             Table = table;
             InitializeComponent();
 
-            typeComboBox.Items.AddRange(Enum.GetNames(typeof(StageTableTypes)));
+            typeComboBox.Items.AddRange(Enum.GetNames(typeof(StageTablePresets)));
             typeComboBox.SelectedIndex = 0;
 
             resetButton_Click(this, new EventArgs());
@@ -51,13 +51,13 @@ namespace CaveStoryEditor
             bool typeOk;
             switch(ExportType)
             {
-                case StageTableTypes.doukutsuexe:
-                case StageTableTypes.swdata:
-                case StageTableTypes.csmap:
+                case StageTablePresets.doukutsuexe:
+                case StageTablePresets.swdata:
+                case StageTablePresets.csmap:
                     typeOk = File.Exists(ExportPath);
                     break;
-                case StageTableTypes.stagetbl:
-                case StageTableTypes.mrmapbin:
+                case StageTablePresets.stagetbl:
+                case StageTablePresets.mrmapbin:
                     typeOk = true;
                     break;
                 default:
@@ -69,7 +69,7 @@ namespace CaveStoryEditor
 
         private void typeComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ExportType = (StageTableTypes)typeComboBox.SelectedIndex;
+            ExportType = (StageTablePresets)typeComboBox.SelectedIndex;
         }
 
         private void resetButton_Click(object sender, EventArgs e)
@@ -82,7 +82,8 @@ namespace CaveStoryEditor
         {
             try
             {
-                StageTable.Save(Table, ExportPath, ExportType, ExportSettings);
+                MessageBox.Show("THIS IS DUMMIED RIGHT NOW");
+                //StageTable.Save(Table, ExportPath, ExportType, ExportSettings);
             }
             catch (Exception ex)
             {
