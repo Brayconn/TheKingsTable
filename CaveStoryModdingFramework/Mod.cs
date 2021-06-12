@@ -63,7 +63,10 @@ namespace CaveStoryModdingFramework
 
         [LocalizeableCategory(nameof(Dialog.ModStageTableCategory), typeof(Dialog)), TypeConverter(typeof(ExpandableObjectConverter))]
         public StageEntrySettings StageTableSettings { get; }
-        
+
+        [LocalizeableCategory(nameof(Dialog.ModStageTableCategory), typeof(Dialog)), TypeConverter(typeof(ExpandableObjectConverter))]
+        public StageTableReferences InternalStageTableReferences { get; } = new StageTableReferences();
+
         [LocalizeableCategory(nameof(Dialog.ModStageTableCategory), typeof(Dialog)), TypeConverter(typeof(ExpandableObjectConverter))]
         public StageTableLocation StageTableLocation { get; set; }
         #endregion
@@ -286,9 +289,8 @@ namespace CaveStoryModdingFramework
             FolderPaths = new AssetManager(this, "Stage", "Npc");
 
             StageTableLocation = new StageTableLocation(stage, type);
-            //StageTablePreset = type;
             StageTableSettings = new StageEntrySettings(type);
-            StageTable = StageTableLocation.Read(StageTableSettings);
+            StageTable = Stages.StageTable.Read(StageTableLocation, StageTableSettings);
 
             switch(type)
             {
@@ -554,7 +556,6 @@ namespace CaveStoryModdingFramework
             {
                 StageTableLocation = new StageTableLocation(AssetManager.MakeAbsolute(BaseDataPath, st[nameof(StageTableLocation.Filename)].InnerText));
                 //TODO saving is still broken btw
-                //StageTableFormat =  (StageTablePresets)Enum.Parse(typeof(StageTablePresets), st["Type"].InnerText);
                 StageTableSettings = new StageEntrySettings(st["StageTableSettings"]);
             }
 
@@ -601,7 +602,7 @@ namespace CaveStoryModdingFramework
             LoadLongDict(root["BossNumbers"], BossNumbers);
             LoadLongDict(root["BackgroundTypes"], BackgroundTypes);
 
-            StageTable = StageTableLocation.Read(StageTableSettings);
+            StageTable = Stages.StageTable.Read(StageTableLocation, StageTableSettings);
             //TODO check npc table loading from project file
             if(File.Exists(NpcTablePath))
                 NPCTable = Entities.NPCTable.Load(NpcTablePath);

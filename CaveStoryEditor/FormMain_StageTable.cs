@@ -242,7 +242,7 @@ namespace CaveStoryEditor
                 return;
             */
 
-            mod.StageTableLocation.Write(mod.StageTable, mod.StageTableSettings);
+            StageTable.Write(mod.StageTable, mod.StageTableLocation, mod.StageTableSettings, mod.InternalStageTableReferences);
             
             //final check if SW worked
             if (mod.StageTableLocation.StageTableFormat == StageTableFormats.swdata
