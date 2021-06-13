@@ -158,6 +158,19 @@ namespace CaveStoryModdingFramework.Stages
         {
             ResetToDefault(type);
         }
+        public StageTableLocation(XmlElement xml, string filename)
+        {
+            Filename = filename;
+            //Filename = xml[nameof(Filename)].InnerText;
+            DataLocationType = (DataLocationTypes)Enum.Parse(typeof(DataLocationTypes), xml[nameof(DataLocationType)].InnerText);
+            Offset = int.Parse(xml[nameof(Offset)].InnerText);
+            SectionName = xml[nameof(SectionName)].InnerText;
+            FixedSize = bool.Parse(xml[nameof(FixedSize)].InnerText);
+            MaximumSize = int.Parse(xml[nameof(MaximumSize)].InnerText);
+
+            StageTableFormat = (StageTableFormats)Enum.Parse(typeof(StageTableFormats), xml[nameof(StageTableFormat)].InnerText);
+            StageCount = int.Parse(xml[nameof(StageCount)].InnerText);
+        }
         public override XElement ToXML(string elementName, string relativeBase)
         {
             var x = base.ToXML(elementName, relativeBase);

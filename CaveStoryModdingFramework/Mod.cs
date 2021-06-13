@@ -418,20 +418,28 @@ namespace CaveStoryModdingFramework
                     @base.Add(i);
                 }
                 return @base;
-            }           
+            }
+            XElement SerializeList(List<string> list, string name, string itemName = "Item")
+            {
+                var @base = new XElement(name);
+                foreach(var item in list)
+                {
+                    @base.Add(new XElement(itemName, item));
+                }
+                return @base;
+            }
 
             new XDocument(
                 new XElement("CaveStoryMod",
                     new XElement("Paths", 
                         new XElement("BaseDataPath", relativeDataPath),
-                        new XElement("DataFolders", FolderPaths.DataPaths),
-                        new XElement("StageFolders", FolderPaths.StagePaths),
-                        new XElement("NpcFolders", FolderPaths.NpcPaths),
+                        SerializeList(FolderPaths.DataPaths, "DataFolders"),
+                        SerializeList(FolderPaths.StagePaths, "StageFolders"),
+                        SerializeList(FolderPaths.NpcPaths, "NpcFolders"),
                         new XElement("NpcTablePath", relativeNpcTablePath)
                     ),
                     new XElement("StageTable",
                         StageTableLocation.ToXML("Location", BaseDataPath),
-                        //new XElement("Type", StageTableFormat),
                         StageTableSettings.ToXML("StageTableSettings")
                     ),
                     new XElement("TileSize", TileSize),
@@ -480,10 +488,10 @@ namespace CaveStoryModdingFramework
             if (root == null)
                 throw new FileLoadException();
 
-            var dataPath = root["Paths"]?["DataPath"]?.InnerText;
+            var dataPath = root["Paths"]?["BaseDataPath"]?.InnerText;
             if (dataPath == null)
                 throw new ArgumentNullException();
-            dataPath = AssetManager.MakeAbsolute(Path.GetDirectoryName(path), dataPath);
+            dataPath = AssetManager.MakeAbsolute(path, dataPath);
             if (!Directory.Exists(dataPath))
                 throw new DirectoryNotFoundException();
             BaseDataPath = dataPath;
@@ -553,6 +561,7 @@ namespace CaveStoryModdingFramework
                 }
             }
 
+            FolderPaths = new AssetManager(this);
             var paths = root["Paths"];
             LoadList(paths["DataFolders"], FolderPaths.DataPaths);
             LoadList(paths["StageFolders"], FolderPaths.StagePaths);
@@ -564,9 +573,9 @@ namespace CaveStoryModdingFramework
             var st = root["StageTable"];
             if(st != null)
             {
-                StageTableLocation = new StageTableLocation(AssetManager.MakeAbsolute(BaseDataPath, st[nameof(StageTableLocation.Filename)].InnerText));
-                //TODO saving is still broken btw
+                StageTableLocation = new StageTableLocation(st["Location"], AssetManager.MakeAbsolute(BaseDataPath, st["Location"][nameof(Stages.StageTableLocation.Filename)].InnerText));
                 StageTableSettings = new StageEntrySettings(st["StageTableSettings"]);
+                //TODO save references
             }
 
             TileSize = int.Parse(root["TileSize"].InnerText);
