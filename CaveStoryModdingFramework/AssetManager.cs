@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing.Design;
 using System.IO;
 
 namespace CaveStoryModdingFramework
@@ -31,17 +33,28 @@ namespace CaveStoryModdingFramework
         readonly Mod parentMod;
         private string BaseDataPath => parentMod.BaseDataPath;
 
+        //HACK turns out property grids need to have a custom type editor to make List<string> editable
+        //Double check this isn't producing a reliance on winforms
+        const string StringEditorLocation = "System.Windows.Forms.Design.StringCollectionEditor, " +
+                                            "System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a";
+
         /// <summary>
         /// Directories to be searched for Backgrounds, Global Scripts, and other misc. images
         /// </summary>
+        [Editor(StringEditorLocation, typeof(UITypeEditor))]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public List<string> DataPaths { get; } = new List<string>();
         /// <summary>
         /// Directories to be searched for Tile Data, Entity Data, and Tileset data/images
         /// </summary>
+        [Editor(StringEditorLocation, typeof(UITypeEditor))]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public List<string> StagePaths { get; } = new List<string>();
         /// <summary>
         /// Directories to be searched for Npc Spritesheets
         /// </summary>
+        [Editor(StringEditorLocation, typeof(UITypeEditor))]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public List<string> NpcPaths { get; } = new List<string>();
 
         public static string MakeRelative(string basePath, string subPath)
