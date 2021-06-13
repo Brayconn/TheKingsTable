@@ -83,7 +83,6 @@
             this.typeComboBox.Name = "typeComboBox";
             this.typeComboBox.Size = new System.Drawing.Size(170, 21);
             this.typeComboBox.TabIndex = 3;
-            this.typeComboBox.SelectedIndexChanged += new System.EventHandler(this.typeComboBox_SelectedIndexChanged);
             // 
             // pathTextBox
             // 

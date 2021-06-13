@@ -27,11 +27,10 @@ namespace CaveStoryModdingFramework
         {
             get
             {
-                if (StageTableLocation.Presets.TryGetValue(StageTableLocation, out var loc) &&
-                    (StageTableLocation.DataLocationType == DataLocationTypes.Internal) == (StageTableLocation.Filename == EXEPath) &&
-                    StageEntrySettings.Presets.TryGetValue(StageTableSettings, out var ent) &&
-                    loc == ent)
-                    return loc;
+                if (Stages.StageTable.TryDetectPreset(StageTableLocation, StageTableSettings, out var preset) &&
+                    //internal stage tables must be pointing at your exe, and external ones must NOT
+                    (StageTableLocation.DataLocationType == DataLocationTypes.Internal) == (StageTableLocation.Filename == EXEPath))
+                    return preset;
                 else
                     return StageTablePresets.custom;
             }
@@ -56,7 +55,7 @@ namespace CaveStoryModdingFramework
                                 );
                             break;
                     }
-                    StageTableSettings.Reset(value);
+                    StageTableSettings.ResetToDefault(value);
                 }
             }
         }
@@ -291,6 +290,17 @@ namespace CaveStoryModdingFramework
             StageTableLocation = new StageTableLocation(stage, type);
             StageTableSettings = new StageEntrySettings(type);
             StageTable = Stages.StageTable.Read(StageTableLocation, StageTableSettings);
+
+            switch (StageTableLocation.DataLocationType)
+            {
+                case DataLocationTypes.Internal:
+                    EXEPath = stage;
+                    break;
+                case DataLocationTypes.External:
+                    //TODO this breaks if you have more than one exe in the directory
+                    EXEPath = Directory.GetFiles(Path.GetDirectoryName(data), "*.exe")[0];
+                    break;
+            }
 
             switch(type)
             {

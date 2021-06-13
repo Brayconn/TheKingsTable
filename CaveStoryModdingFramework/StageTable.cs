@@ -145,8 +145,10 @@ namespace CaveStoryModdingFramework.Stages
 
     public class StageTableLocation : DataLocation
     {
-        public StageTableFormats StageTableFormat { get; set; }
-        public int StageCount { get; set; }
+        StageTableFormats stageTableFormat;
+        int stageCount;
+        public StageTableFormats StageTableFormat { get => stageTableFormat; set => SetVal(ref stageTableFormat, value); }
+        public int StageCount { get => stageCount; set => SetVal(ref stageCount, value); }
 
         public StageTableLocation(string path)
         {
@@ -224,18 +226,15 @@ namespace CaveStoryModdingFramework.Stages
             }
             else return base.Equals(obj);
         }
-
-        public static readonly Dictionary<StageTableLocation, StageTablePresets> Presets;
-        static StageTableLocation()
+        public override int GetHashCode()
         {
-            var values = Enum.GetValues(typeof(StageTablePresets));
-            Presets = new Dictionary<StageTableLocation, StageTablePresets>(values.Length);
-            foreach (StageTablePresets item in values)
-            {
-                //custom has no preset so we avoid it
-                if (item != StageTablePresets.custom)
-                    Presets.Add(new StageTableLocation("", item), item);
-            }
+            return (2 * DataLocationType.GetHashCode()) +
+                (3 * SectionName.GetHashCode()) +
+                (5 * Offset.GetHashCode()) +
+                (7 * MaximumSize.GetHashCode()) +
+                (11 * FixedSize.GetHashCode()) +
+                (13 * StageTableFormat.GetHashCode()) +
+                (17 * StageCount.GetHashCode());
         }
     }
 
@@ -329,7 +328,7 @@ namespace CaveStoryModdingFramework.Stages
             MapNameBuffer = int.Parse(xml[nameof(MapNameBuffer)].InnerText);
             Padding = int.Parse(xml[nameof(Padding)].InnerText);
         }
-        public void Reset(StageTablePresets type)
+        public void ResetToDefault(StageTablePresets type)
         {
             switch (type)
             {
@@ -376,18 +375,20 @@ namespace CaveStoryModdingFramework.Stages
         { }
         public StageEntrySettings(StageTablePresets type)
         {
-            Reset(type);
+            ResetToDefault(type);
         }
         public override bool Equals(object obj)
         {
             if(obj is StageEntrySettings s)
             {
-                return TilesetNameBuffer == s.TilesetNameBuffer &&
+                return FilenameEncoding == s.FilenameEncoding &&
+                    TilesetNameBuffer == s.TilesetNameBuffer &&
                     FilenameBuffer == s.FilenameBuffer &&
                     BackgroundTypeType == s.BackgroundTypeType &&
                     BackgroundNameBuffer == s.BackgroundNameBuffer &&
                     Spritesheet1Buffer == s.Spritesheet1Buffer &&
                     Spritesheet2Buffer == s.Spritesheet2Buffer &&
+                    JapaneseNameEncoding == s.JapaneseNameEncoding &&
                     JapaneseNameBuffer == s.JapaneseNameBuffer &&
                     BossNumberType == s.BossNumberType &&
                     MapNameBuffer == s.MapNameBuffer &&
@@ -396,17 +397,20 @@ namespace CaveStoryModdingFramework.Stages
             else
                 return base.Equals(obj);
         }
-        public static readonly Dictionary<StageEntrySettings, StageTablePresets> Presets;
-        static StageEntrySettings()
+        public override int GetHashCode()
         {
-            var values = Enum.GetValues(typeof(StageTablePresets));
-            Presets = new Dictionary<StageEntrySettings, StageTablePresets>(values.Length);
-            foreach (StageTablePresets item in values)
-            {
-                //custom has no preset so we avoid it
-                if (item != StageTablePresets.custom)
-                    Presets.Add(new StageEntrySettings(item), item);
-            }
+            return (2 * FilenameEncoding?.GetHashCode() ?? 0) +
+                (3 * TilesetNameBuffer.GetHashCode()) +
+                (5 * FilenameBuffer.GetHashCode()) +
+                (7 * BackgroundTypeType.GetHashCode()) +
+                (11 * BackgroundNameBuffer.GetHashCode()) +
+                (13 * Spritesheet1Buffer.GetHashCode()) +
+                (17 * Spritesheet2Buffer.GetHashCode()) +
+                (19 * JapaneseNameEncoding?.GetHashCode() ?? 0) +
+                (23 * JapaneseNameBuffer.GetHashCode()) +
+                (29 * BossNumberType.GetHashCode()) +
+                (31 * MapNameBuffer.GetHashCode()) +
+                (37 * Padding.GetHashCode());
         }
     }
 
@@ -686,6 +690,44 @@ namespace CaveStoryModdingFramework.Stages
             }
         }
 
+        public static bool TryDetectPreset(StageTableLocation location, StageEntrySettings settings, out StageTablePresets preset)
+        {
+            preset = StageTablePresets.custom;
+            switch (location.DataLocationType)
+            {
+                case DataLocationTypes.Internal:
+                    //doukutsuexe, csmap, and swdata share the same entry settings
+                    var internalSettings = new StageEntrySettings(StageTablePresets.doukutsuexe);
+                    if(settings == internalSettings)
+                    {
+                        if(location == new StageTableLocation("", StageTablePresets.doukutsuexe))
+                        {
+                            preset = StageTablePresets.doukutsuexe;
+                        }
+                        else if(location == new StageTableLocation("", StageTablePresets.csmap))
+                        {
+                            preset = StageTablePresets.csmap;
+                        }
+                        else if(location == new StageTableLocation("", StageTablePresets.swdata))
+                        {
+                            preset = StageTablePresets.swdata;
+                        }
+                    }
+                    break;
+                case DataLocationTypes.External:
+                    if(location == new StageTableLocation("", StageTablePresets.stagetbl) && settings == new StageEntrySettings(StageTablePresets.stagetbl))
+                    {
+                        preset = StageTablePresets.stagetbl;
+                    }
+                    else if(location == new StageTableLocation("", StageTablePresets.mrmapbin) && settings == new StageEntrySettings(StageTablePresets.mrmapbin))
+                    {
+                        preset = StageTablePresets.mrmapbin;
+                    }
+                    break;
+            }
+            return preset != StageTablePresets.custom;
+        }
+
         #region Reading
         public static StageEntry ReadStage(this BinaryReader br, StageEntrySettings settings)
         {
@@ -783,7 +825,8 @@ namespace CaveStoryModdingFramework.Stages
         public static void Write(IList<StageEntry> stages, StageTableLocation location, StageEntrySettings settings, StageTableReferences references)
         {
             Write(stages, location, settings);
-            PatchStageTableLocation(location, settings, references);
+            if(location.DataLocationType == DataLocationTypes.Internal)
+                PatchStageTableLocation(location, settings, references);
         }
         public static void Write(IList<StageEntry> stages, StageTableLocation location, StageEntrySettings settings)
         {
@@ -847,10 +890,23 @@ namespace CaveStoryModdingFramework.Stages
         public static void PatchStageTableLocation(StageTableLocation location, StageEntrySettings settings, StageTableReferences r)
         {
             if (location.DataLocationType != DataLocationTypes.Internal)
-                return;
+                throw new ArgumentException("Can only patch internal stage tables!", nameof(location.DataLocationType));
+            var pe = PEFile.FromFile(location.Filename);
+            uint startOfStageTable = pe.optionalHeader32.ImageBase;
+            bool set = false;
+            if(!string.IsNullOrEmpty(location.SectionName))
+            {
+                if (!pe.TryGetSection(location.SectionName, out var sect))
+                    throw new KeyNotFoundException();
+                startOfStageTable += sect.VirtualAddress;
+                set = true;
+            }
+
             using (var bw = new BinaryWriter(location.GetStream(FileMode.Open, FileAccess.ReadWrite)))
             {
-                uint startOfStageTable = (uint)bw.BaseStream.Position;
+                //this might not work in *every* case, but it can be circumvented by using the actual section name anyways, so...
+                if(!set)
+                    startOfStageTable += (uint)bw.BaseStream.Position;
                 switch (location.StageTableFormat)
                 {
                     case StageTableFormats.swdata:
