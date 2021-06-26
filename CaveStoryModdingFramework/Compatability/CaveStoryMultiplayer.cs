@@ -106,7 +106,7 @@ namespace CaveStoryModdingFramework.Compatability
             AbsoluteBitPosition++;
             return output;
         }
-        public byte ReadByte()
+        public new byte ReadByte()
         {
             return Read(8)[0];
         }

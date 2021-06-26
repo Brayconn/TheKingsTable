@@ -48,9 +48,9 @@ namespace CaveStoryModdingFramework.TSC
         /// </summary>
         /// <param name="flag">The flag number</param>
         /// <returns>The address of the </returns>
-        public static int FlagToAddress(string flag, out int bit, int firstFlagAddress = NPCFlagAddress)
+        public static int FlagToAddress(string flag, int length, out int bit, int firstFlagAddress = NPCFlagAddress)
         {
-            var val = FlagToRealValue(flag);
+            var val = FlagToRealValue(flag, length);
             var whole = Math.DivRem(val, 8, out bit) + firstFlagAddress;
             if (val < 0 && bit != 0)
                 whole--;
@@ -63,27 +63,45 @@ namespace CaveStoryModdingFramework.TSC
         /// </summary>
         /// <param name="flag">The flag number</param>
         /// <returns>The address of the </returns>
-        public static int FlagToAddress(string flag, int firstFlagAddress = NPCFlagAddress)
+        public static int FlagToAddress(string flag, int length, int firstFlagAddress = NPCFlagAddress)
         {
-            return (FlagToRealValue(flag) / 8) + firstFlagAddress;
+            return (FlagToRealValue(flag, length) / 8) + firstFlagAddress;
+        }
+        public static int FlagToRealValue(string flag, int length)
+        {
+            return FlagToRealValue(flag, length, Encoding.UTF8);
         }
         /// <summary>
         /// Get the "real" value of the given TSC flag
         /// </summary>
         /// <param name="flag">The TSC flag</param>
         /// <returns>The "real" flag number</returns>
-        public static int FlagToRealValue(string flag)
+        public static int FlagToRealValue(string flag, int length, Encoding encoding)
+        {
+            TryFlagToRealValue(flag, length, encoding, out var output);
+            return output;
+        }
+
+        public static bool TryFlagToRealValue(string flag, out int value)
+        {
+            return TryFlagToRealValue(flag, flag.Length, Encoding.UTF8, out value);
+        }
+        public static bool TryFlagToRealValue(string flag, int length, out int value)
+        {
+            return TryFlagToRealValue(flag, length, Encoding.UTF8, out value);
+        }
+        public static bool TryFlagToRealValue(string flag, int length, Encoding encoding, out int value)
         {
             //Input sanitation
-            //sbyte[] input = flag.Select(x => (sbyte)x).ToArray();
-            byte[] input = Encoding.ASCII.GetBytes(flag);
-            //sbyte[] input = Array.ConvertAll(flag.ToCharArray(), x => (sbyte)x);
+            byte[] input = encoding.GetBytes(flag);
 
-            int number = 0;
+            value = 0;
             for (int i = 0; i < input.Length; i++)
-                number += (input[i] - 0x30) * (int)Math.Pow(10, input.Length - 1 - i);
-            return number;
+                value += (input[i] - 0x30) * (int)Math.Pow(10, input.Length - 1 - i);
+
+            return input.Length == length;
         }
+
 
         #endregion
 
@@ -104,7 +122,8 @@ namespace CaveStoryModdingFramework.TSC
                 flag = number.ToString($"D{outputLength}");
             }
             //if it's within the range of "single OOB character" numbers, use that
-            else if (FlagToRealValue(minimum_character + new string('0', outputLength - 1)) <= number && number <= FlagToRealValue(max_char + new string('9', outputLength - 1)))
+            else if (FlagToRealValue(minimum_character + new string('0', outputLength - 1), outputLength) <= number
+                 && number <= FlagToRealValue(max_char + new string('9', outputLength - 1), outputLength))
             {
                 for (int dec_place = outputLength - 1; dec_place >= 0; dec_place--)
                 {

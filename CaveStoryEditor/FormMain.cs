@@ -512,7 +512,7 @@ namespace CaveStoryEditor
                             case "<FL+":
                             case "<FL-":
                             case "<FLJ":
-                                AddFlag(FlagConverter.FlagToRealValue(text.Substring(index+4,4)),
+                                AddFlag(FlagConverter.FlagToRealValue(text.Substring(index+4,4),4),
                                     $"{cmd} {Path.GetFileName(tscPath)} event {eve}");
                                 break;
                         }
@@ -541,7 +541,7 @@ namespace CaveStoryEditor
                                 break;
                             //f == FLJ in credits
                             case 'f':
-                                AddFlag(FlagConverter.FlagToRealValue(text.Substring(index+1,4)),$"<FLJ {Path.GetFileName(tscPath)} event #{curreve}");
+                                AddFlag(FlagConverter.FlagToRealValue(text.Substring(index+1,4), 4),$"<FLJ {Path.GetFileName(tscPath)} event #{curreve}");
                                 index += 4;
                                 break;
                         }

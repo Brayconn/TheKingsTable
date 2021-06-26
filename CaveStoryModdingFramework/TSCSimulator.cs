@@ -85,7 +85,7 @@ namespace CaveStoryModdingFramework
         }
         public void Run(string eventNum)
         {
-            Run(scriptBuffer, FlagConverter.FlagToRealValue(eventNum));
+            Run(scriptBuffer, FlagConverter.FlagToRealValue(eventNum,4));
         }
     }
 }

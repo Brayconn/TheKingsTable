@@ -10,6 +10,8 @@ namespace CaveStoryEditor
         int AddressOffset = FlagConverter.NPCFlagAddress;
         bool locked = false;
 
+        int Length => (int)flagLengthNumericUpDown.Value;
+
         int Value
         {
             get => (int)ValueNumericUpDown.Value;
@@ -52,6 +54,9 @@ namespace CaveStoryEditor
         {
             InitializeComponent();
 
+            flagLengthNumericUpDown.Minimum = 0;
+            flagLengthNumericUpDown.Maximum = int.MaxValue;
+
             ValueNumericUpDown.Minimum = int.MinValue;
             ValueNumericUpDown.Maximum = int.MaxValue;
 
@@ -67,7 +72,14 @@ namespace CaveStoryEditor
             if (!locked)
             {
                 locked = true;
-                var val = FlagConverter.FlagToRealValue(TSCText);
+
+                if (TSCText.Length > Length)
+                {
+                    var s = TSCTextBox.SelectionStart;
+                    TSCText = TSCText.Substring(0, Length);
+                    TSCTextBox.SelectionStart = s;
+                }
+                var val = FlagConverter.FlagToRealValue(TSCText, Length);
                 Value = val;
                 Address = FlagConverter.RealValueToAddress(val, out var bit, AddressOffset);
                 Bit = bit;
@@ -81,8 +93,8 @@ namespace CaveStoryEditor
             {
                 locked = true;
                 var val = Value;
-                TSCText = FlagConverter.RealValueToFlag(val);
-                Address = FlagConverter.RealValueToAddress(val, out var bit, AddressOffset);                
+                TSCText = FlagConverter.RealValueToFlag(val, Length);
+                Address = FlagConverter.RealValueToAddress(val, out var bit, AddressOffset);
                 Bit = bit;
                 locked = false;
             }
@@ -94,7 +106,7 @@ namespace CaveStoryEditor
             {
                 locked = true;
                 var val = FlagConverter.AddressToRealValue(Address, Bit, AddressOffset);
-                TSCText = FlagConverter.RealValueToFlag(val);
+                TSCText = FlagConverter.RealValueToFlag(val, Length);
                 Value = val;
                 locked = false;
             }
@@ -126,6 +138,11 @@ namespace CaveStoryEditor
                 Bit = bit;
                 locked = false;
             }
+        }
+
+        private void flagLengthNumericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            valueNumericUpDown_ValueChanged(sender, e);
         }
     }
 }

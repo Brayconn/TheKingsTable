@@ -45,6 +45,8 @@ namespace CaveStoryEditor
             this.panel2 = new System.Windows.Forms.Panel();
             this.bitNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.addressNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.flagLengthNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.panel3 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.ValueNumericUpDown)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -52,13 +54,15 @@ namespace CaveStoryEditor
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bitNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.addressNumericUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.flagLengthNumericUpDown)).BeginInit();
+            this.panel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // TSCTextBox
             // 
-            this.TSCTextBox.Location = new System.Drawing.Point(63, 3);
+            this.TSCTextBox.Location = new System.Drawing.Point(1, 3);
             this.TSCTextBox.Name = "TSCTextBox";
-            this.TSCTextBox.Size = new System.Drawing.Size(133, 20);
+            this.TSCTextBox.Size = new System.Drawing.Size(87, 20);
             this.TSCTextBox.TabIndex = 0;
             this.TSCTextBox.TextChanged += new System.EventHandler(this.tscTextBox_TextChanged);
             // 
@@ -76,13 +80,13 @@ namespace CaveStoryEditor
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Controls.Add(this.ValueNumericUpDown, 1, 1);
-            this.tableLayoutPanel1.Controls.Add(this.TSCTextBox, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.label2, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.label3, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.panel1, 1, 3);
             this.tableLayoutPanel1.Controls.Add(this.label4, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.panel2, 1, 2);
+            this.tableLayoutPanel1.Controls.Add(this.panel3, 1, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -237,6 +241,28 @@ namespace CaveStoryEditor
             this.addressNumericUpDown.TabIndex = 3;
             this.addressNumericUpDown.ValueChanged += new System.EventHandler(this.addressNumericUpDown_ValueChanged);
             // 
+            // flagLengthNumericUpDown
+            // 
+            this.flagLengthNumericUpDown.Location = new System.Drawing.Point(94, 3);
+            this.flagLengthNumericUpDown.Name = "flagLengthNumericUpDown";
+            this.flagLengthNumericUpDown.Size = new System.Drawing.Size(38, 20);
+            this.flagLengthNumericUpDown.TabIndex = 1;
+            this.flagLengthNumericUpDown.Value = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            this.flagLengthNumericUpDown.ValueChanged += new System.EventHandler(this.flagLengthNumericUpDown_ValueChanged);
+            // 
+            // panel3
+            // 
+            this.panel3.Controls.Add(this.flagLengthNumericUpDown);
+            this.panel3.Controls.Add(this.TSCTextBox);
+            this.panel3.Location = new System.Drawing.Point(63, 3);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(134, 24);
+            this.panel3.TabIndex = 9;
+            // 
             // FlagScratchPad
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -253,6 +279,9 @@ namespace CaveStoryEditor
             this.panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.bitNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.addressNumericUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.flagLengthNumericUpDown)).EndInit();
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -275,5 +304,7 @@ namespace CaveStoryEditor
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.NumericUpDown bitNumericUpDown;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.NumericUpDown flagLengthNumericUpDown;
     }
 }

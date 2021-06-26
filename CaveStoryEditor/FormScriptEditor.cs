@@ -250,7 +250,7 @@ namespace CaveStoryEditor
                         {
                             if(g.ShowDialog() == DialogResult.OK)
                             {
-                                var val = FlagConverter.FlagToRealValue(g.Value);
+                                var val = FlagConverter.FlagToRealValue(g.Value, EventValueLength);
                                 var index = FindEvent(mainScintilla, val);
                                 if (index != -1)
                                 {
@@ -286,7 +286,7 @@ namespace CaveStoryEditor
                     {
                         if ((char)scintilla.GetCharAt(index) == EventStart_Char)
                         {
-                            var val = FlagConverter.FlagToRealValue(scintilla.GetTextRange(index + 1, EventValueLength));
+                            var val = FlagConverter.FlagToRealValue(scintilla.GetTextRange(index + 1, EventValueLength), EventValueLength);
                             if (val == eventNum || (TEMP_orderedEvents && val > eventNum))
                                 return index;
                         }
@@ -306,7 +306,7 @@ namespace CaveStoryEditor
                                 inBrackets = false;
                                 break;
                             case 'l' when !inBrackets:
-                                var val = FlagConverter.FlagToRealValue(scintilla.GetTextRange(index + 1, EventValueLength));
+                                var val = FlagConverter.FlagToRealValue(scintilla.GetTextRange(index + 1, EventValueLength), EventValueLength);
                                 if (val == eventNum)
                                     return index;
                                 break;
@@ -491,7 +491,7 @@ namespace CaveStoryEditor
                             //load from head.tsc
                             ? TEMPHEADLASTFLAG
                             //otherwise, read the value
-                            : FlagConverter.FlagToRealValue(scintilla.GetTextRange(prevEventIndex + 1, EventValueLength));
+                            : FlagConverter.FlagToRealValue(scintilla.GetTextRange(prevEventIndex + 1, EventValueLength), EventValueLength);
 
                         //init the event indexes list with the value from above (index = -1 because it will never be read anyways)
                         eventIndexes = new List<Tuple<int, int>>() { new Tuple<int, int>(-1, prevEventValue) };
@@ -507,7 +507,7 @@ namespace CaveStoryEditor
                             if (c == EventStart_Char)
                             {
                                 //and add it to the list
-                                eventIndexes.Add(new Tuple<int, int>(i, FlagConverter.FlagToRealValue(scintilla.GetTextRange(i + 1, EventValueLength))));
+                                eventIndexes.Add(new Tuple<int, int>(i, FlagConverter.FlagToRealValue(scintilla.GetTextRange(i + 1, EventValueLength), EventValueLength)));
                             }
                             else if (c == '\n')
                             {
@@ -612,7 +612,7 @@ namespace CaveStoryEditor
                                     switch (r.RepeatType)
                                     {
                                         case RepeatTypes.GlobalIndex:
-                                            var repeatCount = FlagConverter.FlagToRealValue(scintilla.GetTextRange(flattenedArgs[r.Value].Item1, flattenedArgs[r.Value].Item2));
+                                            var repeatCount = FlagConverter.FlagToRealValue(scintilla.GetTextRange(flattenedArgs[r.Value].Item1, flattenedArgs[r.Value].Item2), flattenedArgs[r.Value].Item2);
                                             for (int j = 0; j < repeatCount; j++)
                                                 StyleArgs(r.Arguments, forceEndingSeparator || i < args.Count - 1 || j < repeatCount - 1);
                                             break;
