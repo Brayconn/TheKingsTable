@@ -364,7 +364,8 @@ namespace CaveStoryModdingFramework.Stages
                     MapNameBuffer = 0x20;
                     Padding = type != StageTablePresets.stagetbl ? 3 : 0;
                     break;
-                //this is apparently emulating the MOD_MR format
+                //Moustache Riders Map (table) .bin
+                //this is emulating the stage table format used for GIRakaCHEEZER's unreleased game "Moustache Riders"
                 //using it makes BL load png images instead of bmp
                 //this editor doesn't care though, so use whatever you want :3
                 case StageTablePresets.mrmapbin:
