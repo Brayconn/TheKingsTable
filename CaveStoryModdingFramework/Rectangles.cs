@@ -4,10 +4,51 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
+using System.IO;
 using System.Runtime.CompilerServices;
 
 namespace CaveStoryModdingFramework.Entities
 {
+    public static class RectExtensions
+    {
+        public static NPCHitRect ReadHitRect(this BinaryReader br)
+        {
+            return new NPCHitRect(br.ReadByte(), br.ReadByte(), br.ReadByte(), br.ReadByte());
+        }
+        public static NPCViewRect ReadViewRect(this BinaryReader br)
+        {
+            return new NPCViewRect(br.ReadByte(), br.ReadByte(), br.ReadByte(), br.ReadByte());
+        }
+        public static IntRect ReadIntRect(this BinaryReader br)
+        {
+            return new IntRect(br.ReadInt32(), br.ReadInt32(), br.ReadInt32(), br.ReadInt32());
+        }
+        public static void Write(this BinaryWriter bw, IntRect rect)
+        {
+            bw.Write(rect.Front);
+            bw.Write(rect.Top);
+            bw.Write(rect.Back);
+            bw.Write(rect.Bottom);
+        }
+    }
+
+    public class IntRect
+    {
+        public int Front { get; set; }
+        public int Top { get; set; }
+        public int Back { get; set; }
+        public int Bottom { get; set; }
+
+        public IntRect(int front, int top, int back, int bottom)
+        {
+            Front = front;
+            Top = top;
+            Back = back;
+            Bottom = bottom;
+        }
+
+    }
+
     /// <summary>
     /// A rectangle with four byte values
     /// </summary>

@@ -68,14 +68,6 @@ namespace CaveStoryModdingFramework.Entities
     {
         public const string NPCTBL = "npc.tbl";
         public static string NPCTBLFilter = $"{Dialog.NPCTable} ({NPCTBL})|{NPCTBL}";
-        public static NPCHitRect ReadHitRect(this BinaryReader br)
-        {
-            return new NPCHitRect(br.ReadByte(), br.ReadByte(), br.ReadByte(), br.ReadByte());
-        }
-        public static NPCViewRect ReadViewRect(this BinaryReader br)
-        {
-            return new NPCViewRect(br.ReadByte(), br.ReadByte(), br.ReadByte(), br.ReadByte());
-        }
 
         public static List<NPCTableEntry> Load(string path)
         {

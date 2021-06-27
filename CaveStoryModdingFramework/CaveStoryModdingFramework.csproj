@@ -54,6 +54,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>BackgroundTypeNames.resx</DependentUpon>
     </Compile>
+    <Compile Include="BulletTable.cs" />
     <Compile Include="Compatability\CaveStoryMultiplayer.cs" />
     <Compile Include="Compatability\Patcher.cs" />
     <Compile Include="Compatability\Scriptsource.cs" />
