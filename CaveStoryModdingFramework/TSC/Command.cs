@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Xml.Serialization;
 
 namespace CaveStoryModdingFramework.TSC
 {
@@ -44,18 +45,22 @@ namespace CaveStoryModdingFramework.TSC
     {
         public const int DefaultArgumentLength = 4;
         public const string DefaultSeparator = ":";
-        public string Name { get; set; } = "";
 
+        [XmlAttribute]
+        public string Name { get; set; } = "";
+        [XmlAttribute]
         public ArgumentTypes Type { get; set; } = ArgumentTypes.Number;
 
         /// <summary>
         /// 0 <= = variable length until Separator
         /// </summary>
+        [XmlAttribute]
         public int Length { get; set; } = DefaultArgumentLength;
 
         /// <summary>
         /// This is used in a regular string comparison if Length <= 0, otherwise it just uses the length of the string
         /// </summary>
+        [XmlAttribute]
         public string Separator { get; set; } = DefaultSeparator;
 
         public Argument() { }
@@ -163,8 +168,13 @@ namespace CaveStoryModdingFramework.TSC
     [DebuggerDisplay("RepeatType = {RepeatType} Value = {Value}")]
     public class RepeatStructure
     {
+        [XmlAttribute]
         public RepeatTypes RepeatType { get; set; }
+        [XmlAttribute]
         public int Value { get; set; }
+
+        [XmlElement(ElementName = nameof(Argument), Type = typeof(Argument)),
+         XmlElement(ElementName = nameof(RepeatStructure), Type = typeof(RepeatStructure))]
         public List<object> Arguments { get; set; } = new List<object>();
 
         public RepeatStructure() { }
@@ -187,9 +197,12 @@ namespace CaveStoryModdingFramework.TSC
     }
 
     [DebuggerDisplay("ShortName = {ShortName} LongName = {LongName} Author = {Author} Properties = {Properties}")]
+    [XmlRoot(XMLName)]
     public class Command
     {
-        const string DefaultAuthor = "Pixel";
+        public const string XMLName = "TSCCommand";
+        public const string DefaultAuthor = "Pixel";
+        [XmlIgnore]
         public bool UsesRepeats
         {
             get
@@ -200,13 +213,21 @@ namespace CaveStoryModdingFramework.TSC
                 return false;
             }
         }
+        [XmlAttribute]
         public string ShortName { get; set; }
+        [XmlAttribute]
         public string LongName { get; set; }
+        [XmlAttribute]
         public string Description { get; set; }
-        public List<object> Arguments { get; set; } = new List<object>();
-        public CommandProperties Properties { get; set; }
+        [XmlAttribute]
         public string Author { get; set; } = DefaultAuthor;
-
+        [XmlAttribute]
+        public CommandProperties Properties { get; set; }
+        [XmlElement(ElementName = nameof(Argument), Type = typeof(Argument)),
+         XmlElement(ElementName = nameof(RepeatStructure), Type = typeof(RepeatStructure))]
+        public List<object> Arguments { get; set; } = new List<object>();
+                
+        private Command() { }
         public Command(string shortName, string longName, string description)
             : this(shortName, longName, description, CommandProperties.None, Array.Empty<object>()) { }
         public Command(string shortName, string longName, string description, params object[] args)

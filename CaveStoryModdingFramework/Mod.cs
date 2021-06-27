@@ -12,6 +12,7 @@ using System.Xml.Linq;
 using System.Reflection;
 using System.Xml;
 using CaveStoryModdingFramework.TSC;
+using System.Xml.Serialization;
 
 namespace CaveStoryModdingFramework
 {
@@ -430,7 +431,22 @@ namespace CaveStoryModdingFramework
                 }
                 return @base;
             }
-
+            XElement SerializeCommands(List<Command> list, string name)
+            {
+                var xs = new XmlSerializer(typeof(List<Command>));
+                var ns = new XmlSerializerNamespaces();
+                ns.Add("", "");
+                var xd = new XDocument();
+                using (var xw = xd.CreateWriter())
+                {
+                    //xw.Settings.OmitXmlDeclaration = true;
+                    //xw.Settings.Indent = true;
+                    xs.Serialize(xw, list, ns);
+                }
+                xd.Root.Name = name;
+                return xd.Root;
+            }
+            
             new XDocument(
                 new XElement("CaveStoryMod",
                     new XElement("Paths", 
@@ -474,7 +490,8 @@ namespace CaveStoryModdingFramework
                     SerializeDict(SoundEffects, "SoundEffects", "SoundEffect"),
                     SerializeDict(SmokeSizes, "SmokeSizes", "SmokeSize"),
                     SerializeDict(BossNumbers, "BossNumbers", "BossNumber"),
-                    SerializeDict(BackgroundTypes, "BackgroundTypes", "BackgroundType")
+                    SerializeDict(BackgroundTypes, "BackgroundTypes", "BackgroundType"),
+                    SerializeCommands(Commands, "TSCCommands")
                 )
             ).Save(path);
         }
@@ -563,6 +580,19 @@ namespace CaveStoryModdingFramework
                     list.Add(item.InnerText);
                 }
             }
+            //HACK omg this is probably the worst code in TKT, I really need to redo mod saving/loading
+            void LoadCommands(string elementName, List<Command> list)
+            {
+                List<Command> temp;
+                using (var garbage = XmlReader.Create(new FileStream(path, FileMode.Open, FileAccess.Read)))
+                {
+                    garbage.ReadToDescendant(elementName);
+                    var xs = new XmlSerializer(typeof(List<Command>), new XmlRootAttribute(elementName));
+                    temp = (List<Command>)xs.Deserialize(garbage);
+                }                
+                foreach (var command in temp)
+                    list.Add(command);
+            }
 
             FolderPaths = new AssetManager(this);
             var paths = root["Paths"];
@@ -625,6 +655,11 @@ namespace CaveStoryModdingFramework
             LoadDict(root["SmokeSizes"], SmokeSizes);
             LoadLongDict(root["BossNumbers"], BossNumbers);
             LoadLongDict(root["BackgroundTypes"], BackgroundTypes);
+            if (root["TSCCommands"] != null)
+            {
+                Commands = new List<Command>(root["TSCCommands"].ChildNodes.Count);
+                LoadCommands("TSCCommands", Commands);
+            }
 
             StageTable = Stages.StageTable.Read(StageTableLocation, StageTableSettings);
             //TODO check npc table loading from project file
