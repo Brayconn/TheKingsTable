@@ -355,7 +355,9 @@ namespace CaveStoryModdingFramework
         public void Save(string path)
         {
             var relativeDataPath = AssetManager.MakeRelative(path, BaseDataPath);
-            var relativeNpcTablePath = AssetManager.MakeRelative(path, NpcTablePath);
+            var relativeEXEPath = AssetManager.MakeRelative(BaseDataPath, EXEPath);
+            var relativeNpcTablePath = AssetManager.MakeRelative(BaseDataPath, NpcTablePath);
+
 
             XElement SerializeEntities(IDictionary<int, EntityInfo> dict, string name, string valName, string keyName = "Key")
             {
@@ -433,6 +435,7 @@ namespace CaveStoryModdingFramework
                 new XElement("CaveStoryMod",
                     new XElement("Paths", 
                         new XElement("BaseDataPath", relativeDataPath),
+                        new XElement("EXEPath", relativeEXEPath),
                         SerializeList(FolderPaths.DataPaths, "DataFolders"),
                         SerializeList(FolderPaths.StagePaths, "StageFolders"),
                         SerializeList(FolderPaths.NpcPaths, "NpcFolders"),
@@ -567,6 +570,8 @@ namespace CaveStoryModdingFramework
             LoadList(paths["StageFolders"], FolderPaths.StagePaths);
             LoadList(paths["NpcFolders"], FolderPaths.NpcPaths);
             //TODO failsafe might not be safe
+            if (paths["EXEPath"] != null)
+                EXEPath = AssetManager.MakeAbsolute(BaseDataPath, paths["EXEPath"].InnerText);
             NpcTablePath = AssetManager.MakeAbsolute(BaseDataPath, paths["NpcTablePath"]?.InnerText ?? Entities.NPCTable.NPCTBL);
 
 
