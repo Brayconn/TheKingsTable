@@ -25,7 +25,7 @@ namespace CaveStoryEditor
             InitializeComponent();
             stageTableDataGridView.AutoGenerateColumns = false;
 
-            InitHitboxViewboxLayers();
+            
         }
 
         public void Init()
@@ -39,12 +39,10 @@ namespace CaveStoryEditor
             mod.StageTableTypeChanged += Mod_StageTableTypeChanged;
 
             modPropertyGrid.SelectedObject = mod;
-
-            InitCheckboxList();
-            InitComboBoxDataSources();
+                       
 
             StageTableUnsaved = false;
-            NPCTableUnsaved = false;
+            
 
             //tool strip menu buttons
             saveProjectToolStripMenuItem.Enabled = true;
@@ -81,15 +79,23 @@ namespace CaveStoryEditor
             UpdateCanAddStageTableEntries();
 
             //npc table
-            npcTableListBox.DataSource = mod.NPCTable;
-            NPCTableListEditingUIEnabled = true;
-            NPCTableEntryUIEnabled = true;
+            npcTableEditor.UnsavedChangesChanged += NpcTableEditor_UnsavedChangesChanged;
+            npcTableEditor.InitMod(mod);
+            npcTableEditor.LoadTable(mod.NPCTable);
 
             saveNPCTableToolStripMenuItem.Enabled = true;
             exportNPCTableToolStripMenuItem.Enabled = true;
 
             InitScriptWatcher();
             InitImageWatcher();
+        }
+
+        private void NpcTableEditor_UnsavedChangesChanged(object sender, EventArgs e)
+        {
+            if (npcTableEditor.HasUnsavedChanges)
+                npcTableTabPage.Text += "*";
+            else
+                npcTableTabPage.Text = npcTableTabPage.Text.Remove(npcTableTabPage.Text.Length - 1);
         }
 
         bool lockMod = false;
@@ -351,6 +357,7 @@ namespace CaveStoryEditor
             }
         }
 
+        #region TSC encryption/decryption
         void GetTXTAndTSC(string file, out string txtPath, out string tscPath)
         {
             var @base = mod.FolderPaths.MakeAbsoluteFromBase(file);
@@ -388,6 +395,7 @@ namespace CaveStoryEditor
                 }
             }
         }
+        #endregion
 
         private void Open_Click(object sender, EventArgs e)
         {
@@ -458,8 +466,14 @@ namespace CaveStoryEditor
         bool SafeToClose()
         {
             //TODO check for changes to the project file
-            return mod == null || (!StageTableUnsaved && !NPCTableUnsaved && !manager.UnsavedChanges) 
-                || MessageBox.Show("You have unsaved changes! Are you sure you want to continue?", "Warning", MessageBoxButtons.YesNo) == DialogResult.Yes;
+            //It's only safe to close if...
+            //there's no mod loaded
+            return mod == null
+                //there's no unsaved changes in any editor
+                || (!StageTableUnsaved && !npcTableEditor.HasUnsavedChanges && !manager.UnsavedChanges) 
+                //or the user says it's ok
+                || MessageBox.Show("You have unsaved changes! Are you sure you want to continue?",
+                    "Warning", MessageBoxButtons.YesNo) == DialogResult.Yes;
         }
 
         private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
@@ -599,6 +613,26 @@ namespace CaveStoryEditor
                 if(ofd.ShowDialog() == DialogResult.OK)
                 {
                     mod.Commands = CaveStoryModdingFramework.Compatability.TSCListTXT.Load(ofd.FileName);
+                }
+            }
+        }
+
+        private void saveNPCTableToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            npcTableEditor.Save(mod.NpcTablePath);
+        }
+
+        private void exportNPCTableToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var sfd = new SaveFileDialog()
+            {
+                Title = "Choose a location...",
+                Filter = string.Join("|", NPCTable.NPCTBLFilter, "All Files (*.*)|*.*")
+            })
+            {
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    npcTableEditor.Save(sfd.FileName);
                 }
             }
         }

@@ -90,9 +90,6 @@
     <Compile Include="FormMain.Designer.cs">
       <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormMain_NPCTable.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="FormMain_StageTable.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -135,6 +132,18 @@
     <Compile Include="MapResizeControl.designer.cs">
       <DependentUpon>MapResizeControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="NPCTableEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="NPCTableEditor.Designer.cs">
+      <DependentUpon>NPCTableEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NPCTablePropertyGridListBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="NPCTablePropertyGridListBox.Designer.cs">
+      <DependentUpon>NPCTablePropertyGridListBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="Patcher.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -142,6 +151,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PropertyGridListBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PropertyGridListBox.Designer.cs">
+      <DependentUpon>PropertyGridListBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="PropertyGridShell.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -185,6 +200,9 @@
     <EmbeddedResource Include="MapResizeControl.resx">
       <DependentUpon>MapResizeControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="NPCTableEditor.resx">
+      <DependentUpon>NPCTableEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -194,6 +212,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="PropertyGridListBox.resx">
+      <DependentUpon>PropertyGridListBox.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Editor.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Editor.Designer.cs</LastGenOutput>
