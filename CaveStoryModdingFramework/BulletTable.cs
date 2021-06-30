@@ -12,6 +12,7 @@ namespace CaveStoryModdingFramework
     public class BulletTableLocation : DataLocation
     {
         public int BulletCount { get; set; }
+        public bool PadDamageAndHits { get; set; }
 
         public BulletTableLocation(string path)
         {
@@ -32,6 +33,7 @@ namespace CaveStoryModdingFramework
                     MaximumSize = BulletTable.CSBulletTableSize;
                     FixedSize = true;
                     BulletCount = BulletTable.CSBulletTableCount;
+                    PadDamageAndHits = true;
                     break;
                 case BulletTablePresets.csplus:
                     DataLocationType = DataLocationTypes.External;
@@ -40,6 +42,7 @@ namespace CaveStoryModdingFramework
                     MaximumSize = 0;
                     FixedSize = false;
                     BulletCount = BulletTable.CSBulletTableCount;
+                    PadDamageAndHits = false;
                     break;
             }
         }
@@ -78,18 +81,22 @@ namespace CaveStoryModdingFramework
             {
                 for (int i = 0; i < count; i++)
                 {
-                    output.Add(new BulletTableEntry()
+                    var entry = new BulletTableEntry()
                     {
                         Damage = br.ReadSByte(),
-                        Hits = br.ReadSByte(),
-                        Range = br.ReadInt32(),
-                        Bits = br.ReadUInt32(),
-                        enemyXL = br.ReadInt32(),
-                        enemyYL = br.ReadInt32(),
-                        blockXL = br.ReadInt32(),
-                        blockYL = br.ReadInt32(),
-                        ViewBox = br.ReadIntRect()
-                    });
+                        Hits = br.ReadSByte()
+                    };
+                    if (location.PadDamageAndHits)
+                        br.BaseStream.Position += 2;
+                    entry.Range = br.ReadInt32();
+                    entry.Bits = br.ReadUInt32();
+                    entry.enemyXL = br.ReadInt32();
+                    entry.enemyYL = br.ReadInt32();
+                    entry.blockXL = br.ReadInt32();
+                    entry.blockYL = br.ReadInt32();
+                    entry.ViewBox = br.ReadIntRect();
+
+                    output.Add(entry);
                 }
             }
             return output;
@@ -97,13 +104,18 @@ namespace CaveStoryModdingFramework
 
         public static void Write(IList<BulletTableEntry> bullets, BulletTableLocation location)
         {
-            var buff = new byte[bullets.Count * BulletTableEntry.Size];
+            var size = BulletTableEntry.Size;
+            if (location.PadDamageAndHits)
+                size += 2;
+            var buff = new byte[bullets.Count * size];
             using(var bw = new BinaryWriter(new MemoryStream(buff)))
             {
                 foreach(var bullet in bullets)
                 {
                     bw.Write(bullet.Damage);
                     bw.Write(bullet.Hits);
+                    if(location.PadDamageAndHits) //I'm so clever 😎
+                        bw.Write((ushort)0);
                     bw.Write(bullet.Range);
                     bw.Write(bullet.Bits);
                     bw.Write(bullet.enemyXL);
