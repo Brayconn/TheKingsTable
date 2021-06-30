@@ -30,6 +30,7 @@ namespace CaveStoryEditor
         private void InitializeComponent()
         {
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.propertyGridListBox1 = new CaveStoryEditor.NPCTablePropertyGridListBox();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.hitboxGroupBox = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
@@ -38,8 +39,6 @@ namespace CaveStoryEditor
             this.frontNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.changeHitboxDirectionButton = new System.Windows.Forms.Button();
             this.bottomNumericUpDown = new System.Windows.Forms.NumericUpDown();
-            this.hitboxContainerPanel = new System.Windows.Forms.Panel();
-            this.hitboxLayeredPictureBox = new LayeredPictureBox.LayeredPictureBox();
             this.numbersGroupBox = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.label3 = new System.Windows.Forms.Label();
@@ -50,8 +49,6 @@ namespace CaveStoryEditor
             this.lifeNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.viewboxGroupBox = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
-            this.viewboxContainerPanel = new System.Windows.Forms.Panel();
-            this.viewboxLayeredPictureBox = new LayeredPictureBox.LayeredPictureBox();
             this.unusedNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.rightOffsetNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.yOffsetNumericUpDown = new System.Windows.Forms.NumericUpDown();
@@ -72,7 +69,8 @@ namespace CaveStoryEditor
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.propertyGridListBox1 = new CaveStoryEditor.NPCTablePropertyGridListBox();
+            this.hitboxPreview1 = new CaveStoryEditor.HitboxPreview();
+            this.viewboxPreview1 = new CaveStoryEditor.ViewboxPreview();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -84,7 +82,6 @@ namespace CaveStoryEditor
             ((System.ComponentModel.ISupportInitialize)(this.backNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.frontNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bottomNumericUpDown)).BeginInit();
-            this.hitboxContainerPanel.SuspendLayout();
             this.numbersGroupBox.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.damageNumericUpDown)).BeginInit();
@@ -92,7 +89,6 @@ namespace CaveStoryEditor
             ((System.ComponentModel.ISupportInitialize)(this.lifeNumericUpDown)).BeginInit();
             this.viewboxGroupBox.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
-            this.viewboxContainerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.unusedNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rightOffsetNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.yOffsetNumericUpDown)).BeginInit();
@@ -118,6 +114,16 @@ namespace CaveStoryEditor
             this.splitContainer1.Size = new System.Drawing.Size(782, 407);
             this.splitContainer1.SplitterDistance = 260;
             this.splitContainer1.TabIndex = 1;
+            // 
+            // propertyGridListBox1
+            // 
+            this.propertyGridListBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.propertyGridListBox1.List = null;
+            this.propertyGridListBox1.Location = new System.Drawing.Point(0, 0);
+            this.propertyGridListBox1.MaxItems = 0;
+            this.propertyGridListBox1.Name = "propertyGridListBox1";
+            this.propertyGridListBox1.Size = new System.Drawing.Size(260, 407);
+            this.propertyGridListBox1.TabIndex = 0;
             // 
             // tableLayoutPanel5
             // 
@@ -161,7 +167,7 @@ namespace CaveStoryEditor
             this.tableLayoutPanel2.Controls.Add(this.frontNumericUpDown, 2, 1);
             this.tableLayoutPanel2.Controls.Add(this.changeHitboxDirectionButton, 1, 1);
             this.tableLayoutPanel2.Controls.Add(this.bottomNumericUpDown, 1, 2);
-            this.tableLayoutPanel2.Controls.Add(this.hitboxContainerPanel, 0, 3);
+            this.tableLayoutPanel2.Controls.Add(this.hitboxPreview1, 0, 3);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 16);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -237,31 +243,6 @@ namespace CaveStoryEditor
             this.bottomNumericUpDown.Name = "bottomNumericUpDown";
             this.bottomNumericUpDown.Size = new System.Drawing.Size(47, 20);
             this.bottomNumericUpDown.TabIndex = 3;
-            // 
-            // hitboxContainerPanel
-            // 
-            this.hitboxContainerPanel.AutoScroll = true;
-            this.hitboxContainerPanel.BackColor = System.Drawing.Color.Black;
-            this.tableLayoutPanel2.SetColumnSpan(this.hitboxContainerPanel, 3);
-            this.hitboxContainerPanel.Controls.Add(this.hitboxLayeredPictureBox);
-            this.hitboxContainerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.hitboxContainerPanel.Location = new System.Drawing.Point(3, 90);
-            this.hitboxContainerPanel.Name = "hitboxContainerPanel";
-            this.hitboxContainerPanel.Size = new System.Drawing.Size(154, 86);
-            this.hitboxContainerPanel.TabIndex = 11;
-            this.hitboxContainerPanel.SizeChanged += new System.EventHandler(this.hitboxContainerPanel_SizeChanged);
-            // 
-            // hitboxLayeredPictureBox
-            // 
-            this.hitboxLayeredPictureBox.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.hitboxLayeredPictureBox.AutoScroll = true;
-            this.hitboxLayeredPictureBox.BackColor = System.Drawing.Color.Black;
-            this.hitboxLayeredPictureBox.CanvasScale = 2;
-            this.hitboxLayeredPictureBox.Location = new System.Drawing.Point(0, 2);
-            this.hitboxLayeredPictureBox.MaxCanvasSize = new System.Drawing.Size(0, 0);
-            this.hitboxLayeredPictureBox.Name = "hitboxLayeredPictureBox";
-            this.hitboxLayeredPictureBox.Size = new System.Drawing.Size(0, 0);
-            this.hitboxLayeredPictureBox.TabIndex = 0;
             // 
             // numbersGroupBox
             // 
@@ -390,7 +371,6 @@ namespace CaveStoryEditor
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel3.Controls.Add(this.viewboxContainerPanel, 0, 2);
             this.tableLayoutPanel3.Controls.Add(this.unusedNumericUpDown, 3, 1);
             this.tableLayoutPanel3.Controls.Add(this.rightOffsetNumericUpDown, 1, 1);
             this.tableLayoutPanel3.Controls.Add(this.yOffsetNumericUpDown, 3, 0);
@@ -399,6 +379,7 @@ namespace CaveStoryEditor
             this.tableLayoutPanel3.Controls.Add(this.label9, 0, 1);
             this.tableLayoutPanel3.Controls.Add(this.label10, 2, 0);
             this.tableLayoutPanel3.Controls.Add(this.label11, 2, 1);
+            this.tableLayoutPanel3.Controls.Add(this.viewboxPreview1, 0, 2);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 16);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
@@ -409,32 +390,6 @@ namespace CaveStoryEditor
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel3.Size = new System.Drawing.Size(334, 179);
             this.tableLayoutPanel3.TabIndex = 0;
-            // 
-            // viewboxContainerPanel
-            // 
-            this.viewboxContainerPanel.AutoScroll = true;
-            this.viewboxContainerPanel.BackColor = System.Drawing.Color.Black;
-            this.tableLayoutPanel3.SetColumnSpan(this.viewboxContainerPanel, 4);
-            this.viewboxContainerPanel.Controls.Add(this.viewboxLayeredPictureBox);
-            this.viewboxContainerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.viewboxContainerPanel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.viewboxContainerPanel.Location = new System.Drawing.Point(3, 91);
-            this.viewboxContainerPanel.Name = "viewboxContainerPanel";
-            this.viewboxContainerPanel.Size = new System.Drawing.Size(328, 85);
-            this.viewboxContainerPanel.TabIndex = 0;
-            this.viewboxContainerPanel.SizeChanged += new System.EventHandler(this.viewboxContainerPanel_SizeChanged);
-            // 
-            // viewboxLayeredPictureBox
-            // 
-            this.viewboxLayeredPictureBox.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.viewboxLayeredPictureBox.AutoScroll = true;
-            this.viewboxLayeredPictureBox.BackColor = System.Drawing.Color.Black;
-            this.viewboxLayeredPictureBox.CanvasScale = 2;
-            this.viewboxLayeredPictureBox.Location = new System.Drawing.Point(-1, 1);
-            this.viewboxLayeredPictureBox.MaxCanvasSize = new System.Drawing.Size(0, 0);
-            this.viewboxLayeredPictureBox.Name = "viewboxLayeredPictureBox";
-            this.viewboxLayeredPictureBox.Size = new System.Drawing.Size(0, 0);
-            this.viewboxLayeredPictureBox.TabIndex = 1;
             // 
             // unusedNumericUpDown
             // 
@@ -673,15 +628,26 @@ namespace CaveStoryEditor
             this.label7.TabIndex = 7;
             this.label7.Text = "Smoke Size";
             // 
-            // propertyGridListBox1
+            // hitboxPreview1
             // 
-            this.propertyGridListBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.propertyGridListBox1.List = null;
-            this.propertyGridListBox1.Location = new System.Drawing.Point(0, 0);
-            this.propertyGridListBox1.MaxItems = 0;
-            this.propertyGridListBox1.Name = "propertyGridListBox1";
-            this.propertyGridListBox1.Size = new System.Drawing.Size(260, 407);
-            this.propertyGridListBox1.TabIndex = 0;
+            this.hitboxPreview1.BackColor = System.Drawing.Color.Black;
+            this.tableLayoutPanel2.SetColumnSpan(this.hitboxPreview1, 3);
+            this.hitboxPreview1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.hitboxPreview1.Location = new System.Drawing.Point(3, 90);
+            this.hitboxPreview1.Name = "hitboxPreview1";
+            this.hitboxPreview1.Size = new System.Drawing.Size(154, 86);
+            this.hitboxPreview1.TabIndex = 11;
+            // 
+            // viewboxPreview1
+            // 
+            this.viewboxPreview1.AutoScroll = true;
+            this.viewboxPreview1.BackColor = System.Drawing.Color.Black;
+            this.tableLayoutPanel3.SetColumnSpan(this.viewboxPreview1, 4);
+            this.viewboxPreview1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.viewboxPreview1.Location = new System.Drawing.Point(3, 91);
+            this.viewboxPreview1.Name = "viewboxPreview1";
+            this.viewboxPreview1.Size = new System.Drawing.Size(328, 85);
+            this.viewboxPreview1.TabIndex = 14;
             // 
             // NPCTableEditor
             // 
@@ -701,8 +667,6 @@ namespace CaveStoryEditor
             ((System.ComponentModel.ISupportInitialize)(this.backNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.frontNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bottomNumericUpDown)).EndInit();
-            this.hitboxContainerPanel.ResumeLayout(false);
-            this.hitboxContainerPanel.PerformLayout();
             this.numbersGroupBox.ResumeLayout(false);
             this.tableLayoutPanel4.ResumeLayout(false);
             this.tableLayoutPanel4.PerformLayout();
@@ -712,8 +676,6 @@ namespace CaveStoryEditor
             this.viewboxGroupBox.ResumeLayout(false);
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel3.PerformLayout();
-            this.viewboxContainerPanel.ResumeLayout(false);
-            this.viewboxContainerPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.unusedNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.rightOffsetNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.yOffsetNumericUpDown)).EndInit();
@@ -737,8 +699,6 @@ namespace CaveStoryEditor
         private System.Windows.Forms.NumericUpDown frontNumericUpDown;
         private System.Windows.Forms.Button changeHitboxDirectionButton;
         private System.Windows.Forms.NumericUpDown bottomNumericUpDown;
-        private System.Windows.Forms.Panel hitboxContainerPanel;
-        private LayeredPictureBox.LayeredPictureBox hitboxLayeredPictureBox;
         private System.Windows.Forms.GroupBox numbersGroupBox;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private System.Windows.Forms.Label label3;
@@ -749,8 +709,6 @@ namespace CaveStoryEditor
         private System.Windows.Forms.NumericUpDown lifeNumericUpDown;
         private System.Windows.Forms.GroupBox viewboxGroupBox;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
-        private System.Windows.Forms.Panel viewboxContainerPanel;
-        private LayeredPictureBox.LayeredPictureBox viewboxLayeredPictureBox;
         private System.Windows.Forms.NumericUpDown unusedNumericUpDown;
         private System.Windows.Forms.NumericUpDown rightOffsetNumericUpDown;
         private System.Windows.Forms.NumericUpDown yOffsetNumericUpDown;
@@ -772,5 +730,7 @@ namespace CaveStoryEditor
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
         private NPCTablePropertyGridListBox propertyGridListBox1;
+        private HitboxPreview hitboxPreview1;
+        private ViewboxPreview viewboxPreview1;
     }
 }

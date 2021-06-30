@@ -13,14 +13,8 @@ namespace CaveStoryEditor
 {
     public partial class NPCTableEditor : UserControl
     {
-        //hitbox layers
-        Layer<Image> Hitbox, HitboxCenter;
 
-        //viewbox layers
-        Layer<Image> LeftOffsetTriangle, LeftOffsetLine,
-                     RightOffsetTriangle, RightOffsetLine,
-                     YOffsetTriangle, YOffsetLine,
-                     ViewCenter;
+                
         NPCTableEntry selectedNPCTableEntry => propertyGridListBox1.SelectedItem;
 
         Dictionary<int, ISurfaceSource> surfaceDescriptors { get; set; }
@@ -52,29 +46,6 @@ namespace CaveStoryEditor
         public NPCTableEditor()
         {
             InitializeComponent();
-
-            #region listbox/viewbox
-            hitboxLayeredPictureBox.CreateLayer(out Hitbox);
-            hitboxLayeredPictureBox.CreateLayer(out HitboxCenter);
-
-            viewboxLayeredPictureBox.CreateLayer(out YOffsetTriangle);
-            viewboxLayeredPictureBox.CreateLayer(out YOffsetLine);
-            viewboxLayeredPictureBox.CreateLayer(out LeftOffsetTriangle);
-            viewboxLayeredPictureBox.CreateLayer(out LeftOffsetLine);
-            viewboxLayeredPictureBox.CreateLayer(out RightOffsetTriangle);
-            viewboxLayeredPictureBox.CreateLayer(out RightOffsetLine);
-            viewboxLayeredPictureBox.CreateLayer(out ViewCenter);
-
-            //create a shared image for the npc's location (Since it never gets changed)
-            var pix = new Bitmap(1, 1);
-            pix.SetPixel(0, 0, Color.White);
-            HitboxCenter.Image = pix;
-            ViewCenter.Image = pix;
-
-            YOffsetTriangle.Image = MakeRightTriangle(Color.Yellow);
-            LeftOffsetTriangle.Image = MakeRightTriangle(Color.Green, -180);
-            RightOffsetTriangle.Image = MakeRightTriangle(Color.Red, 90);
-            #endregion
 
             propertyGridListBox1.SelectedItemChanging += PropertyGridListBox1_SelectedItemChanging;
             propertyGridListBox1.SelectedItemChanged += PropertyGridListBox1_SelectedItemChanged;
@@ -312,169 +283,33 @@ namespace CaveStoryEditor
         #region Hitbox/Viewbox rendering
 
         #region graphics functions for the hitbox/viewbox
-        static Bitmap MakeRightTriangle(Color c, float rotate = 0)
-        {
-            var tri = new Bitmap(MinBoxSize / 2, MinBoxSize / 2);
-            using (var g = Graphics.FromImage(tri))
-            {
-                g.PixelOffsetMode = PixelOffsetMode.Half;
-                if (rotate != 0)
-                {
-                    var w = (float)tri.Width / 2;
-                    var h = (float)tri.Height / 2;
-                    g.TranslateTransform(w, h);
-                    g.RotateTransform(rotate);
-                    g.TranslateTransform(-w, -h);
-                }
-                g.FillPolygon(new SolidBrush(c), new[]
-                {
-                    //top left
-                    new Point(0,-1),
-                    //bottom left
-                    new Point(0,tri.Height),
-                    //bottom right
-                    new Point(tri.Width,tri.Height),
-                });
-            }
-            return new Bitmap(tri);
-        }
-        static Bitmap MakeLine(int width, int height, Color c)
-        {
-            if (width <= 0 || height <= 0)
-                return null;
-            var l = new Bitmap(width, height);
-            using (var g = Graphics.FromImage(l))
-            {
-                g.DrawLine(new Pen(c), 0, 0, width - 1, height - 1);
-            }
-            return new Bitmap(l);
-        }
+        
+        
         #endregion
-
-        const int MinBoxSize = 8;
 
         bool hitboxFacingRight = true;
         private void changeHitboxDirectionButton_Click(object sender, EventArgs e)
         {
             hitboxFacingRight = !hitboxFacingRight;
             changeHitboxDirectionButton.Text = hitboxFacingRight ? "--->" : "<---";
-            DrawHitbox();
+            hitboxPreview1.DrawHitbox(selectedNPCTableEntry.Hitbox, hitboxFacingRight);
         }
 
         private void Hitbox_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             propertyGridListBox1.RefreshPropertyGrid();
-            Invoke(new Action(DrawHitbox));
+            Invoke(new Action<NPCHitRect, bool>(hitboxPreview1.DrawHitbox), selectedNPCTableEntry.Hitbox, hitboxFacingRight);
             HasUnsavedChanges = true;
-        }
-
-        void DrawHitbox()
-        {
-            var size = (Size)selectedNPCTableEntry.Hitbox;
-            if (!size.IsEmpty)
-            {
-                var bit = new Bitmap(size.Width + 1, size.Height + 1);
-                using (var g = Graphics.FromImage(bit))
-                {
-                    if (size.Width == 0 || size.Height == 0)
-                        //for some reason DrawRectangle doesn't let you lines
-                        g.DrawLine(Pens.Red, 0, 0, size.Width, size.Height);
-                    else
-                        g.DrawRectangle(Pens.Red, 0, 0, size.Width, size.Height);
-                }
-                Hitbox.Image = bit;
-            }
-            else
-                Hitbox.Image = null;
-            HitboxCenter.Location = new Point(hitboxFacingRight ? selectedNPCTableEntry.Hitbox.Back : selectedNPCTableEntry.Hitbox.Front, selectedNPCTableEntry.Hitbox.Top);
-            UpdateBoxLocation(hitboxContainerPanel, hitboxLayeredPictureBox);
         }
 
         private void Viewbox_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             propertyGridListBox1.RefreshPropertyGrid();
             if (e.PropertyName != nameof(NPCViewRect.Unused))
-                Invoke(new Action<string>(DrawViewbox), e.PropertyName);
+                Invoke(new Action<NPCViewRect, string>(viewboxPreview1.DrawViewbox), selectedNPCTableEntry.Viewbox, e.PropertyName);
             HasUnsavedChanges = true;
         }
         
-        void DrawViewbox(string prop = null)
-        {
-            int Clamp(int value) => Math.Max(value, MinBoxSize);
-
-            //Display location of the NPC's actual position, clamped to MinBoxSize
-            var viewX = Clamp(Math.Max(selectedNPCTableEntry.Viewbox.LeftOffset, selectedNPCTableEntry.Viewbox.RightOffset));
-            var viewY = Clamp(selectedNPCTableEntry.Viewbox.YOffset);
-
-            //functions to update the images for all the lines
-            void UpdateYImage() => YOffsetLine.Image = MakeLine((viewX + 1) * 2, 1, Color.Yellow);
-            void UpdateLImage() => LeftOffsetLine.Image = MakeLine(1, (viewY + 1) * 2, Color.Green);
-            void UpdateRImage() => RightOffsetLine.Image = MakeLine(1, (viewY + 1) * 2, Color.Red);
-
-            //functions to update the images locations
-            void UpdateYLocation()
-            {
-                YOffsetLine.Location = new Point(0, ViewCenter.Location.Y - selectedNPCTableEntry.Viewbox.YOffset);
-                YOffsetTriangle.Location = new Point(0, YOffsetLine.Location.Y - YOffsetTriangle.Image.Height + 1);
-            }
-            void UpdateLLocation()
-            {
-                LeftOffsetLine.Location = new Point(ViewCenter.Location.X - selectedNPCTableEntry.Viewbox.LeftOffset, 0);
-                LeftOffsetTriangle.Location = new Point(LeftOffsetLine.Location.X - LeftOffsetTriangle.Image.Width + 1, 0);
-            }
-            void UpdateRLocation()
-            {
-                RightOffsetLine.Location = new Point(ViewCenter.Location.X - selectedNPCTableEntry.Viewbox.RightOffset, 0);
-                RightOffsetTriangle.Location = RightOffsetLine.Location;
-            }
-
-            //setting the NPC's center to 1.5x its value leaves room on the left so it looks pretty
-            ViewCenter.Location = new Point(viewX + viewX / 2, viewY + viewY / 2);
-
-            //reset all images
-            if (prop == null)
-            {
-                UpdateLImage();
-                UpdateRImage();
-                UpdateYImage();
-            }
-            else
-            {
-                switch (prop)
-                {
-                    case nameof(NPCViewRect.YOffset):
-                        UpdateLImage();
-                        UpdateRImage();
-                        break;
-                    //only reset the Y image if the line being edited is the bigger one
-                    case nameof(NPCViewRect.LeftOffset):
-                    case nameof(NPCViewRect.RightOffset):
-                        if (YOffsetLine.Image.Width != (viewX + 1) * 2)
-                            UpdateYImage();
-                        break;
-                }
-            }
-            //always update line locations
-            UpdateYLocation();
-            UpdateLLocation();
-            UpdateRLocation();
-            UpdateBoxLocation(viewboxContainerPanel, viewboxLayeredPictureBox);
-        }
-        void UpdateBoxLocation(ScrollableControl parent, Control child)
-        {
-            //TODO figure out why the hecc auto scroll doesn't work
-            child.Location = new Point(parent.Width / 2 - child.Width / 2, parent.Height / 2 - child.Height / 2);
-        }
-
-        private void viewboxContainerPanel_SizeChanged(object sender, EventArgs e)
-        {
-            UpdateBoxLocation(viewboxContainerPanel, viewboxLayeredPictureBox);
-        }
-
-        private void hitboxContainerPanel_SizeChanged(object sender, EventArgs e)
-        {
-            UpdateBoxLocation(hitboxContainerPanel, hitboxLayeredPictureBox);
-        }
         #endregion
 
         bool npcTableEntryUIEnabled = false;
@@ -566,10 +401,10 @@ namespace CaveStoryEditor
                 //update event subscriptions
                 //hitbox
                 selectedNPCTableEntry.Hitbox.PropertyChanged += Hitbox_PropertyChanged;
-                DrawHitbox();
+                hitboxPreview1.DrawHitbox(selectedNPCTableEntry.Hitbox, hitboxFacingRight);
                 //viewbox
                 selectedNPCTableEntry.Viewbox.PropertyChanged += Viewbox_PropertyChanged;
-                DrawViewbox();
+                viewboxPreview1.DrawViewbox(selectedNPCTableEntry.Viewbox);
                 //all the enums
                 selectedNPCTableEntry.PropertyChanged += currentNPCTableEntry_PropertyChanged;
                 SetComboBoxValue(spriteSurfaceComboBox, surfaceDescriptors, selectedNPCTableEntry.SpriteSurface);

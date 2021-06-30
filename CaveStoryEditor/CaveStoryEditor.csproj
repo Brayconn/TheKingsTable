@@ -117,6 +117,18 @@
     <Compile Include="FormStageTableExporter.Designer.cs">
       <DependentUpon>FormStageTableExporter.cs</DependentUpon>
     </Compile>
+    <Compile Include="HitboxPreview.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="HitboxPreview.Designer.cs">
+      <DependentUpon>HitboxPreview.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewboxPreview.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ViewboxPreview.Designer.cs">
+      <DependentUpon>ViewboxPreview.cs</DependentUpon>
+    </Compile>
     <Compile Include="IUndo.cs" />
     <Compile Include="FormStageEditor_MapDisplay.cs">
       <SubType>Form</SubType>
@@ -196,6 +208,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormStageTableExporter.resx">
       <DependentUpon>FormStageTableExporter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="HitboxPreview.resx">
+      <DependentUpon>HitboxPreview.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ViewboxPreview.resx">
+      <DependentUpon>ViewboxPreview.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MapResizeControl.resx">
       <DependentUpon>MapResizeControl.cs</DependentUpon>

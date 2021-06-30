@@ -62,7 +62,7 @@ namespace CaveStoryModdingFramework
         public int enemyYL { get; set; }
         public int blockXL { get; set; }
         public int blockYL { get; set; }
-        public IntRect ViewBox { get; set; }
+        public BulletViewRect ViewBox { get; set; }
     }
 
     public static class BulletTable

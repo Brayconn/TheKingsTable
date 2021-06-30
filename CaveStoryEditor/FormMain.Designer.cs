@@ -74,6 +74,7 @@
             this.modSettingsTabPage = new System.Windows.Forms.TabPage();
             this.modPropertyGrid = new CaveStoryEditor.PropertyGridShell();
             this.editorSettingsTabPage = new System.Windows.Forms.TabPage();
+            this.bulletTableTabPage = new System.Windows.Forms.TabPage();
             this.menuStrip1.SuspendLayout();
             this.mainTabControl.SuspendLayout();
             this.stageTableTabPage.SuspendLayout();
@@ -120,14 +121,14 @@
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.newToolStripMenuItem.Text = "New...";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.openToolStripMenuItem.Text = "Open...";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
@@ -135,7 +136,7 @@
             // 
             this.saveProjectToolStripMenuItem.Enabled = false;
             this.saveProjectToolStripMenuItem.Name = "saveProjectToolStripMenuItem";
-            this.saveProjectToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveProjectToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.saveProjectToolStripMenuItem.Text = "Save Project";
             this.saveProjectToolStripMenuItem.Click += new System.EventHandler(this.saveProjectToolStripMenuItem_Click);
             // 
@@ -143,20 +144,20 @@
             // 
             this.saveProjectAsToolStripMenuItem.Enabled = false;
             this.saveProjectAsToolStripMenuItem.Name = "saveProjectAsToolStripMenuItem";
-            this.saveProjectAsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveProjectAsToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.saveProjectAsToolStripMenuItem.Text = "Save Project As...";
             this.saveProjectAsToolStripMenuItem.Click += new System.EventHandler(this.saveProjectAsToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(176, 6);
             // 
             // saveStageTableToolStripMenuItem
             // 
             this.saveStageTableToolStripMenuItem.Enabled = false;
             this.saveStageTableToolStripMenuItem.Name = "saveStageTableToolStripMenuItem";
-            this.saveStageTableToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveStageTableToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.saveStageTableToolStripMenuItem.Text = "Save Stage Table";
             this.saveStageTableToolStripMenuItem.Click += new System.EventHandler(this.saveStageTableToolStripMenuItem_Click);
             // 
@@ -164,20 +165,20 @@
             // 
             this.exportStageTableToolStripMenuItem.Enabled = false;
             this.exportStageTableToolStripMenuItem.Name = "exportStageTableToolStripMenuItem";
-            this.exportStageTableToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exportStageTableToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.exportStageTableToolStripMenuItem.Text = "Export Stage Table...";
             this.exportStageTableToolStripMenuItem.Click += new System.EventHandler(this.exportStageTableToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(176, 6);
             // 
             // saveNPCTableToolStripMenuItem
             // 
             this.saveNPCTableToolStripMenuItem.Enabled = false;
             this.saveNPCTableToolStripMenuItem.Name = "saveNPCTableToolStripMenuItem";
-            this.saveNPCTableToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveNPCTableToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.saveNPCTableToolStripMenuItem.Text = "Save NPC Table";
             this.saveNPCTableToolStripMenuItem.Click += new System.EventHandler(this.saveNPCTableToolStripMenuItem_Click);
             // 
@@ -185,7 +186,7 @@
             // 
             this.exportNPCTableToolStripMenuItem.Enabled = false;
             this.exportNPCTableToolStripMenuItem.Name = "exportNPCTableToolStripMenuItem";
-            this.exportNPCTableToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exportNPCTableToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.exportNPCTableToolStripMenuItem.Text = "Export NPC Table...";
             this.exportNPCTableToolStripMenuItem.Click += new System.EventHandler(this.exportNPCTableToolStripMenuItem_Click);
             // 
@@ -226,6 +227,7 @@
             // 
             this.mainTabControl.Controls.Add(this.stageTableTabPage);
             this.mainTabControl.Controls.Add(this.npcTableTabPage);
+            this.mainTabControl.Controls.Add(this.bulletTableTabPage);
             this.mainTabControl.Controls.Add(this.assetsTabPage);
             this.mainTabControl.Controls.Add(this.modSettingsTabPage);
             this.mainTabControl.Controls.Add(this.editorSettingsTabPage);
@@ -578,6 +580,15 @@
             this.editorSettingsTabPage.Text = "Editor Settings";
             this.editorSettingsTabPage.UseVisualStyleBackColor = true;
             // 
+            // bulletTableTabPage
+            // 
+            this.bulletTableTabPage.Location = new System.Drawing.Point(4, 22);
+            this.bulletTableTabPage.Name = "bulletTableTabPage";
+            this.bulletTableTabPage.Size = new System.Drawing.Size(792, 400);
+            this.bulletTableTabPage.TabIndex = 5;
+            this.bulletTableTabPage.Text = "Bullet Table";
+            this.bulletTableTabPage.UseVisualStyleBackColor = true;
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -658,6 +669,7 @@
         private System.Windows.Forms.ToolStripMenuItem loadTsclisttxtToolStripMenuItem;
         private System.Windows.Forms.TabPage npcTableTabPage;
         private NPCTableEditor npcTableEditor;
+        private System.Windows.Forms.TabPage bulletTableTabPage;
     }
 }
 

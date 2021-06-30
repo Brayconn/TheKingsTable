@@ -19,34 +19,50 @@ namespace CaveStoryModdingFramework.Entities
         {
             return new NPCViewRect(br.ReadByte(), br.ReadByte(), br.ReadByte(), br.ReadByte());
         }
-        public static IntRect ReadIntRect(this BinaryReader br)
+        public static BulletViewRect ReadIntRect(this BinaryReader br)
         {
-            return new IntRect(br.ReadInt32(), br.ReadInt32(), br.ReadInt32(), br.ReadInt32());
+            return new BulletViewRect(br.ReadInt32(), br.ReadInt32(), br.ReadInt32(), br.ReadInt32());
         }
-        public static void Write(this BinaryWriter bw, IntRect rect)
+        public static void Write(this BinaryWriter bw, BulletViewRect rect)
         {
-            bw.Write(rect.Front);
-            bw.Write(rect.Top);
-            bw.Write(rect.Back);
-            bw.Write(rect.Bottom);
+            bw.Write(rect.LeftOffset);
+            bw.Write(rect.YOffset);
+            bw.Write(rect.RightOffset);
+            bw.Write(rect.Unused);
         }
     }
 
-    public class IntRect
+    [DebuggerDisplay("LeftOffset = {LeftOffset} YOffset = {YOffset} RightOffset = {RightOffset} Unused = {Unused}")]
+    public class BulletViewRect
     {
-        public int Front { get; set; }
-        public int Top { get; set; }
-        public int Back { get; set; }
-        public int Bottom { get; set; }
+        /// <summary>
+        /// Labeled as "Front" in CS.
+        /// </summary>
+        [LocalizeableDescription(nameof(Dialog.LeftOffsetDescription), typeof(Dialog))]
+        public int LeftOffset { get; set; }
+        /// <summary>
+        /// Labeled as "Top" in CS.
+        /// </summary>
+        [LocalizeableDescription(nameof(Dialog.YOffsetDescription), typeof(Dialog))]
+        public int YOffset { get; set; }
+        /// <summary>
+        /// Labeled as "Back" in CS.
+        /// </summary>
+        [LocalizeableDescription(nameof(Dialog.RightOffsetDescription), typeof(Dialog))]
+        public int RightOffset { get; set; }
+        /// <summary>
+        /// Labeled as "Bottom" in CS. It goes unused in the default sprite renderer
+        /// </summary>
+        [LocalizeableDescription(nameof(Dialog.UnusedDescription), typeof(Dialog))]
+        public int Unused { get; set; }
 
-        public IntRect(int front, int top, int back, int bottom)
+        public BulletViewRect(int leftOffset, int yOffset, int rightOffset, int unused)
         {
-            Front = front;
-            Top = top;
-            Back = back;
-            Bottom = bottom;
+            LeftOffset = leftOffset;
+            YOffset = yOffset;
+            RightOffset = rightOffset;
+            Unused = unused;
         }
-
     }
 
     /// <summary>
