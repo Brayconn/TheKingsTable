@@ -2,34 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-using System.Runtime.CompilerServices;
 
 namespace CaveStoryModdingFramework.Entities
 {
-    public class NPCTableEntry : INotifyPropertyChanging, INotifyPropertyChanged
+    public class NPCTableEntry : PropertyChangedHelper
     {
         public const int Size = 0x18;
-
-        public event PropertyChangingEventHandler PropertyChanging;
-        public event PropertyChangedEventHandler PropertyChanged;
-        
-        protected void NotifyPropertyChanging([CallerMemberName] string name = "")
-        {
-            PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(name));
-        }
-        protected void NotifyPropertyChanged([CallerMemberName] string name = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
-        protected void SetVal<T>(ref T var, T value, [CallerMemberName] string name = "") where T : IComparable
-        {
-            if (var == null || var.CompareTo(value) != 0)
-            {
-                NotifyPropertyChanging(name);
-                var = value;
-                NotifyPropertyChanged(name);
-            }
-        }
 
         private EntityFlags bits;
         private ushort life;

@@ -4,8 +4,6 @@ using System.IO;
 using PETools;
 using System.Text;
 using System.Xml.Linq;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 
 namespace CaveStoryModdingFramework
 {
@@ -14,33 +12,12 @@ namespace CaveStoryModdingFramework
         Internal,
         External
     }
-    public class DataLocation : INotifyPropertyChanging, INotifyPropertyChanged
+    public class DataLocation : PropertyChangedHelper
     {
-        public event PropertyChangingEventHandler PropertyChanging;
-        public event PropertyChangedEventHandler PropertyChanged;
-
         string filename, sectionName;
         DataLocationTypes dataLocationType;
         bool fixedSize;
         int offset, maximumSize;
-
-        protected void NotifyPropertyChanging([CallerMemberName] string name = "")
-        {
-            PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(name));
-        }
-        protected void NotifyPropertyChanged([CallerMemberName] string name = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
-        protected void SetVal<T>(ref T variable, T value, [CallerMemberName] string name = "")
-        {
-            if (!EqualityComparer<T>.Default.Equals(variable, value))
-            {
-                NotifyPropertyChanging(name);
-                variable = value;
-                NotifyPropertyChanged(name);
-            }
-        }
 
         public string Filename { get => filename; set => SetVal(ref filename, value); }
         public DataLocationTypes DataLocationType { get => dataLocationType; set => SetVal(ref dataLocationType, value); }

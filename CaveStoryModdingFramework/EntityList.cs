@@ -14,20 +14,8 @@ namespace CaveStoryModdingFramework.Entities
 {
     #region Common
 
-    public class MultiEntityShell : INotifyPropertyChanging, INotifyPropertyChanged
-    {
-        public event PropertyChangedEventHandler PropertyChanged;
-        public event PropertyChangingEventHandler PropertyChanging;
-
-        private void NotifyPropertyChanging(string propertyName)
-        {
-            PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(propertyName));
-        }
-        private void NotifyPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
+    public class MultiEntityShell : PropertyChangedHelper
+    {        
         readonly Entity[] hosts;
         private T GetProperty<T>(Entity e, PropertyInfo property)
         {

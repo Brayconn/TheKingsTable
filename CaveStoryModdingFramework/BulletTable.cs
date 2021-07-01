@@ -1,5 +1,7 @@
 ﻿using CaveStoryModdingFramework.Entities;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 
 namespace CaveStoryModdingFramework
@@ -48,21 +50,46 @@ namespace CaveStoryModdingFramework
         }
     }
 
-    public class BulletTableEntry
+    [Flags]
+    public enum BulletFlags : uint
+    {
+
+        PierceTiles = 0x04,
+        CollideWithTiles = 0x08,
+        PierceInvincibleEntities = 0x10,
+        BreakSnacks = 0x20,
+        PierceSnacks = 0x40
+    }
+
+    public class BulletTableEntry : PropertyChangedHelper
     {
         public const int Size = 42;
-        public sbyte Damage { get; set; }
-        //Life
-        public sbyte Hits { get; set; }
-        //life_count
-        public int Range { get; set; }
 
-        public uint Bits { get; set; }
-        public int enemyXL { get; set; }
-        public int enemyYL { get; set; }
-        public int blockXL { get; set; }
-        public int blockYL { get; set; }
-        public BulletViewRect ViewBox { get; set; }
+        sbyte damage, hits;
+        int range, enemyHitboxWidth, enemyHitboxHeight, tileHitboxWidth, tileHitboxHeight;
+        BulletFlags bits;
+        BulletViewRect viewBox;
+
+        public sbyte Damage { get => damage; set => SetVal(ref damage, value); }
+        //Life
+        public sbyte Hits { get => hits; set => SetVal(ref hits, value); }
+        //Life_count
+        public int Range { get => range; set => SetVal(ref range, value); }
+
+        [Editor(typeof(FlagEnumUIEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public BulletFlags Bits { get => bits; set => SetVal(ref bits, value); }
+        //EnemyXL
+        public int EnemyHitboxWidth { get => enemyHitboxWidth; set => SetVal(ref enemyHitboxWidth, value); }
+        //EnemyYL
+
+        public int EnemyHitboxHeight { get => enemyHitboxHeight; set => SetVal(ref enemyHitboxHeight, value); }
+        //BlockXL
+        public int TileHitboxWidth { get => tileHitboxWidth; set => SetVal(ref tileHitboxWidth, value); }
+        //BlockYL
+        public int TileHitboxHeight { get => tileHitboxHeight; set => SetVal(ref tileHitboxHeight, value); }
+
+        [TypeConverter(typeof(BullletViewRectTypeConverter))]
+        public BulletViewRect ViewBox { get => viewBox; set => SetVal(ref viewBox, value); }
     }
 
     public static class BulletTable
@@ -89,11 +116,11 @@ namespace CaveStoryModdingFramework
                     if (location.PadDamageAndHits)
                         br.BaseStream.Position += 2;
                     entry.Range = br.ReadInt32();
-                    entry.Bits = br.ReadUInt32();
-                    entry.enemyXL = br.ReadInt32();
-                    entry.enemyYL = br.ReadInt32();
-                    entry.blockXL = br.ReadInt32();
-                    entry.blockYL = br.ReadInt32();
+                    entry.Bits = (BulletFlags)br.ReadUInt32();
+                    entry.EnemyHitboxWidth = br.ReadInt32();
+                    entry.EnemyHitboxHeight = br.ReadInt32();
+                    entry.TileHitboxWidth = br.ReadInt32();
+                    entry.TileHitboxHeight = br.ReadInt32();
                     entry.ViewBox = br.ReadIntRect();
 
                     output.Add(entry);
@@ -117,10 +144,11 @@ namespace CaveStoryModdingFramework
                     if(location.PadDamageAndHits) //I'm so clever 😎
                         bw.Write((ushort)0);
                     bw.Write(bullet.Range);
-                    bw.Write(bullet.Bits);
-                    bw.Write(bullet.enemyXL);
-                    bw.Write(bullet.enemyYL);
-                    bw.Write(bullet.blockYL);
+                    bw.Write((uint)bullet.Bits);
+                    bw.Write(bullet.EnemyHitboxWidth);
+                    bw.Write(bullet.EnemyHitboxHeight);
+                    bw.Write(bullet.TileHitboxWidth);
+                    bw.Write(bullet.TileHitboxHeight);
                     bw.Write(bullet.ViewBox);
                 }
             }

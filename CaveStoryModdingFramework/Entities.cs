@@ -28,19 +28,18 @@ namespace CaveStoryModdingFramework.Entities
         ShowDamage = 0x8000             // Show the number of damage taken when harmed
     };
 
-    public class Entity : INotifyPropertyChanging, INotifyPropertyChanged
+    public class Entity : PropertyChangedHelper
     {
-        //TODO finish implementing
-        public event PropertyChangingEventHandler PropertyChanging;
-        public event PropertyChangedEventHandler PropertyChanged;
+        short x,y,flag,@event,type;
+        EntityFlags bits;
 
-        public short X { get; set; }
-        public short Y { get; set; }
-        public short Flag { get; set; }
-        public short Event { get; set; }
-        public short Type { get; set; }
+        public short X { get => x; set => SetVal(ref x, value); }
+        public short Y { get => y; set => SetVal(ref y, value); }
+        public short Flag { get => flag; set => SetVal(ref flag, value); }
+        public short Event { get => @event; set => SetVal(ref @event, value); }
+        public short Type { get => type; set => SetVal(ref type, value); }
         [Editor(typeof(FlagEnumUIEditor), typeof(System.Drawing.Design.UITypeEditor))]
-        public EntityFlags Bits { get; set; }
+        public EntityFlags Bits { get => bits; set => SetVal(ref bits, value); }
 
         public Entity(Entity e) : this(e.X, e.Y, e.Flag, e.Event, e.Type, e.Bits) { }
         public Entity(short x, short y, short flag, short @event, short type, EntityFlags bits)

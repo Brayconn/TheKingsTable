@@ -68,6 +68,7 @@
       <DependentUpon>BossNames.resx</DependentUpon>
     </Compile>
     <Compile Include="Profile.cs" />
+    <Compile Include="PropertyChangedHelper.cs" />
     <Compile Include="Rectangles.cs" />
     <Compile Include="Dialog.Designer.cs">
       <AutoGen>True</AutoGen>

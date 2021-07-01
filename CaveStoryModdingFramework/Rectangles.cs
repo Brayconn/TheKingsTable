@@ -65,6 +65,22 @@ namespace CaveStoryModdingFramework.Entities
         }
     }
 
+    public class BullletViewRectTypeConverter : ExpandableObjectConverter
+    {
+        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
+        {
+            return destinationType == typeof(string) || base.CanConvertTo(context, destinationType);
+        }
+
+        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+        {
+            if (value is BulletViewRect br)
+                return string.Join(", ", br.LeftOffset, br.YOffset, br.RightOffset, br.Unused);
+            else
+                return base.ConvertTo(context, culture, value, destinationType);
+        }
+    }
+
     /// <summary>
     /// A rectangle with four byte values
     /// </summary>
