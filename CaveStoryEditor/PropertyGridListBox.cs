@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace CaveStoryEditor
 {
-    public abstract partial class PropertyGridListBox<T> : UserControl
+    public abstract partial class PropertyGridListBox<T> : UserControl where T : new()
     {
         public PropertyGridListBox()
         {
@@ -145,17 +145,33 @@ namespace CaveStoryEditor
         {
             ItemRemoved?.Invoke(this, new EventArgs());
         }
-        public virtual void Add()
+        public void Add()
         {
-            throw new NotImplementedException();
+            List.Add(new T());
+            SafeRefreshItems();
+            SelectedItem = List[List.Count - 1];
+            UpdateCanAddItems();
+            InvokeItemAdded();
         }
-        public virtual void Insert()
+        public void Insert()
         {
-            throw new NotImplementedException();
+            var index = Math.Max(0, SelectedIndex);
+            var entry = new T();
+            List.Insert(index, entry);
+            SafeRefreshItems();
+            SelectedItem = List[index];
+            UpdateCanAddItems();
+            InvokeItemInserted();
         }
-        public virtual void Remove()
+        public void Remove()
         {
-            throw new NotImplementedException();
+            var index = SelectedIndex;
+            List.RemoveAt(index);
+            SafeRefreshItems();
+            var newSelect = Math.Max(index - 1, 0);
+            SelectedItem = newSelect > 0 ? List[newSelect] : default;
+            UpdateCanAddItems();
+            InvokeItemRemoved();
         }
 
         private void addButton_Click(object sender, EventArgs e)
