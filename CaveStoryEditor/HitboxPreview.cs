@@ -9,7 +9,7 @@ namespace CaveStoryEditor
     public partial class HitboxPreview : UserControl
     {
         //hitbox layers
-        Layer<Image> Hitbox, HitboxCenter;
+        readonly Layer<Image> Hitbox, HitboxCenter;
 
         public HitboxPreview()
         {

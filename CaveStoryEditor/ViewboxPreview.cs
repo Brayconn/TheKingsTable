@@ -10,7 +10,7 @@ namespace CaveStoryEditor
     public partial class ViewboxPreview : UserControl
     {
         //viewbox layers
-        Layer<Image> LeftOffsetTriangle, LeftOffsetLine,
+        readonly Layer<Image> LeftOffsetTriangle, LeftOffsetLine,
                      RightOffsetTriangle, RightOffsetLine,
                      YOffsetTriangle, YOffsetLine,
                      ViewCenter;
