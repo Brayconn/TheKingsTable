@@ -28,23 +28,24 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.flagCheckedListBox1 = new CaveStoryModdingFramework.FlagCheckedListBox();
+            this.checkedListBox = new System.Windows.Forms.CheckedListBox();
             this.SuspendLayout();
             // 
-            // flagCheckedListBox1
+            // checkedListBox
             // 
-            this.flagCheckedListBox1.CheckOnClick = true;
-            this.flagCheckedListBox1.FormattingEnabled = true;
-            this.flagCheckedListBox1.Location = new System.Drawing.Point(3, 3);
-            this.flagCheckedListBox1.Name = "flagCheckedListBox1";
-            this.flagCheckedListBox1.Size = new System.Drawing.Size(120, 94);
-            this.flagCheckedListBox1.TabIndex = 0;
+            this.checkedListBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkedListBox.FormattingEnabled = true;
+            this.checkedListBox.Location = new System.Drawing.Point(0, 0);
+            this.checkedListBox.Name = "checkedListBox";
+            this.checkedListBox.Size = new System.Drawing.Size(150, 150);
+            this.checkedListBox.TabIndex = 0;
+            this.checkedListBox.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.checkedListBox_ItemCheck);
             // 
             // BitEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.flagCheckedListBox1);
+            this.Controls.Add(this.checkedListBox);
             this.Name = "BitEditor";
             this.ResumeLayout(false);
 
@@ -52,6 +53,6 @@
 
         #endregion
 
-        private CaveStoryModdingFramework.FlagCheckedListBox flagCheckedListBox1;
+        private System.Windows.Forms.CheckedListBox checkedListBox;
     }
 }

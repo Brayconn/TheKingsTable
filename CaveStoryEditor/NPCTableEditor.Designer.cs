@@ -39,6 +39,7 @@ namespace CaveStoryEditor
             this.frontNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.changeHitboxDirectionButton = new System.Windows.Forms.Button();
             this.bottomNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.hitboxPreview1 = new CaveStoryEditor.HitboxPreview();
             this.numbersGroupBox = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.label3 = new System.Windows.Forms.Label();
@@ -57,8 +58,8 @@ namespace CaveStoryEditor
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
+            this.viewboxPreview1 = new CaveStoryEditor.ViewboxPreview();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.bitsCheckedListBox = new System.Windows.Forms.CheckedListBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.spriteSurfaceComboBox = new System.Windows.Forms.ComboBox();
@@ -69,8 +70,7 @@ namespace CaveStoryEditor
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.hitboxPreview1 = new CaveStoryEditor.HitboxPreview();
-            this.viewboxPreview1 = new CaveStoryEditor.ViewboxPreview();
+            this.bitEditor1 = new CaveStoryEditor.BitEditor();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -243,6 +243,16 @@ namespace CaveStoryEditor
             this.bottomNumericUpDown.Name = "bottomNumericUpDown";
             this.bottomNumericUpDown.Size = new System.Drawing.Size(47, 20);
             this.bottomNumericUpDown.TabIndex = 3;
+            // 
+            // hitboxPreview1
+            // 
+            this.hitboxPreview1.BackColor = System.Drawing.Color.Black;
+            this.tableLayoutPanel2.SetColumnSpan(this.hitboxPreview1, 3);
+            this.hitboxPreview1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.hitboxPreview1.Location = new System.Drawing.Point(3, 90);
+            this.hitboxPreview1.Name = "hitboxPreview1";
+            this.hitboxPreview1.Size = new System.Drawing.Size(154, 86);
+            this.hitboxPreview1.TabIndex = 11;
             // 
             // numbersGroupBox
             // 
@@ -479,9 +489,20 @@ namespace CaveStoryEditor
             this.label11.TabIndex = 13;
             this.label11.Text = "Unused";
             // 
+            // viewboxPreview1
+            // 
+            this.viewboxPreview1.AutoScroll = true;
+            this.viewboxPreview1.BackColor = System.Drawing.Color.Black;
+            this.tableLayoutPanel3.SetColumnSpan(this.viewboxPreview1, 4);
+            this.viewboxPreview1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.viewboxPreview1.Location = new System.Drawing.Point(3, 91);
+            this.viewboxPreview1.Name = "viewboxPreview1";
+            this.viewboxPreview1.Size = new System.Drawing.Size(328, 85);
+            this.viewboxPreview1.TabIndex = 14;
+            // 
             // groupBox4
             // 
-            this.groupBox4.Controls.Add(this.bitsCheckedListBox);
+            this.groupBox4.Controls.Add(this.bitEditor1);
             this.groupBox4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox4.Location = new System.Drawing.Point(347, 3);
             this.groupBox4.Name = "groupBox4";
@@ -489,17 +510,6 @@ namespace CaveStoryEditor
             this.groupBox4.TabIndex = 4;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Bits";
-            // 
-            // bitsCheckedListBox
-            // 
-            this.bitsCheckedListBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bitsCheckedListBox.Enabled = false;
-            this.bitsCheckedListBox.FormattingEnabled = true;
-            this.bitsCheckedListBox.Location = new System.Drawing.Point(3, 16);
-            this.bitsCheckedListBox.Name = "bitsCheckedListBox";
-            this.bitsCheckedListBox.Size = new System.Drawing.Size(162, 178);
-            this.bitsCheckedListBox.TabIndex = 0;
-            this.bitsCheckedListBox.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.bitsCheckedListBox_ItemCheck);
             // 
             // groupBox5
             // 
@@ -628,26 +638,13 @@ namespace CaveStoryEditor
             this.label7.TabIndex = 7;
             this.label7.Text = "Smoke Size";
             // 
-            // hitboxPreview1
+            // bitEditor1
             // 
-            this.hitboxPreview1.BackColor = System.Drawing.Color.Black;
-            this.tableLayoutPanel2.SetColumnSpan(this.hitboxPreview1, 3);
-            this.hitboxPreview1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.hitboxPreview1.Location = new System.Drawing.Point(3, 90);
-            this.hitboxPreview1.Name = "hitboxPreview1";
-            this.hitboxPreview1.Size = new System.Drawing.Size(154, 86);
-            this.hitboxPreview1.TabIndex = 11;
-            // 
-            // viewboxPreview1
-            // 
-            this.viewboxPreview1.AutoScroll = true;
-            this.viewboxPreview1.BackColor = System.Drawing.Color.Black;
-            this.tableLayoutPanel3.SetColumnSpan(this.viewboxPreview1, 4);
-            this.viewboxPreview1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.viewboxPreview1.Location = new System.Drawing.Point(3, 91);
-            this.viewboxPreview1.Name = "viewboxPreview1";
-            this.viewboxPreview1.Size = new System.Drawing.Size(328, 85);
-            this.viewboxPreview1.TabIndex = 14;
+            this.bitEditor1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bitEditor1.Location = new System.Drawing.Point(3, 16);
+            this.bitEditor1.Name = "bitEditor1";
+            this.bitEditor1.Size = new System.Drawing.Size(162, 178);
+            this.bitEditor1.TabIndex = 0;
             // 
             // NPCTableEditor
             // 
@@ -718,7 +715,6 @@ namespace CaveStoryEditor
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.CheckedListBox bitsCheckedListBox;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
         private System.Windows.Forms.ComboBox spriteSurfaceComboBox;
@@ -732,5 +728,6 @@ namespace CaveStoryEditor
         private NPCTablePropertyGridListBox propertyGridListBox1;
         private HitboxPreview hitboxPreview1;
         private ViewboxPreview viewboxPreview1;
+        private BitEditor bitEditor1;
     }
 }

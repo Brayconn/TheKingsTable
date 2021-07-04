@@ -55,6 +55,8 @@ namespace CaveStoryEditor
             propertyGridListBox1.ItemRemoved += PropertyGridListBox1_ItemCountChanged;
 
             propertyGridListBox1.Format += npcTableListBox_Format;
+
+            bitEditor1.BitChanged += bitsCheckedListBox_ItemCheck;
         }
 
         
@@ -99,10 +101,7 @@ namespace CaveStoryEditor
             bind(smokeSizeComboBox, smokeSizes);
 
             //TODO allow for custom flag names
-            var names = Enum.GetNames(typeof(EntityFlags));
-            bitsCheckedListBox.Items.Clear();
-            foreach (var name in names)
-                bitsCheckedListBox.Items.Add(name);
+            bitEditor1.Initialize(typeof(EntityFlags), sizeof(ushort) * 8);
         }
         
         public void LoadTable(List<NPCTableEntry> list)
@@ -114,7 +113,7 @@ namespace CaveStoryEditor
         }
         public void UnloadTable()
         {
-            propertyGridListBox1.List = null; ;
+            propertyGridListBox1.List = null;
 
             HasUnsavedChanges = false;
             NPCTableEntryUIEnabled = false;
@@ -131,19 +130,19 @@ namespace CaveStoryEditor
                 switch (e.PropertyName)
                 {
                     case nameof(NPCTableEntry.SpriteSurface):
-                        SetComboBoxValue(spriteSurfaceComboBox, surfaceDescriptors, selectedNPCTableEntry.SpriteSurface);
+                        SetSurfaceComboBoxValue(spriteSurfaceComboBox, surfaceDescriptors, selectedNPCTableEntry.SpriteSurface);
                         break;
                     case nameof(NPCTableEntry.HitSound):
-                        SetComboBoxValue(hitSoundComboBox, soundEffects, selectedNPCTableEntry.HitSound);
+                        SetStringComboBoxValue(hitSoundComboBox, soundEffects, selectedNPCTableEntry.HitSound);
                         break;
                     case nameof(NPCTableEntry.DeathSound):
-                        SetComboBoxValue(deathSoundComboBox, soundEffects, selectedNPCTableEntry.DeathSound);
+                        SetStringComboBoxValue(deathSoundComboBox, soundEffects, selectedNPCTableEntry.DeathSound);
                         break;
                     case nameof(NPCTableEntry.SmokeSize):
-                        SetComboBoxValue(smokeSizeComboBox, smokeSizes, selectedNPCTableEntry.SmokeSize);
+                        SetStringComboBoxValue(smokeSizeComboBox, smokeSizes, selectedNPCTableEntry.SmokeSize);
                         break;
                     case nameof(NPCTableEntry.Bits):
-                        SetBitsUI(selectedNPCTableEntry.Bits);
+                        SetBitUI();
                         break;
                 }
                 propertyGridListBox1.RefreshPropertyGrid();
@@ -158,47 +157,28 @@ namespace CaveStoryEditor
         }
 
         #region bits
-
         //UI -> entry
-        private void bitsCheckedListBox_ItemCheck(object sender, ItemCheckEventArgs e)
+        private void bitsCheckedListBox_ItemCheck(object sender, EventArgs e)
         {
             if (!lockNpcTableEntry)
             {
                 lockNpcTableEntry = true;
-                EntityFlags flag = (EntityFlags)(1 << e.Index);
-                switch (e.NewValue)
-                {
-                    case CheckState.Checked:
-                        selectedNPCTableEntry.Bits |= flag;
-                        break;
-                    case CheckState.Unchecked:
-                        selectedNPCTableEntry.Bits &= ~flag;
-                        break;
-                    default:
-                        throw new ArgumentException($"Invalid check stage: {e.NewValue}");
-                }
+                selectedNPCTableEntry.Bits = (EntityFlags)(ushort)bitEditor1.UnderlyingBitValue;
                 propertyGridListBox1.RefreshPropertyGrid();
                 lockNpcTableEntry = false;
             }
         }
         //entry -> UI
-        private void SetBitsUI(EntityFlags flags)
+        private void SetBitUI()
         {
-            if (!lockNpcTableEntry)
-            {
-                lockNpcTableEntry = true;
-                var newVal = new BitArray(BitConverter.GetBytes((ushort)flags));
-                for (int i = 0; i < newVal.Length; i++)
-                    bitsCheckedListBox.SetItemChecked(i, newVal[i]);
-                lockNpcTableEntry = false;
-            }
+            bitEditor1.UnderlyingBitValue = (ulong)selectedNPCTableEntry.Bits;
         }
         #endregion
 
         #region comboboxes
 
-        #region entry -> UI
-        void SetComboBoxValue(ComboBox cb, IDictionary<int, ISurfaceSource> dict, int value)
+        //entry -> UI
+        void SetSurfaceComboBoxValue(ComboBox cb, IDictionary<int, ISurfaceSource> dict, int value)
         {
             //remove the extra entry
             if (cb.Items.Count > dict.Count)
@@ -216,7 +196,7 @@ namespace CaveStoryEditor
                 cb.SelectedIndex = cb.Items.Count - 1;
             }
         }
-        void SetComboBoxValue(ComboBox cb, IDictionary<int, string> dict, int value)
+        void SetStringComboBoxValue(ComboBox cb, IDictionary<int, string> dict, int value)
         {
             if (cb.Items.Count > dict.Count)
                 cb.Items.RemoveAt(cb.Items.Count - 1);
@@ -232,9 +212,7 @@ namespace CaveStoryEditor
             }
         }
 
-        #endregion
-
-        #region UI -> entry
+        //UI -> entry
         void ComboBoxChanged(object sender, EventArgs e)
         {
             if (!lockNpcTableEntry)
@@ -274,18 +252,12 @@ namespace CaveStoryEditor
                 lockNpcTableEntry = false;
             }
         }
-        #endregion
-
+        
         #endregion
 
         #endregion
 
         #region Hitbox/Viewbox rendering
-
-        #region graphics functions for the hitbox/viewbox
-        
-        
-        #endregion
 
         bool hitboxFacingRight = true;
         private void changeHitboxDirectionButton_Click(object sender, EventArgs e)
@@ -319,7 +291,7 @@ namespace CaveStoryEditor
             set
             {
                 //the_man.gif
-                bitsCheckedListBox.Enabled = value;
+                bitEditor1.Enabled = value;
                 lifeNumericUpDown.Enabled = value;
                 spriteSurfaceComboBox.Enabled = value;
                 hitSoundComboBox.Enabled = value;
@@ -407,13 +379,13 @@ namespace CaveStoryEditor
                 viewboxPreview1.DrawViewbox(selectedNPCTableEntry.Viewbox);
                 //all the enums
                 selectedNPCTableEntry.PropertyChanged += currentNPCTableEntry_PropertyChanged;
-                SetComboBoxValue(spriteSurfaceComboBox, surfaceDescriptors, selectedNPCTableEntry.SpriteSurface);
-                SetComboBoxValue(hitSoundComboBox, soundEffects, selectedNPCTableEntry.HitSound);
-                SetComboBoxValue(deathSoundComboBox, soundEffects, selectedNPCTableEntry.DeathSound);
-                SetComboBoxValue(smokeSizeComboBox, smokeSizes, selectedNPCTableEntry.SmokeSize);
+                SetSurfaceComboBoxValue(spriteSurfaceComboBox, surfaceDescriptors, selectedNPCTableEntry.SpriteSurface);
+                SetStringComboBoxValue(hitSoundComboBox, soundEffects, selectedNPCTableEntry.HitSound);
+                SetStringComboBoxValue(deathSoundComboBox, soundEffects, selectedNPCTableEntry.DeathSound);
+                SetStringComboBoxValue(smokeSizeComboBox, smokeSizes, selectedNPCTableEntry.SmokeSize);
 
                 //bits are down here because the event has been subscribed by this point
-                SetBitsUI(selectedNPCTableEntry.Bits);
+                bitEditor1.UnderlyingBitValue = (ulong)selectedNPCTableEntry.Bits;
             }
         }
 
