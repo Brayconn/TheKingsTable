@@ -58,56 +58,6 @@ namespace CaveStoryEditor
             {
                 var index = bulletTablePropertyGridListBox1.List.IndexOf(bte);
                 var val = $"{index} - ";
-                //HACK these should be in the mod
-                var TEMP_VALUES = new List<string>
-                {
-                    "Null",
-                    "Snake Lv. 1",
-                    "Snake Lv. 2",
-                    "Snake Lv. 3",
-                    "Polar Star Lv. 1",
-                    "Polar Star Lv. 2",
-                    "Polar Star Lv. 3",
-                    "Fireball Lv. 1",
-                    "Fireball Lv. 2",
-                    "Fireball Lv. 3",
-                    "Machine Gun Lv. 1",
-                    "Machine Gun Lv. 2",
-                    "Machine Gun Lv. 3",
-                    "Missile Launcher Lv. 1",
-                    "Missile Launcher Lv. 2",
-                    "Missile Launcher Lv. 3",
-                    "Missile Launcher (Explosion) Lv. 1",
-                    "Missile Launcher (Explosion) Lv. 2",
-                    "Missile Launcher (Explosion) Lv. 3",
-                    "Bubbler Lv. 1",
-                    "Bubbler Lv. 2",
-                    "Bubbler Lv. 3",
-                    "Bubbler (Spines) Lv. 3",
-                    "Blade (Slashes) Lv. 3",
-                    "Egg Corridor? Falling Spike",
-                    "Blade Lv. 1",
-                    "Blade Lv. 2",
-                    "Blade Lv. 3",
-                    "Super Missile Launcher Lv. 1",
-                    "Super Missile Launcher Lv. 2",
-                    "Super Missile Launcher Lv. 3",
-                    "Super Missile Launcher (Explosion) Lv. 1",
-                    "Super Missile Launcher (Explosion) Lv. 2",
-                    "Super Missile Launcher (Explosion) Lv. 3",
-                    "Nemesis Lv. 1",
-                    "Nemesis Lv. 2",
-                    "Nemesis Lv. 3",
-                    "Spur Lv. 1",
-                    "Spur Lv. 2",
-                    "Spur Lv. 3",
-                    "Spur (Trail Tail) Lv. 3",
-                    "Spur (Trail Body) Lv. 3",
-                    "Spur (Trail Head) Lv. 3",
-                    "Curly's Nemesis",
-                    "Debug Kill-all Bullet",
-                    "Whimsical Star"
-                };
                 if(index < TEMP_VALUES.Count)
                 {
                     val += TEMP_VALUES[index];

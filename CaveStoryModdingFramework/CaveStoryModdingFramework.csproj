@@ -47,7 +47,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="290.cs" />
-    <Compile Include="AssetManager.cs" />
+    <Compile Include="Lists\BulletList.cs" />
+    <Compile Include="Lists\SurfaceList.cs" />
+    <Compile Include="Utilities\AssetManager.cs" />
     <Compile Include="Attributes.cs" />
     <Compile Include="BackgroundTypeNames.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -59,7 +61,7 @@
     <Compile Include="Compatability\Patcher.cs" />
     <Compile Include="Compatability\Scriptsource.cs" />
     <Compile Include="Compatability\TSCListTXT.cs" />
-    <Compile Include="DataLocation.cs" />
+    <Compile Include="Utilities\DataLocation.cs" />
     <Compile Include="Lists\BackgroundTypes.cs" />
     <Compile Include="Lists\Bosses.cs" />
     <Compile Include="BossNames.Designer.cs">
@@ -68,7 +70,7 @@
       <DependentUpon>BossNames.resx</DependentUpon>
     </Compile>
     <Compile Include="Profile.cs" />
-    <Compile Include="PropertyChangedHelper.cs" />
+    <Compile Include="Utilities\PropertyChangedHelper.cs" />
     <Compile Include="Rectangles.cs" />
     <Compile Include="Dialog.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -81,7 +83,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SmokeSizeNames.resx</DependentUpon>
     </Compile>
-    <Compile Include="SpriteCache.cs" />
+    <Compile Include="Utilities\SpriteCache.cs" />
     <Compile Include="SurfaceNames.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -97,8 +99,8 @@
     <Compile Include="TSC\CommandList.cs" />
     <Compile Include="TSC\Encryptor.cs" />
     <Compile Include="Entities.cs" />
-    <Compile Include="EntityList.cs" />
-    <Compile Include="Extensions.cs" />
+    <Compile Include="Lists\EntityList.cs" />
+    <Compile Include="Utilities\Extensions.cs" />
     <Compile Include="FlagEnumEditor.cs">
       <SubType>Component</SubType>
     </Compile>

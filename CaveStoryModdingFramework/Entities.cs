@@ -1,7 +1,10 @@
-﻿using System;
+﻿using LocalizeableComponentModel;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace CaveStoryModdingFramework.Entities
@@ -28,6 +31,9 @@ namespace CaveStoryModdingFramework.Entities
         ShowDamage = 0x8000             // Show the number of damage taken when harmed
     };
 
+    /// <summary>
+    /// The actual entity class
+    /// </summary>
     public class Entity : PropertyChangedHelper
     {
         short x,y,flag,@event,type;
@@ -51,6 +57,91 @@ namespace CaveStoryModdingFramework.Entities
             Type = type;
             Bits = bits;
         }        
+    }
+    
+    /// <summary>
+    /// Shell over multiple entities to allow for editing multiple entities at once
+    /// </summary>
+    public class MultiEntityShell : PropertyChangedHelper
+    {
+        readonly Entity[] hosts;
+        private T GetProperty<T>(Entity e, PropertyInfo property)
+        {
+            return (T)property.GetValue(e);
+        }
+        private T? GetProperty<T>([CallerMemberName] string propertyName = "") where T : struct
+        {
+            var property = typeof(Entity).GetProperty(propertyName);
+            T? val = GetProperty<T?>(hosts[0], property);
+            for (int i = 1; i < hosts.Length; i++)
+                if (!val.Equals(GetProperty<T>(hosts[i], property)))
+                    return null;
+            return val;
+        }
+
+        private void SetProperty<T>(T value, [CallerMemberName] string propertyName = "")
+        {
+            if (value == null)
+                return;
+            NotifyPropertyChanging(propertyName);
+            var property = typeof(Entity).GetProperty(propertyName);
+            foreach (var entity in hosts)
+            {
+                property.SetValue(entity, value);
+            }
+            NotifyPropertyChanged(propertyName);
+        }
+
+        [LocalizeableDescription(nameof(Dialog.XDescription), typeof(Dialog))]
+        public short? X { get => GetProperty<short>(); set => SetProperty(value); }
+        [LocalizeableDescription(nameof(Dialog.YDescription), typeof(Dialog))]
+        public short? Y { get => GetProperty<short>(); set => SetProperty(value); }
+        [LocalizeableDescription(nameof(Dialog.FlagDescription), typeof(Dialog))]
+        public short? Flag { get => GetProperty<short>(); set => SetProperty(value); }
+        [LocalizeableDescription(nameof(Dialog.EventDescription), typeof(Dialog))]
+        public short? Event { get => GetProperty<short>(); set => SetProperty(value); }
+        [LocalizeableDescription(nameof(Dialog.TypeDescription), typeof(Dialog))]
+        public short? Type { get => GetProperty<short>(); set => SetProperty(value); }
+        [LocalizeableDescription(nameof(Dialog.BitsDescription), typeof(Dialog))]
+        public EntityFlags? Bits { get => GetProperty<EntityFlags>(); set => SetProperty(value); }
+
+
+        public MultiEntityShell(params Entity[] ents)
+        {
+            if (ents.Length < 1)
+                throw new ArgumentException("You must supply at least one entity.", nameof(ents));
+            hosts = ents;
+        }
+    }
+
+    /// <summary>
+    /// Shell over an entity to allow for adding entity specific interfaces
+    /// </summary>
+    public abstract class EntityShell
+    {
+        readonly Entity host;
+
+
+        [LocalizeableDescription(nameof(Dialog.XDescription), typeof(Dialog))]
+        public short X { get => host.X; set => host.X = value; }
+
+        [LocalizeableDescription(nameof(Dialog.YDescription), typeof(Dialog))]
+        public short Y { get => host.Y; set => host.Y = value; }
+        [LocalizeableDescription(nameof(Dialog.FlagDescription), typeof(Dialog))]
+        public short Flag { get => host.Flag; set => host.Flag = value; }
+        [LocalizeableDescription(nameof(Dialog.EventDescription), typeof(Dialog))]
+        public short Event { get => host.Event; set => host.Event = value; }
+
+        [LocalizeableDescription(nameof(Dialog.TypeDescription), typeof(Dialog))]
+        public short Type { get => host.Type; set => host.Type = value; }
+
+        [LocalizeableDescription(nameof(Dialog.BitsDescription), typeof(Dialog))]
+        public EntityFlags Bits { get => host.Bits; set => host.Bits = value; }
+
+        protected EntityShell(Entity e)
+        {
+            host = e;
+        }
     }
 
     public static class PXE

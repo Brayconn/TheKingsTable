@@ -52,22 +52,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BitEditor.cs">
+    <Compile Include="Controls\BitEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="BitEditor.Designer.cs">
+    <Compile Include="Controls\BitEditor.Designer.cs">
       <DependentUpon>BitEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="BulletTableEditor.cs">
+    <Compile Include="Controls\BulletTableEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="BulletTableEditor.Designer.cs">
+    <Compile Include="Controls\BulletTableEditor.Designer.cs">
       <DependentUpon>BulletTableEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="BulletTablePropertyGridListBox.cs">
+    <Compile Include="Controls\BulletTablePropertyGridListBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="BulletTablePropertyGridListBox.Designer.cs">
+    <Compile Include="Controls\BulletTablePropertyGridListBox.Designer.cs">
       <DependentUpon>BulletTablePropertyGridListBox.cs</DependentUpon>
     </Compile>
     <Compile Include="Editor.Designer.cs">
@@ -75,34 +75,34 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Editor.settings</DependentUpon>
     </Compile>
-    <Compile Include="EditorManager.cs" />
+    <Compile Include="Utilities\EditorManager.cs" />
     <Compile Include="EditorSettings.cs" />
-    <Compile Include="EnumColumn.cs" />
-    <Compile Include="FlagScratchPad.cs">
+    <Compile Include="Utilities\EnumColumn.cs" />
+    <Compile Include="Controls\FlagScratchPad.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="FlagScratchPad.Designer.cs">
+    <Compile Include="Controls\FlagScratchPad.Designer.cs">
       <DependentUpon>FlagScratchPad.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormAttributeEditor.cs">
+    <Compile Include="MainWindows\FormAttributeEditor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormAttributeEditor.designer.cs">
+    <Compile Include="MainWindows\FormAttributeEditor.designer.cs">
       <DependentUpon>FormAttributeEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormGoto.cs">
+    <Compile Include="DialogWindows\FormGoto.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormGoto.Designer.cs">
+    <Compile Include="DialogWindows\FormGoto.Designer.cs">
       <DependentUpon>FormGoto.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormMain.cs">
+    <Compile Include="MainWindows\FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormMain.Designer.cs">
+    <Compile Include="MainWindows\FormMain.Designer.cs">
       <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormMain_StageTable.cs">
+    <Compile Include="MainWindows\FormMain_StageTable.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormOpenStageFiles.cs">
@@ -111,38 +111,38 @@
     <Compile Include="FormOpenStageFiles.Designer.cs">
       <DependentUpon>FormOpenStageFiles.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormScriptEditor.cs">
+    <Compile Include="MainWindows\FormScriptEditor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormScriptEditor.Designer.cs">
+    <Compile Include="MainWindows\FormScriptEditor.Designer.cs">
       <DependentUpon>FormScriptEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormStageEditor.cs">
+    <Compile Include="MainWindows\FormStageEditor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormStageEditor.designer.cs">
+    <Compile Include="MainWindows\FormStageEditor.designer.cs">
       <DependentUpon>FormStageEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormStageTableExporter.cs">
+    <Compile Include="DialogWindows\FormStageTableExporter.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormStageTableExporter.Designer.cs">
+    <Compile Include="DialogWindows\FormStageTableExporter.Designer.cs">
       <DependentUpon>FormStageTableExporter.cs</DependentUpon>
     </Compile>
-    <Compile Include="HitboxPreview.cs">
+    <Compile Include="Controls\HitboxPreview.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="HitboxPreview.Designer.cs">
+    <Compile Include="Controls\HitboxPreview.Designer.cs">
       <DependentUpon>HitboxPreview.cs</DependentUpon>
     </Compile>
-    <Compile Include="ViewboxPreview.cs">
+    <Compile Include="Controls\ViewboxPreview.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ViewboxPreview.Designer.cs">
+    <Compile Include="Controls\ViewboxPreview.Designer.cs">
       <DependentUpon>ViewboxPreview.cs</DependentUpon>
     </Compile>
-    <Compile Include="IUndo.cs" />
-    <Compile Include="FormStageEditor_MapDisplay.cs">
+    <Compile Include="Utilities\IUndo.cs" />
+    <Compile Include="MainWindows\FormStageEditor_MapDisplay.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Keybinds.Designer.cs">
@@ -150,22 +150,22 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Keybinds.settings</DependentUpon>
     </Compile>
-    <Compile Include="MapResizeControl.cs">
+    <Compile Include="Controls\MapResizeControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="MapResizeControl.designer.cs">
+    <Compile Include="Controls\MapResizeControl.designer.cs">
       <DependentUpon>MapResizeControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="NPCTableEditor.cs">
+    <Compile Include="Controls\NPCTableEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="NPCTableEditor.Designer.cs">
+    <Compile Include="Controls\NPCTableEditor.Designer.cs">
       <DependentUpon>NPCTableEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="NPCTablePropertyGridListBox.cs">
+    <Compile Include="Controls\NPCTablePropertyGridListBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="NPCTablePropertyGridListBox.Designer.cs">
+    <Compile Include="Controls\NPCTablePropertyGridListBox.Designer.cs">
       <DependentUpon>NPCTablePropertyGridListBox.cs</DependentUpon>
     </Compile>
     <Compile Include="Patcher.Designer.cs">
@@ -175,18 +175,18 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PropertyGridListBox.cs">
+    <Compile Include="Controls\PropertyGridListBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="PropertyGridListBox.Designer.cs">
+    <Compile Include="Controls\PropertyGridListBox.Designer.cs">
       <DependentUpon>PropertyGridListBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="PropertyGridShell.cs">
+    <Compile Include="Controls\PropertyGridShell.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ScintillaExtensions.cs" />
-    <Compile Include="SharedGraphics.cs" />
-    <Compile Include="FormStageEditor_TilesetDisplay.cs">
+    <Compile Include="Utilities\ScintillaExtensions.cs" />
+    <Compile Include="Utilities\SharedGraphics.cs" />
+    <Compile Include="MainWindows\FormStageEditor_TilesetDisplay.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI.Designer.cs">
@@ -194,46 +194,46 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>UI.settings</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="BitEditor.resx">
+    <EmbeddedResource Include="Controls\BitEditor.resx">
       <DependentUpon>BitEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="BulletTableEditor.resx">
+    <EmbeddedResource Include="Controls\BulletTableEditor.resx">
       <DependentUpon>BulletTableEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FlagScratchPad.resx">
+    <EmbeddedResource Include="Controls\FlagScratchPad.resx">
       <DependentUpon>FlagScratchPad.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormAttributeEditor.resx">
+    <EmbeddedResource Include="MainWindows\FormAttributeEditor.resx">
       <DependentUpon>FormAttributeEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormGoto.resx">
+    <EmbeddedResource Include="DialogWindows\FormGoto.resx">
       <DependentUpon>FormGoto.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormMain.resx">
+    <EmbeddedResource Include="MainWindows\FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormOpenStageFiles.resx">
       <DependentUpon>FormOpenStageFiles.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormScriptEditor.resx">
+    <EmbeddedResource Include="MainWindows\FormScriptEditor.resx">
       <DependentUpon>FormScriptEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormStageEditor.resx">
+    <EmbeddedResource Include="MainWindows\FormStageEditor.resx">
       <DependentUpon>FormStageEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormStageTableExporter.resx">
+    <EmbeddedResource Include="DialogWindows\FormStageTableExporter.resx">
       <DependentUpon>FormStageTableExporter.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="HitboxPreview.resx">
+    <EmbeddedResource Include="Controls\HitboxPreview.resx">
       <DependentUpon>HitboxPreview.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ViewboxPreview.resx">
+    <EmbeddedResource Include="Controls\ViewboxPreview.resx">
       <DependentUpon>ViewboxPreview.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MapResizeControl.resx">
+    <EmbeddedResource Include="Controls\MapResizeControl.resx">
       <DependentUpon>MapResizeControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="NPCTableEditor.resx">
+    <EmbeddedResource Include="Controls\NPCTableEditor.resx">
       <DependentUpon>NPCTableEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -245,7 +245,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="PropertyGridListBox.resx">
+    <EmbeddedResource Include="Controls\PropertyGridListBox.resx">
       <DependentUpon>PropertyGridListBox.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Editor.settings">
@@ -309,5 +309,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
