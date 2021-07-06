@@ -59,6 +59,7 @@
             this.insertButton = new System.Windows.Forms.Button();
             this.npcTableTabPage = new System.Windows.Forms.TabPage();
             this.npcTableEditor = new CaveStoryEditor.NPCTableEditor();
+            this.bulletTableTabPage = new System.Windows.Forms.TabPage();
             this.assetsTabPage = new System.Windows.Forms.TabPage();
             this.assetsTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.pxmListBox = new System.Windows.Forms.ListBox();
@@ -74,7 +75,7 @@
             this.modSettingsTabPage = new System.Windows.Forms.TabPage();
             this.modPropertyGrid = new CaveStoryEditor.PropertyGridShell();
             this.editorSettingsTabPage = new System.Windows.Forms.TabPage();
-            this.bulletTableTabPage = new System.Windows.Forms.TabPage();
+            this.bulletTableEditor1 = new CaveStoryEditor.BulletTableEditor();
             this.menuStrip1.SuspendLayout();
             this.mainTabControl.SuspendLayout();
             this.stageTableTabPage.SuspendLayout();
@@ -85,6 +86,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.stageTableDataGridView)).BeginInit();
             this.tableLayoutPanel7.SuspendLayout();
             this.npcTableTabPage.SuspendLayout();
+            this.bulletTableTabPage.SuspendLayout();
             this.assetsTabPage.SuspendLayout();
             this.assetsTableLayoutPanel.SuspendLayout();
             this.modSettingsTabPage.SuspendLayout();
@@ -408,6 +410,16 @@
             this.npcTableEditor.Size = new System.Drawing.Size(786, 394);
             this.npcTableEditor.TabIndex = 0;
             // 
+            // bulletTableTabPage
+            // 
+            this.bulletTableTabPage.Controls.Add(this.bulletTableEditor1);
+            this.bulletTableTabPage.Location = new System.Drawing.Point(4, 22);
+            this.bulletTableTabPage.Name = "bulletTableTabPage";
+            this.bulletTableTabPage.Size = new System.Drawing.Size(792, 400);
+            this.bulletTableTabPage.TabIndex = 5;
+            this.bulletTableTabPage.Text = "Bullet Table";
+            this.bulletTableTabPage.UseVisualStyleBackColor = true;
+            // 
             // assetsTabPage
             // 
             this.assetsTabPage.Controls.Add(this.assetsTableLayoutPanel);
@@ -580,14 +592,13 @@
             this.editorSettingsTabPage.Text = "Editor Settings";
             this.editorSettingsTabPage.UseVisualStyleBackColor = true;
             // 
-            // bulletTableTabPage
+            // bulletTableEditor1
             // 
-            this.bulletTableTabPage.Location = new System.Drawing.Point(4, 22);
-            this.bulletTableTabPage.Name = "bulletTableTabPage";
-            this.bulletTableTabPage.Size = new System.Drawing.Size(792, 400);
-            this.bulletTableTabPage.TabIndex = 5;
-            this.bulletTableTabPage.Text = "Bullet Table";
-            this.bulletTableTabPage.UseVisualStyleBackColor = true;
+            this.bulletTableEditor1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bulletTableEditor1.Location = new System.Drawing.Point(0, 0);
+            this.bulletTableEditor1.Name = "bulletTableEditor1";
+            this.bulletTableEditor1.Size = new System.Drawing.Size(792, 400);
+            this.bulletTableEditor1.TabIndex = 0;
             // 
             // FormMain
             // 
@@ -613,6 +624,7 @@
             this.tableLayoutPanel7.ResumeLayout(false);
             this.tableLayoutPanel7.PerformLayout();
             this.npcTableTabPage.ResumeLayout(false);
+            this.bulletTableTabPage.ResumeLayout(false);
             this.assetsTabPage.ResumeLayout(false);
             this.assetsTableLayoutPanel.ResumeLayout(false);
             this.assetsTableLayoutPanel.PerformLayout();
@@ -670,6 +682,7 @@
         private System.Windows.Forms.TabPage npcTableTabPage;
         private NPCTableEditor npcTableEditor;
         private System.Windows.Forms.TabPage bulletTableTabPage;
+        private BulletTableEditor bulletTableEditor1;
     }
 }
 

@@ -58,6 +58,18 @@
     <Compile Include="BitEditor.Designer.cs">
       <DependentUpon>BitEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="BulletTableEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="BulletTableEditor.Designer.cs">
+      <DependentUpon>BulletTableEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BulletTablePropertyGridListBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="BulletTablePropertyGridListBox.Designer.cs">
+      <DependentUpon>BulletTablePropertyGridListBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="Editor.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -184,6 +196,9 @@
     </Compile>
     <EmbeddedResource Include="BitEditor.resx">
       <DependentUpon>BitEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BulletTableEditor.resx">
+      <DependentUpon>BulletTableEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FlagScratchPad.resx">
       <DependentUpon>FlagScratchPad.cs</DependentUpon>

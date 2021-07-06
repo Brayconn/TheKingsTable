@@ -1,20 +1,14 @@
 ﻿using CaveStoryModdingFramework;
 using CaveStoryModdingFramework.Entities;
-using LayeredPictureBox;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
 namespace CaveStoryEditor
 {
     public partial class NPCTableEditor : UserControl
     {
-
-                
         NPCTableEntry selectedNPCTableEntry => propertyGridListBox1.SelectedItem;
 
         Dictionary<int, ISurfaceSource> surfaceDescriptors { get; set; }

@@ -83,6 +83,10 @@ namespace CaveStoryEditor
             npcTableEditor.InitMod(mod);
             npcTableEditor.LoadTable(mod.NPCTable);
 
+            //bullet table
+            bulletTableEditor1.InitMod(mod);
+            //TODO
+
             saveNPCTableToolStripMenuItem.Enabled = true;
             exportNPCTableToolStripMenuItem.Enabled = true;
 

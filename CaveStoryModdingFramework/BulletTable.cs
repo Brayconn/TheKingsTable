@@ -53,7 +53,6 @@ namespace CaveStoryModdingFramework
     [Flags]
     public enum BulletFlags : uint
     {
-
         PierceTiles = 0x04,
         CollideWithTiles = 0x08,
         PierceInvincibleEntities = 0x10,
