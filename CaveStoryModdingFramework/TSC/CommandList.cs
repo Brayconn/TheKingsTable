@@ -106,6 +106,7 @@ namespace CaveStoryModdingFramework.TSC
         public static readonly IReadOnlyList<Command> OtherCommands = new List<Command>()
         {
             //CS+ exclusive
+            new Command("<FAC", "FACe", "Show facepic", new Argument("Mirrored",1, ArgumentTypes.Number, ""), new Argument("Talking",1, ArgumentTypes.Number, ""), new Argument("Face",2, ArgumentTypes.Face, "")){ Author = "Nicalis" },
             new Command("<I+N", "Item + N", "Add 1 of item X to the inventory, with a maximum of Y", ArgumentTypes.Item, ArgumentTypes.Number){ Author = "Nicalis" },
             new Command("<2MV", "2nd player MoVe", "Moves the player who didn't trigger this event to the one who did. Values < 11 put the player one tile away, anything greater puts them X/10 pixels away", ArgumentTypes.Number){ Author = "Nicalis" },
             new Command("<HM2", "Hide My character 2", "Hides only the player who triggered the event"){ Author = "Nicalis" },
