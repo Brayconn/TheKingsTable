@@ -7,7 +7,7 @@ using System.Globalization;
 using System.IO;
 using System.Runtime.CompilerServices;
 
-namespace CaveStoryModdingFramework.Entities
+namespace CaveStoryModdingFramework
 {
     public static class RectExtensions
     {
@@ -30,7 +30,19 @@ namespace CaveStoryModdingFramework.Entities
             bw.Write(rect.RightOffset);
             bw.Write(rect.Unused);
         }
+
+        public static Rectangle RectFromString(string input)
+        {
+            var nums = input.Split(',');
+            return new Rectangle(int.Parse(nums[0]), int.Parse(nums[1]), int.Parse(nums[2]), int.Parse(nums[3]));
+        }
+        public static string RectToString(Rectangle rect)
+        {
+            return $"{rect.X},{rect.Y},{rect.Width},{rect.Height}";
+        }
     }
+
+    #region Bullet rect
 
     [DebuggerDisplay("LeftOffset = {LeftOffset} YOffset = {YOffset} RightOffset = {RightOffset} Unused = {Unused}")]
     public class BulletViewRect
@@ -80,6 +92,10 @@ namespace CaveStoryModdingFramework.Entities
                 return base.ConvertTo(context, culture, value, destinationType);
         }
     }
+
+    #endregion
+
+    #region npc.tbl rects
 
     /// <summary>
     /// A rectangle with four byte values
@@ -218,4 +234,6 @@ namespace CaveStoryModdingFramework.Entities
             return new Size(rect.Back + rect.Front, rect.Top + rect.Bottom);
         }
     }
+
+    #endregion
 }

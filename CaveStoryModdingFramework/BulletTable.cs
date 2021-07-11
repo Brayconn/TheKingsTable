@@ -16,6 +16,10 @@ namespace CaveStoryModdingFramework
         public int BulletCount { get; set; }
         public bool PadDamageAndHits { get; set; }
 
+        private BulletTableLocation()
+        {
+
+        }
         public BulletTableLocation(string path)
         {
             Filename = path;

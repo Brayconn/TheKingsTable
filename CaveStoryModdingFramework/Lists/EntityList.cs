@@ -1,31 +1,49 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
-using System.ComponentModel;
+using System.Xml.Serialization;
+using System.Diagnostics;
+using System.Xml.Schema;
+using System.Xml;
 
 namespace CaveStoryModdingFramework.Entities
 {
-    public class EntityInfo
+    [DebuggerDisplay("Name = {Name}")]
+    public class EntityInfo : IXmlSerializable
     {
         public string Name { get; set; }
 
-        public string Category { get; set; }
-
-        [ReadOnly(true)]
-        public Type CustomType { get; set; }
-
         public Rectangle SpriteLocation { get; set; }
 
+        public string Category { get; set; }
+        
+        public EntityInfo()
+        {
+
+        }
         public EntityInfo(string name, Rectangle spriteLocation, string category = "")
         {
             Name = name;
             Category = category;
             SpriteLocation = spriteLocation;
         }
-        public EntityInfo(string name, Type type, Rectangle spriteLocation, string category = "") : this(name, spriteLocation, category)
+
+        public XmlSchema GetSchema() => null;
+
+        public void ReadXml(XmlReader reader)
         {
-            CustomType = type;
+            Name = reader.GetAttribute(nameof(Name));
+            SpriteLocation = RectExtensions.RectFromString(reader.GetAttribute("Rect"));
+            if (reader.MoveToAttribute(nameof(Category)))
+                Category = reader.GetAttribute(nameof(Category));
+        }
+        
+        public void WriteXml(XmlWriter writer)
+        {
+            writer.WriteAttributeString(nameof(Name), Name);
+            writer.WriteAttributeString("Rect", RectExtensions.RectToString(SpriteLocation));
+            if (!string.IsNullOrWhiteSpace(Category))
+                writer.WriteAttributeString(nameof(Category), Category);
         }
     }
 

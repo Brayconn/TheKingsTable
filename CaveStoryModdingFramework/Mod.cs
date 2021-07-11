@@ -8,15 +8,15 @@ using System.IO;
 using LocalizeableComponentModel;
 using System.Text;
 using System.Drawing;
-using System.Xml.Linq;
-using System.Reflection;
 using System.Xml;
 using CaveStoryModdingFramework.TSC;
 using System.Xml.Serialization;
+using System.Xml.Schema;
 
 namespace CaveStoryModdingFramework
 {
-    public class Mod
+    [XmlRoot(XmlBase)]
+    public class Mod : IXmlSerializable
     {
         public static readonly string CaveStoryProjectFilter = $"{Dialog.ModFilterText} (*.cav)|*.cav";
         #region stage table
@@ -24,6 +24,7 @@ namespace CaveStoryModdingFramework
         public event EventHandler StageTableTypeChanged;
         
         [LocalizeableCategory(nameof(Dialog.ModStageTableCategory), typeof(Dialog))]
+        [XmlIgnore]
         public StageTablePresets StageTablePreset
         {
             get
@@ -71,10 +72,10 @@ namespace CaveStoryModdingFramework
         public StageTableLocation StageTableLocation { get; set; }
         #endregion
 
-        [Browsable(false)]
+        [Browsable(false), XmlIgnore]
         public List<StageEntry> StageTable { get; private set; }
 
-        [Browsable(false)]
+        [Browsable(false), XmlIgnore]
         public List<NPCTableEntry> NPCTable { get; private set; }
 
         #region path/folder stuff
@@ -85,11 +86,16 @@ namespace CaveStoryModdingFramework
         [LocalizeableCategory(nameof(Dialog.FoldersCategory), typeof(Dialog))]
         public string BaseDataPath { get; set; }
 
+        [LocalizeableCategory(nameof(Dialog.FoldersCategory), typeof(Dialog)), TypeConverter(typeof(ExpandableObjectConverter))]
+        public AssetManager FolderPaths { get; private set; }
+
+
         [LocalizeableCategory(nameof(Dialog.FoldersCategory), typeof(Dialog))]
         public string NpcTablePath { get; set; }
 
         [LocalizeableCategory(nameof(Dialog.FoldersCategory), typeof(Dialog)), TypeConverter(typeof(ExpandableObjectConverter))]
-        public AssetManager FolderPaths { get; private set; }
+        public BulletTableLocation BulletTableLocation { get; private set; }
+
         #endregion
 
         [LocalizeableCategory(nameof(Dialog.TilesCategory), typeof(Dialog))]
@@ -251,25 +257,33 @@ namespace CaveStoryModdingFramework
         #region user configurable enums
 
         [Browsable(false)]
-        public Dictionary<int, EntityInfo> EntityInfos { get; private set; } = new Dictionary<int, EntityInfo>();
+        public SerializableDictionary<EntityInfo> EntityInfos { get; private set; } = new SerializableDictionary<EntityInfo>();
 
         [Browsable(false)]
-        public Dictionary<int, ISurfaceSource> SurfaceDescriptors { get; private set; } = new Dictionary<int, ISurfaceSource>();
+        public SerializableDictionary<BulletInfo> BulletInfos { get; private set; } = new SerializableDictionary<BulletInfo>();
 
         [Browsable(false)]
-        public Dictionary<int, string> SoundEffects { get; private set; } = new Dictionary<int, string>();
+        public SerializableDictionary<ISurfaceSource> SurfaceDescriptors { get; private set; } = new SerializableDictionary<ISurfaceSource>();
 
         [Browsable(false)]
-        public Dictionary<int, string> SmokeSizes { get; private set; } = new Dictionary<int, string>();
+        public SerializableDictionary<string> SoundEffects { get; private set; } = new SerializableDictionary<string>();
 
         [Browsable(false)]
-        public Dictionary<long, string> BossNumbers { get; private set; } = new Dictionary<long, string>();
+        public SerializableDictionary<string> SmokeSizes { get; private set; } = new SerializableDictionary<string>();
 
         [Browsable(false)]
-        public Dictionary<long, string> BackgroundTypes { get; private set; } = new Dictionary<long, string>();
+        public SerializableDictionary<string> BossNumbers { get; private set; } = new SerializableDictionary<string>();
+
+        [Browsable(false)]
+        public SerializableDictionary<string> BackgroundTypes { get; private set; } = new SerializableDictionary<string>();
 
         #endregion
 
+        //TODO this should do something
+        public Mod()
+        {
+            FolderPaths = new AssetManager(this);
+        }
 
         /// <summary>
         /// Create a new mod from the given data folder, stage table location, and stage table type
@@ -320,6 +334,9 @@ namespace CaveStoryModdingFramework
                     break;
             }
 
+            //TODO actually support choosing a bullet table type
+            BulletTableLocation = new BulletTableLocation(EXEPath, BulletTablePresets.doukutsuexe);
+
             NpcTablePath = Path.Combine(BaseDataPath, Entities.NPCTable.NPCTBL);
             if(File.Exists(NpcTablePath))
                 NPCTable = Entities.NPCTable.Load(NpcTablePath);
@@ -329,25 +346,19 @@ namespace CaveStoryModdingFramework
                 SurfaceDescriptors.Add(surface.Key, (ISurfaceSource)surface.Value.Clone());
 
             //TODO related to the one above
-            SoundEffects = new Dictionary<int, string>(CaveStoryModdingFramework.SoundEffects.SoundEffectList);
-            SmokeSizes = new Dictionary<int, string>(CaveStoryModdingFramework.SmokeSizes.SmokeSizeList);
-            BossNumbers = new Dictionary<long, string>(CaveStoryModdingFramework.Bosses.BossNameList);
-            BackgroundTypes = new Dictionary<long, string>(CaveStoryModdingFramework.BackgroundTypes.BackgroundTypeList);
+            SoundEffects = new SerializableDictionary<string>(CaveStoryModdingFramework.SoundEffects.SoundEffectList);
+            SmokeSizes = new SerializableDictionary<string>(CaveStoryModdingFramework.SmokeSizes.SmokeSizeList);
+            BossNumbers = new SerializableDictionary<string>(CaveStoryModdingFramework.Bosses.BossNameList);
+            BackgroundTypes = new SerializableDictionary<string>(CaveStoryModdingFramework.BackgroundTypes.BackgroundTypeList);
 
-            EntityInfos = new Dictionary<int, EntityInfo>(EntityList.EntityInfos);
+            EntityInfos = new SerializableDictionary<EntityInfo>(EntityList.EntityInfos);
+            BulletInfos = new SerializableDictionary<BulletInfo>(BulletList.BulletInfos);
 
             Commands = new List<Command>(CommandList.BaseCommands);
         }
 
-        static Rectangle RectFromString(string input)
-        {
-            var nums = input.Split(',');
-            return new Rectangle(int.Parse(nums[0]), int.Parse(nums[1]), int.Parse(nums[2]), int.Parse(nums[3]));
-        }
-        static string RectToString(Rectangle rect)
-        {
-            return $"{rect.X},{rect.Y},{rect.Width},{rect.Height}";
-        }
+        //This is slightly hacky, but I think it's the only way to go...
+        private string relativeDataPath = null;
 
         /// <summary>
         /// Saves this mod to a given file
@@ -355,145 +366,22 @@ namespace CaveStoryModdingFramework
         /// <param name="path"></param>
         public void Save(string path)
         {
-            var relativeDataPath = AssetManager.MakeRelative(path, BaseDataPath);
-            var relativeEXEPath = AssetManager.MakeRelative(BaseDataPath, EXEPath);
-            var relativeNpcTablePath = AssetManager.MakeRelative(BaseDataPath, NpcTablePath);
+            var serializer = new XmlSerializer(typeof(Mod));
+            var settings = new XmlWriterSettings()
+            {
+                Indent = true
+            };
+            relativeDataPath = AssetManager.MakeRelative(path, BaseDataPath);
+            using (var x = XmlWriter.Create(new FileStream(path, FileMode.Create, FileAccess.Write), settings))
+                serializer.Serialize(x, this);
+            relativeDataPath = null;
+        }
 
+        public XmlSchema GetSchema() => null;
 
-            XElement SerializeEntities(IDictionary<int, EntityInfo> dict, string name, string valName, string keyName = "Key")
-            {
-                var baseAssembly = Assembly.GetAssembly(typeof(Mod));
-                var @base = new XElement(name);
-                foreach(var item in dict)
-                {
-                    var i = new XElement(valName,
-                        new XAttribute(keyName, item.Key),
-                        new XAttribute("Name", item.Value.Name),
-                        new XAttribute("Rect", RectToString(item.Value.SpriteLocation))
-                        );
-                    if (!string.IsNullOrWhiteSpace(item.Value.Category))
-                        i.Add(new XAttribute("Category", item.Value.Category));
-                    if (item.Value.CustomType != null)
-                    {
-                        i.Add(new XAttribute("Type", item.Value.CustomType.FullName));
-                        var a = Assembly.GetAssembly(item.Value.CustomType);
-                        if (a != baseAssembly)
-                            i.Add(new XAttribute("dll", a.GetName()));
-                    }
-                    @base.Add(i);                        
-                }
-                return @base;
-            }
-            XElement SerializeSurfaces(IDictionary<int, ISurfaceSource> dict, string name, string valName, string keyName = "Key")
-            {
-                var @base = new XElement(name);
-                foreach(var item in dict)
-                {
-                    var i = new XElement(valName, new XAttribute(keyName, item.Key), item.Value.DisplayName);
-                    if(item.Value is SurfaceSourceFile ssf)
-                    {
-                        i.Add(new XAttribute("Type", "File"),
-                              new XAttribute("Prefix", ssf.Prefix),
-                              new XAttribute("Folder", ssf.Folder),
-                              new XAttribute("Filename", ssf.Filename)
-                              );
-                    }
-                    else if(item.Value is SurfaceSourceIndex ssi)
-                    {
-                        i.Add(new XAttribute("Type", "Index"),
-                              new XAttribute("Index", ssi.Index)
-                              );
-                    }
-                    else if(item.Value is SurfaceSourceRuntime ssr)
-                    {
-                        i.Add(new XAttribute("Type", "Runtime"));
-                    }
-                    @base.Add(i);
-                }
-                return @base;
-            }
-            XElement SerializeDict<T>(IDictionary<T, string> dict, string name, string valName, string keyName = "Key")
-            {
-                var @base = new XElement(name);
-                foreach (var item in dict)
-                {
-                    var i = new XElement(valName, new XAttribute(keyName, item.Key), item.Value);
-                    @base.Add(i);
-                }
-                return @base;
-            }
-            XElement SerializeList(List<string> list, string name, string itemName = "Item")
-            {
-                var @base = new XElement(name);
-                foreach(var item in list)
-                {
-                    @base.Add(new XElement(itemName, item));
-                }
-                return @base;
-            }
-            XElement SerializeCommands(List<Command> list, string name)
-            {
-                var xs = new XmlSerializer(typeof(List<Command>));
-                var ns = new XmlSerializerNamespaces();
-                ns.Add("", "");
-                var xd = new XDocument();
-                using (var xw = xd.CreateWriter())
-                {
-                    //xw.Settings.OmitXmlDeclaration = true;
-                    //xw.Settings.Indent = true;
-                    xs.Serialize(xw, list, ns);
-                }
-                xd.Root.Name = name;
-                return xd.Root;
-            }
-            
-            new XDocument(
-                new XElement("CaveStoryMod",
-                    new XElement("Paths", 
-                        new XElement("BaseDataPath", relativeDataPath),
-                        new XElement("EXEPath", relativeEXEPath),
-                        SerializeList(FolderPaths.DataPaths, "DataFolders"),
-                        SerializeList(FolderPaths.StagePaths, "StageFolders"),
-                        SerializeList(FolderPaths.NpcPaths, "NpcFolders"),
-                        new XElement("NpcTablePath", relativeNpcTablePath)
-                    ),
-                    new XElement("StageTable",
-                        StageTableLocation.ToXML("Location", BaseDataPath),
-                        StageTableSettings.ToXML("StageTableSettings")
-                    ),
-                    new XElement("TileSize", TileSize),
-                    new XElement("Images",
-                        new XElement("TransparentColor", ColorTranslator.ToHtml(TransparentColor)),
-                        new XElement("CopyrightText", copyrightText)
-                    ),
-                    new XElement("Filenames",
-                        new XElement("TilesetPrefix", TilesetPrefix),
-                        new XElement("SpritesheetPrefix", SpritesheetPrefix),
-                        new XElement("StageExtension", StageExtension),
-                        new XElement("EntityExtension", EntityExtension),
-                        new XElement("ImageExtension", ImageExtension),
-                        new XElement("TSCExtension", TSCExtension),
-                        new XElement("AttributeExtension", AttributeExtension)
-                    ),
-                    new XElement("TSC",
-                        new XElement("UseScriptSource", UseScriptSource),
-                        new XElement("TSCEncrypted", TSCEncrypted),
-                        new XElement("DefaultKey", DefaultKey),
-                        new XElement("TSCEncoding", TSCEncoding.WebName)
-                    ),
-                    new XElement("Gameplay",
-                        new XElement("ScreenWidth", ScreenWidth),
-                        new XElement("ScreenHeight", ScreenHeight)
-                    ),
-                    SerializeEntities(EntityInfos, "EntityInfoList", "EntityInfo"),
-                    SerializeSurfaces(SurfaceDescriptors, "SurfaceList", "SurfaceDescriptor"),
-                    SerializeDict(SoundEffects, "SoundEffects", "SoundEffect"),
-                    SerializeDict(SmokeSizes, "SmokeSizes", "SmokeSize"),
-                    SerializeDict(BossNumbers, "BossNumbers", "BossNumber"),
-                    SerializeDict(BackgroundTypes, "BackgroundTypes", "BackgroundType"),
-                    SerializeCommands(Commands, "TSCCommands")
-                )
-            ).Save(path);
+        public void ReadXml(XmlReader reader)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -522,18 +410,10 @@ namespace CaveStoryModdingFramework
                 {
                     var key = int.Parse(item.Attributes["Key"].InnerText);
                     var name = item.Attributes["Name"].InnerText;
-                    var rect = RectFromString(item.Attributes["Rect"].InnerText);
+                    var rect = RectExtensions.RectFromString(item.Attributes["Rect"].InnerText);
                     var categories = item.Attributes["Category"]?.InnerText;
-                    var typeName = item.Attributes["Type"]?.InnerText;
 
-                    if (typeName != null)
-                    {
-                        dict.Add(key, new EntityInfo(name, Type.GetType(typeName), rect, categories ?? ""));
-                    }
-                    else
-                    {
-                        dict.Add(key, new EntityInfo(name, rect, categories ?? ""));
-                    }
+                    dict.Add(key, new EntityInfo(name, rect, categories ?? ""));
                 }
             }
             void LoadSurfaces(XmlElement element, IDictionary<int, ISurfaceSource> dict)
@@ -609,7 +489,7 @@ namespace CaveStoryModdingFramework
             if(st != null)
             {
                 StageTableLocation = new StageTableLocation(st["Location"], AssetManager.MakeAbsolute(BaseDataPath, st["Location"][nameof(Stages.StageTableLocation.Filename)].InnerText));
-                StageTableSettings = new StageEntrySettings(st["StageTableSettings"]);
+                //StageTableSettings = new StageEntrySettings(st["StageTableSettings"]);
                 //TODO save references
             }
 
@@ -650,11 +530,12 @@ namespace CaveStoryModdingFramework
                 ScreenHeight = int.Parse(game["ScreenHeight"].InnerText);
             }
             LoadEntities(root["EntityInfoList"], EntityInfos);
+            
             LoadSurfaces(root["SurfaceList"], SurfaceDescriptors);
             LoadDict(root["SoundEffects"], SoundEffects);
             LoadDict(root["SmokeSizes"], SmokeSizes);
-            LoadLongDict(root["BossNumbers"], BossNumbers);
-            LoadLongDict(root["BackgroundTypes"], BackgroundTypes);
+            LoadDict(root["BossNumbers"], BossNumbers);
+            LoadDict(root["BackgroundTypes"], BackgroundTypes);
             if (root["TSCCommands"] != null)
             {
                 Commands = new List<Command>(root["TSCCommands"].ChildNodes.Count);
@@ -665,6 +546,137 @@ namespace CaveStoryModdingFramework
             //TODO check npc table loading from project file
             if(File.Exists(NpcTablePath))
                 NPCTable = Entities.NPCTable.Load(NpcTablePath);
+        }
+
+        const string XmlBase = "CaveStoryMod";
+        const string XmlPaths = "Paths";
+        const string XmlStageTable = "StageTable";
+        const string XmlNPCTable = "NPCTable";
+        const string XmlBulletTable = "BulletTable";
+        const string XmlImages = "Images";
+        const string XmlFilenames = "Filenames";
+        const string XmlTSC = "TSC";
+        const string XmlGameplay = "Gameplay";
+        public void WriteXml(XmlWriter writer)
+        {
+            var blankNamespace = new XmlSerializerNamespaces();
+            blankNamespace.Add("", "");
+
+            var relativeEXEPath = AssetManager.MakeRelative(BaseDataPath, EXEPath);
+            var relativeNpcTablePath = AssetManager.MakeRelative(BaseDataPath, NpcTablePath);
+
+            void SerializeRelativeDataLocation<T>(T dl) where T : DataLocation
+            {
+                var absolute = dl.Filename;
+                dl.Filename = AssetManager.MakeRelative(BaseDataPath, absolute);
+                var dataLocSerializer = new XmlSerializer(typeof(T));
+                dataLocSerializer.Serialize(writer, dl, blankNamespace);
+                dl.Filename = absolute;
+            }
+
+            writer.WriteStartElement(XmlPaths);
+            {
+                writer.WriteElementString(nameof(BaseDataPath), relativeDataPath ?? BaseDataPath);
+                writer.WriteElementString(nameof(EXEPath), relativeEXEPath);
+
+                //TODO these should say Item
+                var listSerializer = new XmlSerializer(typeof(List<string>), new XmlRootAttribute(nameof(FolderPaths.DataPaths)));
+                listSerializer.Serialize(writer, FolderPaths.DataPaths, blankNamespace);
+
+                listSerializer = new XmlSerializer(typeof(List<string>), new XmlRootAttribute(nameof(FolderPaths.StagePaths)));
+                listSerializer.Serialize(writer, FolderPaths.StagePaths, blankNamespace);
+
+                listSerializer = new XmlSerializer(typeof(List<string>), new XmlRootAttribute(nameof(FolderPaths.NpcPaths)));
+                listSerializer.Serialize(writer, FolderPaths.NpcPaths, blankNamespace);
+            }
+            writer.WriteEndElement();
+
+            writer.WriteStartElement(XmlStageTable);
+            {
+                SerializeRelativeDataLocation(StageTableLocation);
+
+                var settingsSerializer = new XmlSerializer(typeof(StageEntrySettings));
+                settingsSerializer.Serialize(writer, StageTableSettings);
+
+                var referencesSerializer = new XmlSerializer(typeof(StageTableReferences));
+                referencesSerializer.Serialize(writer, InternalStageTableReferences, blankNamespace);
+            }
+            writer.WriteEndElement();
+
+            writer.WriteStartElement(XmlNPCTable);
+            {
+                writer.WriteElementString(nameof(NpcTablePath), relativeNpcTablePath);
+            }
+            writer.WriteEndElement();
+
+            writer.WriteStartElement(XmlBulletTable);
+            {
+                SerializeRelativeDataLocation(BulletTableLocation);
+            }
+            writer.WriteEndElement();
+
+            writer.WriteElementString(nameof(TileSize), TileSize.ToString());
+
+            writer.WriteStartElement(XmlImages);
+            {
+                writer.WriteElementString(nameof(TransparentColor), ColorTranslator.ToHtml(TransparentColor));
+
+                writer.WriteElementString(nameof(CopyrightText), copyrightText);
+            }
+            writer.WriteEndElement();
+
+            writer.WriteStartElement(XmlFilenames);
+            {
+                writer.WriteElementString(nameof(TilesetPrefix), TilesetPrefix);
+                writer.WriteElementString(nameof(SpritesheetPrefix), SpritesheetPrefix);
+                writer.WriteElementString(nameof(StageExtension), StageExtension);
+                writer.WriteElementString(nameof(EntityExtension), EntityExtension);
+                writer.WriteElementString(nameof(ImageExtension), ImageExtension);
+                writer.WriteElementString(nameof(TSCExtension), TSCExtension);
+                writer.WriteElementString(nameof(AttributeExtension), AttributeExtension);
+            }
+            writer.WriteEndElement();
+
+            writer.WriteStartElement(XmlTSC);
+            {
+                writer.WriteElementString(nameof(UseScriptSource), UseScriptSource.ToString());
+                writer.WriteElementString(nameof(TSCEncrypted), TSCEncrypted.ToString());
+                writer.WriteElementString(nameof(DefaultKey), DefaultKey.ToString());
+                writer.WriteElementString(nameof(TSCEncoding), TSCEncoding.WebName);
+            }
+            writer.WriteEndElement();
+
+            writer.WriteStartElement(XmlGameplay);
+            {
+                writer.WriteElementString(nameof(ScreenWidth), ScreenWidth.ToString());
+                writer.WriteElementString(nameof(ScreenHeight), ScreenHeight.ToString());
+            }
+            writer.WriteEndElement();
+
+            var entitySerializer = new XmlSerializer(typeof(SerializableDictionary<EntityInfo>), new XmlRootAttribute(nameof(EntityInfos)));
+            entitySerializer.Serialize(writer, EntityInfos);
+
+            var bulletSerializer = new XmlSerializer(typeof(SerializableDictionary<BulletInfo>), new XmlRootAttribute(nameof(BulletInfos)));
+            bulletSerializer.Serialize(writer, BulletInfos);
+
+            var surfaceSerializer = new XmlSerializer(typeof(SerializableDictionary<ISurfaceSource>), new XmlRootAttribute(nameof(SurfaceDescriptors)));
+            surfaceSerializer.Serialize(writer, SurfaceDescriptors);
+
+            var stringSerialzier = new XmlSerializer(typeof(SerializableDictionary<string>), new XmlRootAttribute(nameof(SoundEffects)));
+            stringSerialzier.Serialize(writer, SoundEffects);
+
+            stringSerialzier = new XmlSerializer(typeof(SerializableDictionary<string>), new XmlRootAttribute(nameof(SmokeSizes)));
+            stringSerialzier.Serialize(writer, SmokeSizes);
+
+            stringSerialzier = new XmlSerializer(typeof(SerializableDictionary<string>), new XmlRootAttribute(nameof(BossNumbers)));
+            stringSerialzier.Serialize(writer, BossNumbers);
+
+            stringSerialzier = new XmlSerializer(typeof(SerializableDictionary<string>), new XmlRootAttribute(nameof(BackgroundTypes)));
+            stringSerialzier.Serialize(writer, BackgroundTypes);
+
+            var commandSerializer = new XmlSerializer(typeof(List<Command>), new XmlRootAttribute("TSCCommands"));
+            commandSerializer.Serialize(writer, Commands, blankNamespace);
+
         }
     }
 }

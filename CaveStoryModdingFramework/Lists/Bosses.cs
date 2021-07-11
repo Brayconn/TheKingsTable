@@ -5,8 +5,9 @@ namespace CaveStoryModdingFramework
 {
     public static class Bosses
     {
-        public static readonly ReadOnlyDictionary<long, string> BossNameList
-            = new ReadOnlyDictionary<long, string>(new Dictionary<long, string>()
+        //The fact that this is <int,string> and not <long,string> theoretically causes an issue, but I think we'll be fine
+        public static readonly ReadOnlyDictionary<int, string> BossNameList
+            = new ReadOnlyDictionary<int, string>(new Dictionary<int, string>()
         {
             {0, BossNames.None },
             {1, BossNames.Omega },

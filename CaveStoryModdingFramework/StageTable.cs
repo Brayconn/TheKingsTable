@@ -10,6 +10,8 @@ using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 using System.Xml;
+using System.Xml.Serialization;
+using System.Xml.Schema;
 
 namespace CaveStoryModdingFramework.Stages
 {
@@ -101,7 +103,7 @@ namespace CaveStoryModdingFramework.Stages
     }
     public class EnumTypeTypeConverter : TypeConverter
     {
-        static readonly Type[] integerTypes = new[]
+        public static readonly Type[] integerTypes = new[]
         {
             typeof(sbyte),
             typeof(byte),
@@ -150,6 +152,10 @@ namespace CaveStoryModdingFramework.Stages
         public StageTableFormats StageTableFormat { get => stageTableFormat; set => SetVal(ref stageTableFormat, value); }
         public int StageCount { get => stageCount; set => SetVal(ref stageCount, value); }
 
+        public StageTableLocation()
+        {
+
+        }
         public StageTableLocation(string path)
         {
             Filename = path;
@@ -251,7 +257,7 @@ namespace CaveStoryModdingFramework.Stages
         }
     }
 
-    public class StageEntrySettings
+    public class StageEntrySettings : IXmlSerializable
     {
         const string VariableTypes = "Variable Types";
         const string BufferSizes = "Buffer Sizes";
@@ -294,53 +300,65 @@ namespace CaveStoryModdingFramework.Stages
                          + JapaneseNameBuffer
                          + Marshal.SizeOf(BossNumberType)
                          + MapNameBuffer
-                         + Padding;        
-        public XElement ToXML(string name)
+                         + Padding;
+
+        public XmlSchema GetSchema() => null;
+        public void WriteXml(XmlWriter writer)
         {
-            return new XElement(name,
-                    new XElement(nameof(BackgroundTypeType), BackgroundTypeType.FullName),
-                    new XElement(nameof(BossNumberType), BossNumberType.FullName),
+            writer.WriteElementString(nameof(BackgroundTypeType), BackgroundTypeType.FullName);
+            writer.WriteElementString(nameof(BossNumberType), BossNumberType.FullName);
 
-                    new XElement(nameof(FilenameEncoding), FilenameEncoding?.WebName ?? ""),
-                    new XElement(nameof(MapNameEncoding), MapNameEncoding?.WebName ?? ""),
-                    new XElement(nameof(JapaneseNameEncoding), JapaneseNameEncoding?.WebName ?? ""),
+            writer.WriteElementString(nameof(FilenameEncoding), FilenameEncoding?.WebName ?? "");
+            writer.WriteElementString(nameof(MapNameEncoding), MapNameEncoding?.WebName ?? "");
+            writer.WriteElementString(nameof(JapaneseNameEncoding), JapaneseNameEncoding?.WebName ?? "");
 
-                    new XElement(nameof(TilesetNameBuffer), TilesetNameBuffer),
-                    new XElement(nameof(FilenameBuffer), FilenameBuffer),
-                    new XElement(nameof(BackgroundNameBuffer), BackgroundNameBuffer),
-                    new XElement(nameof(Spritesheet1Buffer), Spritesheet1Buffer),
-                    new XElement(nameof(Spritesheet2Buffer), Spritesheet2Buffer),
-                    new XElement(nameof(JapaneseNameBuffer), JapaneseNameBuffer),
-                    new XElement(nameof(MapNameBuffer), MapNameBuffer),
-                    new XElement(nameof(Padding), Padding)
-                );
+            writer.WriteElementString(nameof(TilesetNameBuffer), TilesetNameBuffer.ToString());
+            writer.WriteElementString(nameof(FilenameBuffer), FilenameBuffer.ToString());
+            writer.WriteElementString(nameof(BackgroundNameBuffer), BackgroundNameBuffer.ToString());
+            writer.WriteElementString(nameof(Spritesheet1Buffer), Spritesheet1Buffer.ToString());
+            writer.WriteElementString(nameof(Spritesheet2Buffer), Spritesheet2Buffer.ToString());
+            writer.WriteElementString(nameof(JapaneseNameBuffer), JapaneseNameBuffer.ToString());
+            writer.WriteElementString(nameof(MapNameBuffer), MapNameBuffer.ToString());
+            writer.WriteElementString(nameof(Padding), Padding.ToString());
         }
-        public StageEntrySettings(XmlElement xml)
-        {
-            BackgroundTypeType = Type.GetType(xml[nameof(BackgroundTypeType)].InnerText);
-            BossNumberType = Type.GetType(xml[nameof(BossNumberType)].InnerText);
 
-            Encoding ReadEncoding(XmlElement element)
+        public void ReadXml(XmlReader reader)
+        {
+            Type ReadType(string name)
             {
-                var str = element?.InnerText;
+                var typeName = reader.ReadElementContentAsString(name, "");
+                var type = Type.GetType(typeName);
+                if (!EnumTypeTypeConverter.integerTypes.Contains(type))
+                    throw new ArgumentException("Invalid type!");
+                return type;
+            }
+            BackgroundTypeType = ReadType(nameof(BackgroundTypeType));
+            BossNumberType = ReadType(nameof(BossNumberType));
+
+            Encoding ReadEncoding(string name)
+            {
+                var str = reader.ReadElementContentAsString(name, "");
                 if (!string.IsNullOrWhiteSpace(str))
                     return Encoding.GetEncoding(str);
                 else
                     return null;
             }
-            FilenameEncoding = ReadEncoding(xml[nameof(FilenameEncoding)]);
-            MapNameEncoding = ReadEncoding(xml[nameof(MapNameEncoding)]);
-            JapaneseNameEncoding = ReadEncoding(xml[nameof(JapaneseNameEncoding)]);
+            FilenameEncoding = ReadEncoding(nameof(FilenameEncoding));
+            MapNameEncoding = ReadEncoding(nameof(MapNameEncoding));
+            JapaneseNameEncoding = ReadEncoding(nameof(JapaneseNameEncoding));
 
-            TilesetNameBuffer = int.Parse(xml[nameof(TilesetNameBuffer)].InnerText);
-            FilenameBuffer = int.Parse(xml[nameof(FilenameBuffer)].InnerText);
-            BackgroundNameBuffer = int.Parse(xml[nameof(BackgroundNameBuffer)].InnerText);
-            Spritesheet1Buffer = int.Parse(xml[nameof(Spritesheet1Buffer)].InnerText);
-            Spritesheet2Buffer = int.Parse(xml[nameof(Spritesheet2Buffer)].InnerText);
-            JapaneseNameBuffer = int.Parse(xml[nameof(JapaneseNameBuffer)].InnerText);
-            MapNameBuffer = int.Parse(xml[nameof(MapNameBuffer)].InnerText);
-            Padding = int.Parse(xml[nameof(Padding)].InnerText);
+            TilesetNameBuffer = reader.ReadElementContentAsInt(nameof(TilesetNameBuffer), "");
+            FilenameBuffer = reader.ReadElementContentAsInt(nameof(FilenameBuffer), "");
+            BackgroundNameBuffer = reader.ReadElementContentAsInt(nameof(BackgroundNameBuffer), "");
+            Spritesheet1Buffer = reader.ReadElementContentAsInt(nameof(Spritesheet1Buffer), "");
+            Spritesheet2Buffer = reader.ReadElementContentAsInt(nameof(Spritesheet2Buffer), "");
+            JapaneseNameBuffer = reader.ReadElementContentAsInt(nameof(JapaneseNameBuffer), "");
+            MapNameBuffer = reader.ReadElementContentAsInt(nameof(MapNameBuffer), "");
+            Padding = reader.ReadElementContentAsInt(nameof(Padding), "");
         }
+
+        
+
         public void ResetToDefault(StageTablePresets type)
         {
             switch (type)

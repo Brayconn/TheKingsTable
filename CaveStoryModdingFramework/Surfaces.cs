@@ -1,15 +1,25 @@
 ﻿using System;
+using System.Xml.Serialization;
 
 namespace CaveStoryModdingFramework
 {
+    public static class SurfaceSource
+    {
+        public const string XmlType = "Type";
+        public const string XmlRuntime = "Runtime";
+        public const string XmlFile = "File";
+        public const string XmlIndex = "Index";
+    }
     public interface ISurfaceSource : ICloneable
     {
         string DisplayName { get; }
     }
     public class SurfaceSourceRuntime : ISurfaceSource
     {
+        [XmlText]
         public string DisplayName { get; set; }
 
+        private SurfaceSourceRuntime() { }
         public SurfaceSourceRuntime(string displayName)
         {
             DisplayName = displayName;
@@ -22,10 +32,15 @@ namespace CaveStoryModdingFramework
     }
     public class SurfaceSourceFile : ISurfaceSource
     {
-        public SearchLocations Folder { get; set; }
+        [XmlAttribute]
         public Prefixes Prefix { get; set; }
+        [XmlAttribute]
+        public SearchLocations Folder { get; set; }
+        [XmlAttribute]
         public string Filename { get; set; }
+        [XmlText]
         public string DisplayName { get; set; }
+        private SurfaceSourceFile() { }
         public SurfaceSourceFile(SearchLocations folder, Prefixes prefix, string filename, string name)
         {
             Folder = folder;
@@ -50,10 +65,12 @@ namespace CaveStoryModdingFramework
     }
     public class SurfaceSourceIndex : ISurfaceSource
     {
+        [XmlAttribute]
+        public int Index { get; set; }
+        [XmlText]
         public string DisplayName { get; set; }
 
-        public int Index { get; set; }
-
+        private SurfaceSourceIndex() { }
         public SurfaceSourceIndex(int index, string displayName)
         {
             Index = index;

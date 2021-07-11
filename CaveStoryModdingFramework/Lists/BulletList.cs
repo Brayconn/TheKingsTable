@@ -1,18 +1,36 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
+using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
 
 namespace CaveStoryModdingFramework
 {
-    public class BulletInfo
+    public class BulletInfo : IXmlSerializable
     {
         public string Name { get; set; }
         public Rectangle SpriteLocation { get; set; }
 
+        private BulletInfo() { }
         public BulletInfo(string name, Rectangle spriteLocation)
         {
             Name = name;
             SpriteLocation = spriteLocation;
+        }
+
+        public XmlSchema GetSchema() => null;
+
+        public void ReadXml(XmlReader reader)
+        {
+            Name = reader.GetAttribute(nameof(Name));
+            SpriteLocation = RectExtensions.RectFromString(reader.GetAttribute("Rect"));
+        }
+
+        public void WriteXml(XmlWriter writer)
+        {
+            writer.WriteAttributeString(nameof(Name), Name);
+            writer.WriteAttributeString("Rect", RectExtensions.RectToString(SpriteLocation));
         }
     }
     public static class BulletList
