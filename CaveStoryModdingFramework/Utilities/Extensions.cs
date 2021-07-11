@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace CaveStoryModdingFramework
 {
@@ -78,5 +81,24 @@ namespace CaveStoryModdingFramework
             return output;
         }
         */
+
+        //TODO this isn't 100% safe, since you could still add/remove namespaces from this...
+        public static readonly XmlSerializerNamespaces BlankNamespace;
+        static Extensions()
+        {
+            BlankNamespace = new XmlSerializerNamespaces();
+            BlankNamespace.Add("", "");
+        }
+
+        public static T DeserializeAs<T>(this XmlReader stream, T dummy, string root)
+        {
+            var serializer = new XmlSerializer(typeof(T), new XmlRootAttribute(root));
+            return (T)serializer.Deserialize(stream);
+        }
+        public static void SerializeAsRoot<T>(this XmlWriter stream, T obj, string root)
+        {
+            var serializer = new XmlSerializer(typeof(T), new XmlRootAttribute(root));
+            serializer.Serialize(stream, obj, BlankNamespace);
+        }
     }
 }

@@ -43,19 +43,19 @@ namespace CaveStoryModdingFramework
         /// </summary>
         [Editor(StringEditorLocation, typeof(UITypeEditor))]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
-        public List<string> DataPaths { get; } = new List<string>();
+        public List<string> DataPaths { get; set; } = new List<string>();
         /// <summary>
         /// Directories to be searched for Tile Data, Entity Data, and Tileset data/images
         /// </summary>
         [Editor(StringEditorLocation, typeof(UITypeEditor))]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
-        public List<string> StagePaths { get; } = new List<string>();
+        public List<string> StagePaths { get; set; } = new List<string>();
         /// <summary>
         /// Directories to be searched for Npc Spritesheets
         /// </summary>
         [Editor(StringEditorLocation, typeof(UITypeEditor))]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
-        public List<string> NpcPaths { get; } = new List<string>();
+        public List<string> NpcPaths { get; set; } = new List<string>();
 
         public static string MakeRelative(string basePath, string subPath)
         {

@@ -29,64 +29,58 @@ namespace CaveStoryModdingFramework
 
         public void ReadXml(XmlReader reader)
         {
-            if(typeof(T) == typeof(string))
+            reader.ReadStartElement();
             {
-                while (reader.IsStartElement(ItemName))
+                if (typeof(T) == typeof(string))
                 {
-                    reader.ReadStartElement(ItemName);
-
-                    var key = int.Parse(reader.GetAttribute(KeyName));
-                    object value = reader.ReadContentAsString();
-                    this.Add(key, (T)value);
-
-                    reader.ReadEndElement();
-                }
-            }
-            else if(typeof(T) == typeof(ISurfaceSource))
-            {
-                while (reader.IsStartElement(ItemName))
-                {
-                    reader.ReadStartElement(ItemName);
-
-                    var key = int.Parse(reader.GetAttribute(KeyName));
-                    var type = reader.GetAttribute(SurfaceSource.XmlType);
-                    object value;
-                    switch (type)
+                    while (reader.IsStartElement(ItemName))
                     {
-                        case SurfaceSource.XmlFile:
-                            var fileSer = new XmlSerializer(typeof(SurfaceSourceFile), new XmlRootAttribute(ItemName));
-                            value = fileSer.Deserialize(reader);
-                            break;
-                        case SurfaceSource.XmlRuntime:
-                            var runtimeSer = new XmlSerializer(typeof(SurfaceSourceRuntime), new XmlRootAttribute(ItemName));
-                            value = runtimeSer.Deserialize(reader);
-                            break;
-                        case SurfaceSource.XmlIndex:
-                            var indexSer = new XmlSerializer(typeof(SurfaceSourceIndex), new XmlRootAttribute(ItemName));
-                            value = indexSer.Deserialize(reader);
-                            break;
-                        default:
-                            throw new ArgumentException("Invalid type!");
+                        var key = int.Parse(reader.GetAttribute(KeyName));
+                        object value = reader.ReadElementContentAsString(ItemName,"");
+                        this.Add(key, (T)value);
                     }
-                    this.Add(key, (T)value);
-
-                    reader.ReadEndElement();
                 }
-            }
-            else
-            {
-                var valueSerializer = new XmlSerializer(typeof(T), new XmlRootAttribute(ItemName));
-                while (reader.IsStartElement(ItemName))
+                else if (typeof(T) == typeof(ISurfaceSource))
                 {
-                    reader.ReadStartElement(ItemName);
+                    while (reader.IsStartElement(ItemName))
+                    {
+                        var key = int.Parse(reader.GetAttribute(KeyName));
+                        var type = reader.GetAttribute(SurfaceSource.XmlType);
+                        object value;
+                        switch (type)
+                        {
+                            case SurfaceSource.XmlFile:
+                                var fileSer = new XmlSerializer(typeof(SurfaceSourceFile), new XmlRootAttribute(ItemName));
+                                value = fileSer.Deserialize(reader);
+                                break;
+                            case SurfaceSource.XmlRuntime:
+                                var runtimeSer = new XmlSerializer(typeof(SurfaceSourceRuntime), new XmlRootAttribute(ItemName));
+                                value = runtimeSer.Deserialize(reader);
+                                break;
+                            case SurfaceSource.XmlIndex:
+                                var indexSer = new XmlSerializer(typeof(SurfaceSourceIndex), new XmlRootAttribute(ItemName));
+                                value = indexSer.Deserialize(reader);
+                                break;
+                            default:
+                                throw new ArgumentException("Invalid type!");
+                        }
+                        this.Add(key, (T)value);
+                    }
+                }
+                else
+                {
+                    var valueSerializer = new XmlSerializer(typeof(T), new XmlRootAttribute(ItemName));
+                    while (reader.IsStartElement(ItemName))
+                    {
+                        var key = int.Parse(reader.GetAttribute(KeyName));
+                        var value = valueSerializer.Deserialize(reader);
+                        this.Add(key, (T)value);
 
-                    var key = int.Parse(reader.GetAttribute(KeyName));
-                    var value = valueSerializer.Deserialize(reader);
-                    this.Add(key, (T)value);
-
-                    reader.ReadEndElement();
+                        reader.ReadToNextSibling(ItemName);
+                    }
                 }
             }
+            reader.ReadEndElement();
         }
 
         public void WriteXml(XmlWriter writer)

@@ -324,37 +324,41 @@ namespace CaveStoryModdingFramework.Stages
 
         public void ReadXml(XmlReader reader)
         {
-            Type ReadType(string name)
+            reader.ReadStartElement();
             {
-                var typeName = reader.ReadElementContentAsString(name, "");
-                var type = Type.GetType(typeName);
-                if (!EnumTypeTypeConverter.integerTypes.Contains(type))
-                    throw new ArgumentException("Invalid type!");
-                return type;
-            }
-            BackgroundTypeType = ReadType(nameof(BackgroundTypeType));
-            BossNumberType = ReadType(nameof(BossNumberType));
+                Type ReadType(string name)
+                {
+                    var typeName = reader.ReadElementContentAsString(name, "");
+                    var type = Type.GetType(typeName);
+                    if (!EnumTypeTypeConverter.integerTypes.Contains(type))
+                        throw new ArgumentException("Invalid type!");
+                    return type;
+                }
+                BackgroundTypeType = ReadType(nameof(BackgroundTypeType));
+                BossNumberType = ReadType(nameof(BossNumberType));
 
-            Encoding ReadEncoding(string name)
-            {
-                var str = reader.ReadElementContentAsString(name, "");
-                if (!string.IsNullOrWhiteSpace(str))
-                    return Encoding.GetEncoding(str);
-                else
-                    return null;
-            }
-            FilenameEncoding = ReadEncoding(nameof(FilenameEncoding));
-            MapNameEncoding = ReadEncoding(nameof(MapNameEncoding));
-            JapaneseNameEncoding = ReadEncoding(nameof(JapaneseNameEncoding));
+                Encoding ReadEncoding(string name)
+                {
+                    var str = reader.ReadElementContentAsString(name, "");
+                    if (!string.IsNullOrWhiteSpace(str))
+                        return Encoding.GetEncoding(str);
+                    else
+                        return null;
+                }
+                FilenameEncoding = ReadEncoding(nameof(FilenameEncoding));
+                MapNameEncoding = ReadEncoding(nameof(MapNameEncoding));
+                JapaneseNameEncoding = ReadEncoding(nameof(JapaneseNameEncoding));
 
-            TilesetNameBuffer = reader.ReadElementContentAsInt(nameof(TilesetNameBuffer), "");
-            FilenameBuffer = reader.ReadElementContentAsInt(nameof(FilenameBuffer), "");
-            BackgroundNameBuffer = reader.ReadElementContentAsInt(nameof(BackgroundNameBuffer), "");
-            Spritesheet1Buffer = reader.ReadElementContentAsInt(nameof(Spritesheet1Buffer), "");
-            Spritesheet2Buffer = reader.ReadElementContentAsInt(nameof(Spritesheet2Buffer), "");
-            JapaneseNameBuffer = reader.ReadElementContentAsInt(nameof(JapaneseNameBuffer), "");
-            MapNameBuffer = reader.ReadElementContentAsInt(nameof(MapNameBuffer), "");
-            Padding = reader.ReadElementContentAsInt(nameof(Padding), "");
+                TilesetNameBuffer = reader.ReadElementContentAsInt(nameof(TilesetNameBuffer), "");
+                FilenameBuffer = reader.ReadElementContentAsInt(nameof(FilenameBuffer), "");
+                BackgroundNameBuffer = reader.ReadElementContentAsInt(nameof(BackgroundNameBuffer), "");
+                Spritesheet1Buffer = reader.ReadElementContentAsInt(nameof(Spritesheet1Buffer), "");
+                Spritesheet2Buffer = reader.ReadElementContentAsInt(nameof(Spritesheet2Buffer), "");
+                JapaneseNameBuffer = reader.ReadElementContentAsInt(nameof(JapaneseNameBuffer), "");
+                MapNameBuffer = reader.ReadElementContentAsInt(nameof(MapNameBuffer), "");
+                Padding = reader.ReadElementContentAsInt(nameof(Padding), "");
+            }
+            reader.ReadEndElement();
         }
 
         
