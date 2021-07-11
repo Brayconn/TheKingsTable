@@ -812,12 +812,8 @@ namespace CaveStoryEditor
             if (ents.Length == 0)
                 entityPropertyGrid.SelectedObject = null;
             else if(ents.Length == 1)
-            {
-                //if the entity has a custom type, use that, otherwise edit the entity directly
-                //TODO custom type needs to be adjusted for
-                entityPropertyGrid.SelectedObject = 
-                    (parentMod.EntityInfos.TryGetValue(ents[0].Type, out EntityInfo t) && t.CustomType != null)
-                    ? Activator.CreateInstance(t.CustomType, ents) : ents[0];
+            {                
+                entityPropertyGrid.SelectedObject = ents[0];
                 entityTrackChanges = EntityPropertyWatchModes.QuickUndo;
             }
             else

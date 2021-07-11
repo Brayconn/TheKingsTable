@@ -1,4 +1,4 @@
-﻿using CaveStoryModdingFramework.Entities;
+﻿using CaveStoryModdingFramework;
 using LayeredPictureBox;
 using System;
 using System.Drawing;
