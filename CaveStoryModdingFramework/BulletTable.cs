@@ -18,7 +18,7 @@ namespace CaveStoryModdingFramework
 
         private BulletTableLocation()
         {
-
+            
         }
         public BulletTableLocation(string path)
         {
@@ -72,7 +72,7 @@ namespace CaveStoryModdingFramework
         sbyte damage, hits;
         int range, enemyHitboxWidth, enemyHitboxHeight, tileHitboxWidth, tileHitboxHeight;
         BulletFlags bits;
-        BulletViewRect viewBox;
+        BulletViewRect viewBox = new BulletViewRect(0,0,0,0);
 
         public sbyte Damage { get => damage; set => SetVal(ref damage, value); }
         //Life
