@@ -674,6 +674,11 @@ namespace CaveStoryEditor
             }
         }
 
+        private void cSBULLETTABLEToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            mod.BulletTableLocation.ResetToDefault(BulletTablePresets.csplus);
+        }
+
         private void onImageChanged(object sender, FileSystemEventArgs e)
         {
             if (mod.CopyrightText.Length > 0)

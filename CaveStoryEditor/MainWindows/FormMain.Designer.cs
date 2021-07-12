@@ -41,6 +41,9 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.saveNPCTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportNPCTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.saveBulletTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportBulletTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadEntityInfotxtToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.generateFlagListingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -76,9 +79,7 @@
             this.modSettingsTabPage = new System.Windows.Forms.TabPage();
             this.modPropertyGrid = new CaveStoryEditor.PropertyGridShell();
             this.editorSettingsTabPage = new System.Windows.Forms.TabPage();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.saveBulletTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.exportBulletTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cSBULLETTABLEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.mainTabControl.SuspendLayout();
             this.stageTableTabPage.SuspendLayout();
@@ -198,12 +199,34 @@
             this.exportNPCTableToolStripMenuItem.Text = "Export NPC Table...";
             this.exportNPCTableToolStripMenuItem.Click += new System.EventHandler(this.exportNPCTableToolStripMenuItem_Click);
             // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
+            // 
+            // saveBulletTableToolStripMenuItem
+            // 
+            this.saveBulletTableToolStripMenuItem.Enabled = false;
+            this.saveBulletTableToolStripMenuItem.Name = "saveBulletTableToolStripMenuItem";
+            this.saveBulletTableToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveBulletTableToolStripMenuItem.Text = "Save Bullet Table";
+            this.saveBulletTableToolStripMenuItem.Click += new System.EventHandler(this.saveBulletTableToolStripMenuItem_Click);
+            // 
+            // exportBulletTableToolStripMenuItem
+            // 
+            this.exportBulletTableToolStripMenuItem.Enabled = false;
+            this.exportBulletTableToolStripMenuItem.Name = "exportBulletTableToolStripMenuItem";
+            this.exportBulletTableToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exportBulletTableToolStripMenuItem.Text = "Export Bullet Table...";
+            this.exportBulletTableToolStripMenuItem.Click += new System.EventHandler(this.exportBulletTableToolStripMenuItem_Click);
+            // 
             // toolsToolStripMenuItem
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.loadEntityInfotxtToolStripMenuItem,
             this.generateFlagListingToolStripMenuItem,
-            this.loadTsclisttxtToolStripMenuItem});
+            this.loadTsclisttxtToolStripMenuItem,
+            this.cSBULLETTABLEToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
@@ -606,26 +629,12 @@
             this.editorSettingsTabPage.Text = "Editor Settings";
             this.editorSettingsTabPage.UseVisualStyleBackColor = true;
             // 
-            // toolStripSeparator3
+            // cSBULLETTABLEToolStripMenuItem
             // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
-            // 
-            // saveBulletTableToolStripMenuItem
-            // 
-            this.saveBulletTableToolStripMenuItem.Enabled = false;
-            this.saveBulletTableToolStripMenuItem.Name = "saveBulletTableToolStripMenuItem";
-            this.saveBulletTableToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.saveBulletTableToolStripMenuItem.Text = "Save Bullet Table";
-            this.saveBulletTableToolStripMenuItem.Click += new System.EventHandler(this.saveBulletTableToolStripMenuItem_Click);
-            // 
-            // exportBulletTableToolStripMenuItem
-            // 
-            this.exportBulletTableToolStripMenuItem.Enabled = false;
-            this.exportBulletTableToolStripMenuItem.Name = "exportBulletTableToolStripMenuItem";
-            this.exportBulletTableToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.exportBulletTableToolStripMenuItem.Text = "Export Bullet Table...";
-            this.exportBulletTableToolStripMenuItem.Click += new System.EventHandler(this.exportBulletTableToolStripMenuItem_Click);
+            this.cSBULLETTABLEToolStripMenuItem.Name = "cSBULLETTABLEToolStripMenuItem";
+            this.cSBULLETTABLEToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.cSBULLETTABLEToolStripMenuItem.Text = "CS+ BULLET TABLE";
+            this.cSBULLETTABLEToolStripMenuItem.Click += new System.EventHandler(this.cSBULLETTABLEToolStripMenuItem_Click);
             // 
             // FormMain
             // 
@@ -713,6 +722,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem saveBulletTableToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exportBulletTableToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem cSBULLETTABLEToolStripMenuItem;
     }
 }
 
