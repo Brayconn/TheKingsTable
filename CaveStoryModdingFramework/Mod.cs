@@ -365,6 +365,26 @@ namespace CaveStoryModdingFramework
         private string xmlWorkingPath = null;
 
         /// <summary>
+        /// Loads a mod from a given file
+        /// </summary>
+        /// <param name="path"></param>
+        public Mod(string path) : this()
+        {
+            xmlWorkingPath = path;
+            using (var fs = new FileStream(path, FileMode.Open, FileAccess.Read))
+            using (var x = XmlReader.Create(fs, new XmlReaderSettings() { IgnoreWhitespace = true, IgnoreComments = true }))
+                ReadXml(x);
+            xmlWorkingPath = null;
+
+            StageTable = Stages.StageTable.Read(StageTableLocation, StageTableSettings);
+
+            BulletTable = CaveStoryModdingFramework.BulletTable.Read(BulletTableLocation);
+
+            if (File.Exists(NpcTablePath))
+                NPCTable = Entities.NPCTable.Load(NpcTablePath);
+        }
+
+        /// <summary>
         /// Saves this mod to a given file
         /// </summary>
         /// <param name="path"></param>
@@ -376,6 +396,18 @@ namespace CaveStoryModdingFramework
                     WriteXml(x);
             xmlWorkingPath = null;
         }
+
+        #region xml serialization
+
+        const string XmlBase = "CaveStoryMod";
+        const string XmlPaths = "Paths";
+        const string XmlStageTable = "StageTable";
+        const string XmlNPCTable = "NPCTable";
+        const string XmlBulletTable = "BulletTable";
+        const string XmlImages = "Images";
+        const string XmlFilenames = "Filenames";
+        const string XmlTSC = "TSC";
+        const string XmlGameplay = "Gameplay";
 
         public XmlSchema GetSchema() => null;
 
@@ -475,28 +507,6 @@ namespace CaveStoryModdingFramework
             reader.ReadEndElement();
         }
 
-        /// <summary>
-        /// Loads a mod from a given file
-        /// </summary>
-        /// <param name="path"></param>
-        public Mod(string path) : this()
-        {
-            xmlWorkingPath = path;
-            using(var fs = new FileStream(path, FileMode.Open, FileAccess.Read))
-                using (var x = XmlReader.Create(fs, new XmlReaderSettings(){ IgnoreWhitespace = true, IgnoreComments = true }))
-                    ReadXml(x);
-            xmlWorkingPath = null;
-        }
-
-        const string XmlBase = "CaveStoryMod";
-        const string XmlPaths = "Paths";
-        const string XmlStageTable = "StageTable";
-        const string XmlNPCTable = "NPCTable";
-        const string XmlBulletTable = "BulletTable";
-        const string XmlImages = "Images";
-        const string XmlFilenames = "Filenames";
-        const string XmlTSC = "TSC";
-        const string XmlGameplay = "Gameplay";
         public void WriteXml(XmlWriter writer)
         {
             void SerializeRelativeDataLocation<T>(T dl) where T : DataLocation
@@ -604,5 +614,7 @@ namespace CaveStoryModdingFramework
             }
             writer.WriteEndElement();
         }
+
+        #endregion
     }
 }
