@@ -37,7 +37,7 @@ namespace CaveStoryModdingFramework
             //check that the npc number has a valid rect
             if (parentMod.EntityInfos.TryGetValue(num, out var entInf) && !entInf.SpriteLocation.IsEmpty
                 //and that it appears in the npc table
-                && num < (parentMod?.NPCTable.Count ?? 0)) //HACK not sure if this is a great solution for the npc table not existing...
+                && num < (parentMod?.NPCTable?.Count ?? 0)) //HACK not sure if this is a great solution for the npc table not existing...
             {
                 var tblEntry = parentMod.NPCTable[num];
                 //check if the npc table entry's surface number matches the type we expect
