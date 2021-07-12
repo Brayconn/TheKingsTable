@@ -260,25 +260,25 @@ namespace CaveStoryModdingFramework
         #region user configurable enums
 
         [Browsable(false)]
-        public SerializableDictionary<EntityInfo> EntityInfos { get; private set; } = new SerializableDictionary<EntityInfo>();
+        public SerializableDictionary<int,EntityInfo> EntityInfos { get; private set; } = new SerializableDictionary<int,EntityInfo>();
 
         [Browsable(false)]
-        public SerializableDictionary<BulletInfo> BulletInfos { get; private set; } = new SerializableDictionary<BulletInfo>();
+        public SerializableDictionary<int,BulletInfo> BulletInfos { get; private set; } = new SerializableDictionary<int,BulletInfo>();
 
         [Browsable(false)]
-        public SerializableDictionary<ISurfaceSource> SurfaceDescriptors { get; private set; } = new SerializableDictionary<ISurfaceSource>();
+        public SerializableDictionary<int,ISurfaceSource> SurfaceDescriptors { get; private set; } = new SerializableDictionary<int,ISurfaceSource>();
 
         [Browsable(false)]
-        public SerializableDictionary<string> SoundEffects { get; private set; } = new SerializableDictionary<string>();
+        public SerializableDictionary<int,string> SoundEffects { get; private set; } = new SerializableDictionary<int,string>();
 
         [Browsable(false)]
-        public SerializableDictionary<string> SmokeSizes { get; private set; } = new SerializableDictionary<string>();
+        public SerializableDictionary<int,string> SmokeSizes { get; private set; } = new SerializableDictionary<int,string>();
 
         [Browsable(false)]
-        public SerializableDictionary<string> BossNumbers { get; private set; } = new SerializableDictionary<string>();
+        public SerializableDictionary<long,string> BossNumbers { get; private set; } = new SerializableDictionary<long,string>();
 
         [Browsable(false)]
-        public SerializableDictionary<string> BackgroundTypes { get; private set; } = new SerializableDictionary<string>();
+        public SerializableDictionary<long,string> BackgroundTypes { get; private set; } = new SerializableDictionary<long,string>();
 
         #endregion
 
@@ -350,13 +350,13 @@ namespace CaveStoryModdingFramework
                 SurfaceDescriptors.Add(surface.Key, (ISurfaceSource)surface.Value.Clone());
 
             //TODO related to the one above
-            SoundEffects = new SerializableDictionary<string>(CaveStoryModdingFramework.SoundEffects.SoundEffectList);
-            SmokeSizes = new SerializableDictionary<string>(CaveStoryModdingFramework.SmokeSizes.SmokeSizeList);
-            BossNumbers = new SerializableDictionary<string>(CaveStoryModdingFramework.Bosses.BossNameList);
-            BackgroundTypes = new SerializableDictionary<string>(CaveStoryModdingFramework.BackgroundTypes.BackgroundTypeList);
+            SoundEffects = new SerializableDictionary<int,string>(CaveStoryModdingFramework.SoundEffects.SoundEffectList);
+            SmokeSizes = new SerializableDictionary<int,string>(CaveStoryModdingFramework.SmokeSizes.SmokeSizeList);
+            BossNumbers = new SerializableDictionary<long,string>(CaveStoryModdingFramework.Bosses.BossNameList);
+            BackgroundTypes = new SerializableDictionary<long,string>(CaveStoryModdingFramework.BackgroundTypes.BackgroundTypeList);
 
-            EntityInfos = new SerializableDictionary<EntityInfo>(EntityList.EntityInfos);
-            BulletInfos = new SerializableDictionary<BulletInfo>(BulletList.BulletInfos);
+            EntityInfos = new SerializableDictionary<int,EntityInfo>(EntityList.EntityInfos);
+            BulletInfos = new SerializableDictionary<int,BulletInfo>(BulletList.BulletInfos);
 
             Commands = new List<Command>(CommandList.BaseCommands);
         }
@@ -421,7 +421,7 @@ namespace CaveStoryModdingFramework
                     if (xmlWorkingPath != null)
                         BaseDataPath = AssetManager.MakeAbsolute(xmlWorkingPath, BaseDataPath);
 
-                    EXEPath = reader.ReadElementContentAsString(nameof(EXEPath), "");
+                    EXEPath = AssetManager.MakeAbsolute(BaseDataPath, reader.ReadElementContentAsString(nameof(EXEPath), ""));
 
                     FolderPaths.DataPaths = reader.DeserializeAs(FolderPaths.DataPaths, nameof(FolderPaths.DataPaths));
                     FolderPaths.StagePaths = reader.DeserializeAs(FolderPaths.StagePaths, nameof(FolderPaths.StagePaths));

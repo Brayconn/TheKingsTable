@@ -34,9 +34,9 @@ namespace CaveStoryEditor
                         
             void AddComboBoxColumn<T>(string Text, string Property, IDictionary<T, string> dict)
             {
-                var list = new List<KeyValuePair<long, string>>(dict.Count);
+                var list = new List<KeyValuePair<T, string>>(dict.Count);
                 foreach (var item in dict)
-                    list.Add(new KeyValuePair<long, string>(Convert.ToInt32(item.Key), item.Value)); //HACK this can probably be improved
+                    list.Add(new KeyValuePair<T, string>(item.Key, item.Value));
                 stageTableDataGridView.Columns.Add(new DataGridViewColumn()
                 {
                     HeaderText = Text,

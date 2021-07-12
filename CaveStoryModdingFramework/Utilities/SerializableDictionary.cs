@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 
 namespace CaveStoryModdingFramework
 {
-    public class SerializableDictionary<T> : Dictionary<int, T>, IXmlSerializable
+    public class SerializableDictionary<K,V> : Dictionary<K, V>, IXmlSerializable
     {
         public string KeyName { get; set; } = "Key";
         public string ItemName { get; set; } = "Item";
@@ -16,7 +16,7 @@ namespace CaveStoryModdingFramework
         {
 
         }
-        public SerializableDictionary(IDictionary<int, T> source)
+        public SerializableDictionary(IDictionary<K, V> source)
         {
             foreach (var item in source)
                 this.Add(item.Key, item.Value);
@@ -29,22 +29,27 @@ namespace CaveStoryModdingFramework
 
         public void ReadXml(XmlReader reader)
         {
+            K ReadKey(string name)
+            {
+                return (K)Convert.ChangeType(reader.GetAttribute(name), typeof(K));
+            }
+
             reader.ReadStartElement();
             {
-                if (typeof(T) == typeof(string))
+                if (typeof(V) == typeof(string))
                 {
                     while (reader.IsStartElement(ItemName))
                     {
-                        var key = int.Parse(reader.GetAttribute(KeyName));
+                        var key = ReadKey(KeyName);
                         object value = reader.ReadElementContentAsString(ItemName,"");
-                        this.Add(key, (T)value);
+                        this.Add(key, (V)value);
                     }
                 }
-                else if (typeof(T) == typeof(ISurfaceSource))
+                else if (typeof(V) == typeof(ISurfaceSource))
                 {
                     while (reader.IsStartElement(ItemName))
                     {
-                        var key = int.Parse(reader.GetAttribute(KeyName));
+                        var key = ReadKey(KeyName);
                         var type = reader.GetAttribute(SurfaceSource.XmlType);
                         object value;
                         switch (type)
@@ -64,17 +69,17 @@ namespace CaveStoryModdingFramework
                             default:
                                 throw new ArgumentException("Invalid type!");
                         }
-                        this.Add(key, (T)value);
+                        this.Add(key, (V)value);
                     }
                 }
                 else
                 {
-                    var valueSerializer = new XmlSerializer(typeof(T), new XmlRootAttribute(ItemName));
+                    var valueSerializer = new XmlSerializer(typeof(V), new XmlRootAttribute(ItemName));
                     while (reader.IsStartElement(ItemName))
                     {
-                        var key = int.Parse(reader.GetAttribute(KeyName));
+                        var key = ReadKey(KeyName);
                         var value = valueSerializer.Deserialize(reader);
-                        this.Add(key, (T)value);
+                        this.Add(key, (V)value);
 
                         reader.ReadToNextSibling(ItemName);
                     }
@@ -88,7 +93,7 @@ namespace CaveStoryModdingFramework
             var ns = new XmlSerializerNamespaces();
             ns.Add("", "");
 
-            void SerializeItem(KeyValuePair<int, T> item, XmlSerializer serializer, string prependKey = null, string prependValue = null)
+            void SerializeItem(KeyValuePair<K, V> item, XmlSerializer serializer, string prependKey = null, string prependValue = null)
             {
                 //TODO there has GOT to be a better way to do this...
                 //serialize the value to an element
@@ -114,7 +119,7 @@ namespace CaveStoryModdingFramework
                 writer.WriteNode(valueNav, false);
             }
 
-            if (typeof(T) == typeof(string))
+            if (typeof(V) == typeof(string))
             {
                 foreach(var item in this)
                 {
@@ -124,7 +129,7 @@ namespace CaveStoryModdingFramework
                     writer.WriteEndElement();
                 }
             }
-            else if (typeof(T) == typeof(ISurfaceSource))
+            else if (typeof(V) == typeof(ISurfaceSource))
             {
                 foreach(var item in this)
                 {
@@ -154,7 +159,7 @@ namespace CaveStoryModdingFramework
             }
             else
             {
-                var valueSerializer = new XmlSerializer(typeof(T), new XmlRootAttribute(ItemName));
+                var valueSerializer = new XmlSerializer(typeof(V), new XmlRootAttribute(ItemName));
                 foreach (var item in this)
                 {
                     SerializeItem(item, valueSerializer);
