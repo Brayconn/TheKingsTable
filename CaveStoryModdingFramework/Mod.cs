@@ -72,11 +72,14 @@ namespace CaveStoryModdingFramework
         public StageTableLocation StageTableLocation { get; set; }
         #endregion
 
-        [Browsable(false), XmlIgnore]
+        [Browsable(false)]
         public List<StageEntry> StageTable { get; private set; }
 
-        [Browsable(false), XmlIgnore]
+        [Browsable(false)]
         public List<NPCTableEntry> NPCTable { get; private set; }
+
+        [Browsable(false)]
+        public List<BulletTableEntry> BulletTable { get; private set; }
 
         #region path/folder stuff
 
@@ -336,6 +339,7 @@ namespace CaveStoryModdingFramework
 
             //TODO actually support choosing a bullet table type
             BulletTableLocation = new BulletTableLocation(EXEPath, BulletTablePresets.doukutsuexe);
+            BulletTable = CaveStoryModdingFramework.BulletTable.Read(BulletTableLocation);
 
             NpcTablePath = Path.Combine(BaseDataPath, Entities.NPCTable.NPCTBL);
             if(File.Exists(NpcTablePath))

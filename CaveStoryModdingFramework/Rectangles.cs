@@ -45,28 +45,30 @@ namespace CaveStoryModdingFramework
     #region Bullet rect
 
     [DebuggerDisplay("LeftOffset = {LeftOffset} YOffset = {YOffset} RightOffset = {RightOffset} Unused = {Unused}")]
-    public class BulletViewRect
+    public class BulletViewRect : PropertyChangedHelper
     {
+        int leftOffset, yOffset, rightOffset, unused;
+
         /// <summary>
         /// Labeled as "Front" in CS.
         /// </summary>
         [LocalizeableDescription(nameof(Dialog.LeftOffsetDescription), typeof(Dialog))]
-        public int LeftOffset { get; set; }
+        public int LeftOffset { get => leftOffset; set => SetVal(ref leftOffset, value); }
         /// <summary>
         /// Labeled as "Top" in CS.
         /// </summary>
         [LocalizeableDescription(nameof(Dialog.YOffsetDescription), typeof(Dialog))]
-        public int YOffset { get; set; }
+        public int YOffset { get => yOffset; set => SetVal(ref yOffset, value); }
         /// <summary>
         /// Labeled as "Back" in CS.
         /// </summary>
         [LocalizeableDescription(nameof(Dialog.RightOffsetDescription), typeof(Dialog))]
-        public int RightOffset { get; set; }
+        public int RightOffset { get => rightOffset; set => SetVal(ref rightOffset, value); }
         /// <summary>
         /// Labeled as "Bottom" in CS. It goes unused in the default sprite renderer
         /// </summary>
         [LocalizeableDescription(nameof(Dialog.UnusedDescription), typeof(Dialog))]
-        public int Unused { get; set; }
+        public int Unused { get => unused; set => SetVal(ref unused, value); }
 
         public BulletViewRect(int leftOffset, int yOffset, int rightOffset, int unused)
         {
@@ -100,10 +102,10 @@ namespace CaveStoryModdingFramework
     /// <summary>
     /// A rectangle with four byte values
     /// </summary>
-    public abstract class ByteRect : INotifyPropertyChanging, INotifyPropertyChanged, IComparable
+    public abstract class ByteRect : PropertyChangedHelper, IComparable
     {
         internal byte a, b, c, d;
-
+        /*
         public event PropertyChangingEventHandler PropertyChanging;
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -125,6 +127,7 @@ namespace CaveStoryModdingFramework
                 NotifyPropertyChanged(name);
             }
         }
+        */
         public static explicit operator uint(ByteRect br)
         {
             return (uint)(int)br;

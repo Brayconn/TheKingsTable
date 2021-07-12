@@ -30,7 +30,6 @@ namespace CaveStoryEditor
         private void InitializeComponent()
         {
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.propertyGridListBox1 = new CaveStoryEditor.NPCTablePropertyGridListBox();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.hitboxGroupBox = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
@@ -39,7 +38,6 @@ namespace CaveStoryEditor
             this.frontNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.changeHitboxDirectionButton = new System.Windows.Forms.Button();
             this.bottomNumericUpDown = new System.Windows.Forms.NumericUpDown();
-            this.hitboxPreview1 = new CaveStoryEditor.HitboxPreview();
             this.numbersGroupBox = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.label3 = new System.Windows.Forms.Label();
@@ -58,7 +56,6 @@ namespace CaveStoryEditor
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
-            this.viewboxPreview1 = new CaveStoryEditor.ViewboxPreview();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
@@ -70,6 +67,9 @@ namespace CaveStoryEditor
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
+            this.propertyGridListBox1 = new CaveStoryEditor.NPCTablePropertyGridListBox();
+            this.hitboxPreview1 = new CaveStoryEditor.HitboxPreview();
+            this.viewboxPreview1 = new CaveStoryEditor.ViewboxPreview();
             this.bitEditor1 = new CaveStoryEditor.BitEditor();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -115,16 +115,6 @@ namespace CaveStoryEditor
             this.splitContainer1.SplitterDistance = 260;
             this.splitContainer1.TabIndex = 1;
             // 
-            // propertyGridListBox1
-            // 
-            this.propertyGridListBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.propertyGridListBox1.List = null;
-            this.propertyGridListBox1.Location = new System.Drawing.Point(0, 0);
-            this.propertyGridListBox1.MaxItems = 0;
-            this.propertyGridListBox1.Name = "propertyGridListBox1";
-            this.propertyGridListBox1.Size = new System.Drawing.Size(260, 407);
-            this.propertyGridListBox1.TabIndex = 0;
-            // 
             // tableLayoutPanel5
             // 
             this.tableLayoutPanel5.ColumnCount = 3;
@@ -160,8 +150,8 @@ namespace CaveStoryEditor
             // 
             this.tableLayoutPanel2.ColumnCount = 3;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33334F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33334F));
             this.tableLayoutPanel2.Controls.Add(this.topNumericUpDown, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.backNumericUpDown, 0, 1);
             this.tableLayoutPanel2.Controls.Add(this.frontNumericUpDown, 2, 1);
@@ -172,12 +162,10 @@ namespace CaveStoryEditor
             this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 16);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 4;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66333F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66333F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66333F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.01001F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(160, 179);
             this.tableLayoutPanel2.TabIndex = 0;
             // 
@@ -197,7 +185,7 @@ namespace CaveStoryEditor
             // backNumericUpDown
             // 
             this.backNumericUpDown.Enabled = false;
-            this.backNumericUpDown.Location = new System.Drawing.Point(3, 32);
+            this.backNumericUpDown.Location = new System.Drawing.Point(3, 28);
             this.backNumericUpDown.Maximum = new decimal(new int[] {
             255,
             0,
@@ -210,7 +198,7 @@ namespace CaveStoryEditor
             // frontNumericUpDown
             // 
             this.frontNumericUpDown.Enabled = false;
-            this.frontNumericUpDown.Location = new System.Drawing.Point(109, 32);
+            this.frontNumericUpDown.Location = new System.Drawing.Point(109, 28);
             this.frontNumericUpDown.Maximum = new decimal(new int[] {
             255,
             0,
@@ -223,7 +211,7 @@ namespace CaveStoryEditor
             // changeHitboxDirectionButton
             // 
             this.changeHitboxDirectionButton.Enabled = false;
-            this.changeHitboxDirectionButton.Location = new System.Drawing.Point(56, 32);
+            this.changeHitboxDirectionButton.Location = new System.Drawing.Point(56, 28);
             this.changeHitboxDirectionButton.Name = "changeHitboxDirectionButton";
             this.changeHitboxDirectionButton.Size = new System.Drawing.Size(47, 18);
             this.changeHitboxDirectionButton.TabIndex = 10;
@@ -234,7 +222,7 @@ namespace CaveStoryEditor
             // bottomNumericUpDown
             // 
             this.bottomNumericUpDown.Enabled = false;
-            this.bottomNumericUpDown.Location = new System.Drawing.Point(56, 61);
+            this.bottomNumericUpDown.Location = new System.Drawing.Point(56, 52);
             this.bottomNumericUpDown.Maximum = new decimal(new int[] {
             255,
             0,
@@ -243,16 +231,6 @@ namespace CaveStoryEditor
             this.bottomNumericUpDown.Name = "bottomNumericUpDown";
             this.bottomNumericUpDown.Size = new System.Drawing.Size(47, 20);
             this.bottomNumericUpDown.TabIndex = 3;
-            // 
-            // hitboxPreview1
-            // 
-            this.hitboxPreview1.BackColor = System.Drawing.Color.Black;
-            this.tableLayoutPanel2.SetColumnSpan(this.hitboxPreview1, 3);
-            this.hitboxPreview1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.hitboxPreview1.Location = new System.Drawing.Point(3, 90);
-            this.hitboxPreview1.Name = "hitboxPreview1";
-            this.hitboxPreview1.Size = new System.Drawing.Size(154, 86);
-            this.hitboxPreview1.TabIndex = 11;
             // 
             // numbersGroupBox
             // 
@@ -394,17 +372,16 @@ namespace CaveStoryEditor
             this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 16);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 3;
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel3.Size = new System.Drawing.Size(334, 179);
             this.tableLayoutPanel3.TabIndex = 0;
             // 
             // unusedNumericUpDown
             // 
             this.unusedNumericUpDown.Enabled = false;
-            this.unusedNumericUpDown.Location = new System.Drawing.Point(252, 47);
+            this.unusedNumericUpDown.Location = new System.Drawing.Point(252, 40);
             this.unusedNumericUpDown.Maximum = new decimal(new int[] {
             255,
             0,
@@ -417,7 +394,7 @@ namespace CaveStoryEditor
             // rightOffsetNumericUpDown
             // 
             this.rightOffsetNumericUpDown.Enabled = false;
-            this.rightOffsetNumericUpDown.Location = new System.Drawing.Point(86, 47);
+            this.rightOffsetNumericUpDown.Location = new System.Drawing.Point(86, 40);
             this.rightOffsetNumericUpDown.Maximum = new decimal(new int[] {
             255,
             0,
@@ -465,7 +442,7 @@ namespace CaveStoryEditor
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(3, 44);
+            this.label9.Location = new System.Drawing.Point(3, 37);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(70, 26);
             this.label9.TabIndex = 11;
@@ -483,22 +460,11 @@ namespace CaveStoryEditor
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(169, 44);
+            this.label11.Location = new System.Drawing.Point(169, 37);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(44, 13);
             this.label11.TabIndex = 13;
             this.label11.Text = "Unused";
-            // 
-            // viewboxPreview1
-            // 
-            this.viewboxPreview1.AutoScroll = true;
-            this.viewboxPreview1.BackColor = System.Drawing.Color.Black;
-            this.tableLayoutPanel3.SetColumnSpan(this.viewboxPreview1, 4);
-            this.viewboxPreview1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.viewboxPreview1.Location = new System.Drawing.Point(3, 91);
-            this.viewboxPreview1.Name = "viewboxPreview1";
-            this.viewboxPreview1.Size = new System.Drawing.Size(328, 85);
-            this.viewboxPreview1.TabIndex = 14;
             // 
             // groupBox4
             // 
@@ -638,6 +604,37 @@ namespace CaveStoryEditor
             this.label7.TabIndex = 7;
             this.label7.Text = "Smoke Size";
             // 
+            // propertyGridListBox1
+            // 
+            this.propertyGridListBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.propertyGridListBox1.List = null;
+            this.propertyGridListBox1.Location = new System.Drawing.Point(0, 0);
+            this.propertyGridListBox1.MaxItems = 0;
+            this.propertyGridListBox1.Name = "propertyGridListBox1";
+            this.propertyGridListBox1.Size = new System.Drawing.Size(260, 407);
+            this.propertyGridListBox1.TabIndex = 0;
+            // 
+            // hitboxPreview1
+            // 
+            this.hitboxPreview1.BackColor = System.Drawing.Color.Black;
+            this.tableLayoutPanel2.SetColumnSpan(this.hitboxPreview1, 3);
+            this.hitboxPreview1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.hitboxPreview1.Location = new System.Drawing.Point(3, 77);
+            this.hitboxPreview1.Name = "hitboxPreview1";
+            this.hitboxPreview1.Size = new System.Drawing.Size(154, 99);
+            this.hitboxPreview1.TabIndex = 11;
+            // 
+            // viewboxPreview1
+            // 
+            this.viewboxPreview1.AutoScroll = true;
+            this.viewboxPreview1.BackColor = System.Drawing.Color.Black;
+            this.tableLayoutPanel3.SetColumnSpan(this.viewboxPreview1, 4);
+            this.viewboxPreview1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.viewboxPreview1.Location = new System.Drawing.Point(3, 77);
+            this.viewboxPreview1.Name = "viewboxPreview1";
+            this.viewboxPreview1.Size = new System.Drawing.Size(328, 99);
+            this.viewboxPreview1.TabIndex = 14;
+            // 
             // bitEditor1
             // 
             this.bitEditor1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -645,6 +642,7 @@ namespace CaveStoryEditor
             this.bitEditor1.Name = "bitEditor1";
             this.bitEditor1.Size = new System.Drawing.Size(162, 178);
             this.bitEditor1.TabIndex = 0;
+            this.bitEditor1.UnderlyingBitValue = ((ulong)(0ul));
             // 
             // NPCTableEditor
             // 

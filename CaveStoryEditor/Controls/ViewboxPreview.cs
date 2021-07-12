@@ -70,50 +70,121 @@ namespace CaveStoryEditor
             pix.SetPixel(0, 0, Color.White);
             ViewCenter.Image = pix;
 
-            YOffsetTriangle.Image = MakeRightTriangle(Color.Yellow);
-            LeftOffsetTriangle.Image = MakeRightTriangle(Color.Green, -180);
-            RightOffsetTriangle.Image = MakeRightTriangle(Color.Red, 90);
+            InitTriangles(lastMirror);
         }
-        public void DrawViewbox(NPCViewRect rect, string prop = null)
+
+        bool lastMirror = false;
+        void InitTriangles(bool mirror)
         {
-            DrawViewbox(rect.LeftOffset, rect.YOffset, rect.RightOffset, prop);
+            YOffsetTriangle.Image = MakeRightTriangle(Color.Yellow, mirror ? -180 : 0);
+            LeftOffsetTriangle.Image = MakeRightTriangle(Color.Green, mirror ? 0 : -180);
+            RightOffsetTriangle.Image = MakeRightTriangle(Color.Red, mirror ? 90 : 90);
+
+            lastMirror = mirror;
         }
-        public void DrawViewbox(BulletViewRect rect, string prop = null)
+
+        public void DrawViewbox(NPCViewRect rect, bool mirror, string prop = null)
         {
-            DrawViewbox(rect.LeftOffset, rect.YOffset, rect.RightOffset, prop);
+            DrawViewbox(rect.LeftOffset, rect.YOffset, rect.RightOffset, mirror, prop);
         }
-        public void DrawViewbox(int leftOffset, int yOffset, int rightOffset, string prop = null)
+        public void DrawViewbox(BulletViewRect rect, bool mirror, string prop = null)
+        {
+            DrawViewbox(rect.LeftOffset, rect.YOffset, rect.RightOffset, mirror, prop);
+        }
+        public void DrawViewbox(int leftOffset, int yOffset, int rightOffset, bool mirror, string prop = null)
         {
             int Clamp(int value) => Math.Max(value, MinBoxSize);
 
             //Display location of the NPC's actual position, clamped to MinBoxSize
-            var viewX = Clamp(Math.Max(leftOffset, rightOffset));
-            var viewY = Clamp(yOffset);
+            var centerX = Clamp(Math.Max(leftOffset, rightOffset));
+            var centerY = Clamp(yOffset);
+
+            //setting the center location to 1.5x its value leaves room on the top/left so it looks pretty
+            var centerXD = centerX + centerX / 2;
+            var centerYD = centerY + centerY / 2;
+
+            var LRLineWidth = 1;
+            var LRLineHeight = (centerY + 1) * 2;
+
+            var LLineX = centerXD - leftOffset;
+            var LLineY = 0;
+
+            var RLineX = centerXD - rightOffset;
+            var RLineY = 0;
+
+            var YLineHeight = 1;
+            var YLineWidth = (centerX + 1) * 2;
+
+            var YLineX = 0;
+            var YLineY = centerYD - yOffset;
+
+            if (mirror)
+            {
+                (centerX, centerY) = (centerY, centerX);
+                (centerXD, centerYD) = (centerYD, centerXD);
+
+                (LRLineWidth, LRLineHeight) = (LRLineHeight, LRLineWidth);
+                (LLineX, LLineY) = (LLineY, LLineX);
+                (RLineX, RLineY) = (RLineY, RLineX);
+
+                (YLineWidth, YLineHeight) = (YLineHeight, YLineWidth);
+                (YLineX, YLineY) = (YLineY, YLineX);
+            }
+            if (mirror != lastMirror)
+                InitTriangles(mirror);
+            
+            ViewCenter.Location = new Point(centerXD, centerYD);
 
             //functions to update the images for all the lines
-            void UpdateYImage() => YOffsetLine.Image = MakeLine((viewX + 1) * 2, 1, Color.Yellow);
-            void UpdateLImage() => LeftOffsetLine.Image = MakeLine(1, (viewY + 1) * 2, Color.Green);
-            void UpdateRImage() => RightOffsetLine.Image = MakeLine(1, (viewY + 1) * 2, Color.Red);
+            void UpdateYImage()
+            {
+                YOffsetLine.Image = MakeLine(YLineWidth, YLineHeight, Color.Yellow); 
+            }
+            void UpdateLImage()
+            {
+                LeftOffsetLine.Image = MakeLine(LRLineWidth, LRLineHeight, Color.Green);
+            }
+            void UpdateRImage()
+            {
+                RightOffsetLine.Image = MakeLine(LRLineWidth, LRLineHeight, Color.Red);
+            }
 
             //functions to update the images locations
             void UpdateYLocation()
             {
-                YOffsetLine.Location = new Point(0, ViewCenter.Location.Y - yOffset);
-                YOffsetTriangle.Location = new Point(0, YOffsetLine.Location.Y - YOffsetTriangle.Image.Height + 1);
+                YOffsetLine.Location = new Point(YLineX, YLineY);
+                if(mirror)
+                {
+                    YLineX -= YOffsetTriangle.Image.Width;
+                }
+                else
+                {
+                    YLineY -= YOffsetTriangle.Image.Height;
+                }
+                YOffsetTriangle.Location = new Point(YLineX, YLineY);
             }
             void UpdateLLocation()
             {
-                LeftOffsetLine.Location = new Point(ViewCenter.Location.X - leftOffset, 0);
-                LeftOffsetTriangle.Location = new Point(LeftOffsetLine.Location.X - LeftOffsetTriangle.Image.Width + 1, 0);
+                LeftOffsetLine.Location = new Point(LLineX, LLineY);
+                if (mirror)
+                {
+                    LLineY -= LeftOffsetTriangle.Image.Height;
+                }
+                else
+                {
+                    LLineX -= LeftOffsetTriangle.Image.Width;
+                }
+                LeftOffsetTriangle.Location = new Point(LLineX, LLineY);
             }
             void UpdateRLocation()
             {
-                RightOffsetLine.Location = new Point(ViewCenter.Location.X - rightOffset, 0);
-                RightOffsetTriangle.Location = RightOffsetLine.Location;
-            }
-
-            //setting the NPC's center to 1.5x its value leaves room on the left so it looks pretty
-            ViewCenter.Location = new Point(viewX + viewX / 2, viewY + viewY / 2);
+                RightOffsetLine.Location = new Point(RLineX, RLineY);
+                if (mirror)
+                {
+                    //RLineY -= RightOffsetTriangle.Image.Height;
+                }
+                RightOffsetTriangle.Location = new Point(RLineX, RLineY);
+            }            
 
             //reset all images
             if (prop == null)
@@ -131,12 +202,15 @@ namespace CaveStoryEditor
                         UpdateLImage();
                         UpdateRImage();
                         break;
-                    //only reset the Y image if the line being edited is the bigger one
                     case nameof(NPCViewRect.LeftOffset):
                     //case nameof(BulletViewRect.LeftOffset):
                     case nameof(NPCViewRect.RightOffset):
                     //case nameof(BulletViewRect.RightOffset):
-                        if (YOffsetLine.Image.Width != (viewX + 1) * 2)
+                        //only reset the Y image if the line being edited is the bigger one
+                        if ((mirror
+                            ? YOffsetLine.Image.Height != (centerY + 1) * 2
+                            : YOffsetLine.Image.Width  != (centerX + 1) * 2
+                            ))
                             UpdateYImage();
                         break;
                 }
@@ -146,6 +220,7 @@ namespace CaveStoryEditor
             UpdateLLocation();
             UpdateRLocation();
             UpdateBoxLocation(this, viewboxLayeredPictureBox);
+            lastMirror = mirror;
         }
         static void UpdateBoxLocation(ScrollableControl parent, Control child)
         {

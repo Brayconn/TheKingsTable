@@ -272,7 +272,7 @@ namespace CaveStoryEditor
         {
             propertyGridListBox1.RefreshPropertyGrid();
             if (e.PropertyName != nameof(NPCViewRect.Unused))
-                Invoke(new Action<NPCViewRect, string>(viewboxPreview1.DrawViewbox), selectedNPCTableEntry.Viewbox, e.PropertyName);
+                Invoke(new Action<NPCViewRect, bool, string>(viewboxPreview1.DrawViewbox), selectedNPCTableEntry.Viewbox, false, e.PropertyName);
             HasUnsavedChanges = true;
         }
         
@@ -370,7 +370,7 @@ namespace CaveStoryEditor
                 hitboxPreview1.DrawHitbox(selectedNPCTableEntry.Hitbox, hitboxFacingRight);
                 //viewbox
                 selectedNPCTableEntry.Viewbox.PropertyChanged += Viewbox_PropertyChanged;
-                viewboxPreview1.DrawViewbox(selectedNPCTableEntry.Viewbox);
+                viewboxPreview1.DrawViewbox(selectedNPCTableEntry.Viewbox, false);
                 //all the enums
                 selectedNPCTableEntry.PropertyChanged += currentNPCTableEntry_PropertyChanged;
                 SetSurfaceComboBoxValue(spriteSurfaceComboBox, surfaceDescriptors, selectedNPCTableEntry.SpriteSurface);

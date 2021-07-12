@@ -40,7 +40,7 @@ namespace CaveStoryEditor
                 if (bitNames.TryGetValue(val, out var name))
                     highestName = i;
                 else
-                    name = "0x" + val.ToString($"{bitWidth}X");
+                    name = "0x" + val.ToString($"X{bitWidth/8}");
                 checkedListBox.Items.Add(name);
             }
             while (highestName < checkedListBox.Items.Count-1)
@@ -50,13 +50,14 @@ namespace CaveStoryEditor
         }
         public void Initialize(Type @enum, int bitWidth)
         {
-            var baseType = @enum.GetEnumUnderlyingType();
+            //var baseType = @enum.GetEnumUnderlyingType();
             var names = Enum.GetNames(@enum);
 
             var vals = new ulong[names.Length];
             var j = 0;
             foreach (var val in Enum.GetValues(@enum))
-                vals[j++] = (ulong)Convert.ChangeType(val, typeof(ulong));
+                vals[j++] = Convert.ToUInt64(val);
+                //vals[j++] = (ulong)Convert.ChangeType(val, typeof(ulong));
 
             var dict = new Dictionary<ulong, string>(names.Length);
             for (int i = 0; i < names.Length; i++)

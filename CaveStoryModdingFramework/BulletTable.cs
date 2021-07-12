@@ -66,7 +66,8 @@ namespace CaveStoryModdingFramework
 
     public class BulletTableEntry : PropertyChangedHelper
     {
-        public const int Size = 42;
+        //TODO this can actually be 42 for CS+, but I'm not using it for that, sooo...
+        public const int Size = 44;
 
         sbyte damage, hits;
         int range, enemyHitboxWidth, enemyHitboxHeight, tileHitboxWidth, tileHitboxHeight;
@@ -97,6 +98,9 @@ namespace CaveStoryModdingFramework
 
     public static class BulletTable
     {
+        public const string BULLETTABLE = "bullet.tbl";
+        public static string BulletTableFilter = $"Bullet Table ({BULLETTABLE})|{BULLETTABLE}";
+
         public const int CSBulletTableAddress = 0x8F048;
         public const int CSBulletTableCount = 46;
         public const int CSBulletTableSize = CSBulletTableCount * BulletTableEntry.Size;
@@ -135,8 +139,10 @@ namespace CaveStoryModdingFramework
         public static void Write(IList<BulletTableEntry> bullets, BulletTableLocation location)
         {
             var size = BulletTableEntry.Size;
+            /*TODO related to the size thing
             if (location.PadDamageAndHits)
                 size += 2;
+            */
             var buff = new byte[bullets.Count * size];
             using(var bw = new BinaryWriter(new MemoryStream(buff)))
             {

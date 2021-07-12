@@ -83,15 +83,27 @@ namespace CaveStoryEditor
             npcTableEditor.InitMod(mod);
             npcTableEditor.LoadTable(mod.NPCTable);
 
-            //bullet table
-            bulletTableEditor1.InitMod(mod);
-            //TODO
-
             saveNPCTableToolStripMenuItem.Enabled = true;
             exportNPCTableToolStripMenuItem.Enabled = true;
 
+            //bullet table
+            bulletTableEditor1.UnsavedChangesChanged += BulletTableEditor1_UnsavedChangesChanged;
+            bulletTableEditor1.InitMod(mod);
+            bulletTableEditor1.LoadTable(mod.BulletTable);
+
+            saveBulletTableToolStripMenuItem.Enabled = true;
+            exportBulletTableToolStripMenuItem.Enabled = true;
+            
             InitScriptWatcher();
             InitImageWatcher();
+        }
+
+        private void BulletTableEditor1_UnsavedChangesChanged(object sender, EventArgs e)
+        {
+            if (bulletTableEditor1.HasUnsavedChanges)
+                bulletTableTabPage.Text += "*";
+            else
+                bulletTableTabPage.Text = bulletTableTabPage.Text.Remove(bulletTableTabPage.Text.Length - 1);
         }
 
         private void NpcTableEditor_UnsavedChangesChanged(object sender, EventArgs e)
@@ -631,12 +643,33 @@ namespace CaveStoryEditor
             using (var sfd = new SaveFileDialog()
             {
                 Title = "Choose a location...",
-                Filter = string.Join("|", NPCTable.NPCTBLFilter, "All Files (*.*)|*.*")
+                Filter = string.Join("|", NPCTable.NPCTBLFilter, AllFilesFilter)
             })
             {
                 if (sfd.ShowDialog() == DialogResult.OK)
                 {
                     npcTableEditor.Save(sfd.FileName);
+                }
+            }
+        }
+
+        private void saveBulletTableToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            BulletTable.Write(mod.BulletTable, mod.BulletTableLocation);
+        }
+
+        private void exportBulletTableToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using(var sfd = new SaveFileDialog()
+            {
+                Title = "Choose a location...",
+                Filter = string.Join("|", BulletTable.BulletTableFilter, AllFilesFilter)
+            })
+            {
+                if(sfd.ShowDialog() == DialogResult.OK)
+                {
+                    //HACK not that great that I'm creating a new stage table location hardcoded to one mode
+                    BulletTable.Write(mod.BulletTable, new BulletTableLocation(sfd.FileName, BulletTablePresets.csplus));
                 }
             }
         }
