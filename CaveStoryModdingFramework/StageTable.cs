@@ -734,28 +734,28 @@ namespace CaveStoryModdingFramework.Stages
                 case DataLocationTypes.Internal:
                     //doukutsuexe, csmap, and swdata share the same entry settings
                     var internalSettings = new StageEntrySettings(StageTablePresets.doukutsuexe);
-                    if(settings == internalSettings)
+                    if(settings.Equals(internalSettings))
                     {
-                        if(location == new StageTableLocation("", StageTablePresets.doukutsuexe))
+                        if(location.Equals(new StageTableLocation("", StageTablePresets.doukutsuexe)))
                         {
                             preset = StageTablePresets.doukutsuexe;
                         }
-                        else if(location == new StageTableLocation("", StageTablePresets.csmap))
+                        else if(location.Equals(new StageTableLocation("", StageTablePresets.csmap)))
                         {
                             preset = StageTablePresets.csmap;
                         }
-                        else if(location == new StageTableLocation("", StageTablePresets.swdata))
+                        else if(location.Equals(new StageTableLocation("", StageTablePresets.swdata)))
                         {
                             preset = StageTablePresets.swdata;
                         }
                     }
                     break;
                 case DataLocationTypes.External:
-                    if(location == new StageTableLocation("", StageTablePresets.stagetbl) && settings == new StageEntrySettings(StageTablePresets.stagetbl))
+                    if(location.Equals(new StageTableLocation("", StageTablePresets.stagetbl)) && settings.Equals(new StageEntrySettings(StageTablePresets.stagetbl)))
                     {
                         preset = StageTablePresets.stagetbl;
                     }
-                    else if(location == new StageTableLocation("", StageTablePresets.mrmapbin) && settings == new StageEntrySettings(StageTablePresets.mrmapbin))
+                    else if(location.Equals(new StageTableLocation("", StageTablePresets.mrmapbin)) && settings.Equals(new StageEntrySettings(StageTablePresets.mrmapbin)))
                     {
                         preset = StageTablePresets.mrmapbin;
                     }
