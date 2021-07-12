@@ -59,15 +59,15 @@ namespace CaveStoryEditor
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.viewboxPreview1 = new CaveStoryEditor.ViewboxPreview();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
             this.mirroredButton = new System.Windows.Forms.Button();
             this.verticalNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.unusedNumericUpDown = new System.Windows.Forms.NumericUpDown();
-            this.leftNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.rightNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.leftNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -91,8 +91,8 @@ namespace CaveStoryEditor
             this.tableLayoutPanel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.verticalNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.unusedNumericUpDown)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.leftNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rightNumericUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.leftNumericUpDown)).BeginInit();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -446,24 +446,6 @@ namespace CaveStoryEditor
             this.viewboxPreview1.Size = new System.Drawing.Size(238, 77);
             this.viewboxPreview1.TabIndex = 1;
             // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(3, 60);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(42, 30);
-            this.label8.TabIndex = 6;
-            this.label8.Text = "Right Facing Offset";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(3, 0);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(42, 30);
-            this.label9.TabIndex = 7;
-            this.label9.Text = "Left Facing Offset";
-            // 
             // mirroredButton
             // 
             this.tableLayoutPanel3.SetColumnSpan(this.mirroredButton, 2);
@@ -508,6 +490,13 @@ namespace CaveStoryEditor
             this.unusedNumericUpDown.Size = new System.Drawing.Size(56, 20);
             this.unusedNumericUpDown.TabIndex = 5;
             // 
+            // rightNumericUpDown
+            // 
+            this.rightNumericUpDown.Location = new System.Drawing.Point(64, 63);
+            this.rightNumericUpDown.Name = "rightNumericUpDown";
+            this.rightNumericUpDown.Size = new System.Drawing.Size(54, 20);
+            this.rightNumericUpDown.TabIndex = 3;
+            // 
             // leftNumericUpDown
             // 
             this.leftNumericUpDown.Location = new System.Drawing.Point(64, 3);
@@ -515,12 +504,23 @@ namespace CaveStoryEditor
             this.leftNumericUpDown.Size = new System.Drawing.Size(54, 20);
             this.leftNumericUpDown.TabIndex = 2;
             // 
-            // rightNumericUpDown
+            // label9
             // 
-            this.rightNumericUpDown.Location = new System.Drawing.Point(64, 63);
-            this.rightNumericUpDown.Name = "rightNumericUpDown";
-            this.rightNumericUpDown.Size = new System.Drawing.Size(54, 20);
-            this.rightNumericUpDown.TabIndex = 3;
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(3, 0);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(42, 30);
+            this.label9.TabIndex = 7;
+            this.label9.Text = "Left Facing Offset";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(3, 60);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(42, 30);
+            this.label8.TabIndex = 6;
+            this.label8.Text = "Right Facing Offset";
             // 
             // BulletTableEditor
             // 
@@ -556,8 +556,8 @@ namespace CaveStoryEditor
             this.tableLayoutPanel3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.verticalNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.unusedNumericUpDown)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.leftNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.rightNumericUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.leftNumericUpDown)).EndInit();
             this.ResumeLayout(false);
 
         }
