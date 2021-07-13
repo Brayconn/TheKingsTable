@@ -337,8 +337,17 @@ namespace CaveStoryModdingFramework
                     break;
             }
 
-            //TODO actually support choosing a bullet table type
-            BulletTableLocation = new BulletTableLocation(EXEPath, BulletTablePresets.doukutsuexe);
+            //TODO this still isn't good enough
+            switch(StageTableLocation.DataLocationType)
+            {
+                case DataLocationTypes.Internal:
+                    BulletTableLocation = new BulletTableLocation(EXEPath, BulletTablePresets.doukutsuexe);
+                    break;
+                case DataLocationTypes.External:
+                    BulletTableLocation = new BulletTableLocation(Path.Combine(BaseDataPath, CaveStoryModdingFramework.BulletTable.BULLETTABLE), BulletTablePresets.csplus);
+                    break;
+            }
+            
             BulletTable = CaveStoryModdingFramework.BulletTable.Read(BulletTableLocation);
 
             NpcTablePath = Path.Combine(BaseDataPath, Entities.NPCTable.NPCTBL);
