@@ -16,6 +16,8 @@ namespace CaveStoryModdingFramework
         public int BulletCount { get; set; }
         public bool PadDamageAndHits { get; set; }
 
+        public int EntrySize => PadDamageAndHits ? BulletTableEntry.PaddedSize : BulletTableEntry.UnpaddedSize;
+
         private BulletTableLocation()
         {
             
@@ -66,8 +68,8 @@ namespace CaveStoryModdingFramework
 
     public class BulletTableEntry : PropertyChangedHelper
     {
-        //TODO this can actually be 42 for CS+, but I'm not using it for that, sooo...
-        public const int Size = 44;
+        public const int UnpaddedSize = 42;
+        public const int PaddedSize = 44;
 
         sbyte damage, hits;
         int range, enemyHitboxWidth, enemyHitboxHeight, tileHitboxWidth, tileHitboxHeight;
@@ -103,13 +105,13 @@ namespace CaveStoryModdingFramework
 
         public const int CSBulletTableAddress = 0x8F048;
         public const int CSBulletTableCount = 46;
-        public const int CSBulletTableSize = CSBulletTableCount * BulletTableEntry.Size;
+        public const int CSBulletTableSize = CSBulletTableCount * BulletTableEntry.PaddedSize;
 
         public static List<BulletTableEntry> Read(BulletTableLocation location)
         {
             var count = location.BulletCount;
             if (location.DataLocationType == DataLocationTypes.External)
-                count = (int)(new FileInfo(location.Filename).Length / BulletTableEntry.Size);
+                count = (int)(new FileInfo(location.Filename).Length / location.EntrySize);
             var output = new List<BulletTableEntry>(count);
             using(var br = new BinaryReader(location.GetStream(FileMode.Open, FileAccess.Read)))
             {
@@ -138,12 +140,7 @@ namespace CaveStoryModdingFramework
 
         public static void Write(IList<BulletTableEntry> bullets, BulletTableLocation location)
         {
-            var size = BulletTableEntry.Size;
-            /*TODO related to the size thing
-            if (location.PadDamageAndHits)
-                size += 2;
-            */
-            var buff = new byte[bullets.Count * size];
+            var buff = new byte[bullets.Count * location.EntrySize];
             using(var bw = new BinaryWriter(new MemoryStream(buff)))
             {
                 foreach(var bullet in bullets)
