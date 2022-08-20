@@ -1,0 +1,36 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:c="using:TheKingsTable.Controls">
+    <Design.PreviewWith>
+        <Border Padding="20">
+          <c:WizardControl>
+              
+                  <TextBox>hello!</TextBox>
+                  <Button IsEnabled="False">Middle?</Button>
+                  <Ellipse Fill="Red" Width="300" Height="200"/>
+              
+          </c:WizardControl>
+        </Border>
+    </Design.PreviewWith>
+
+  <Style Selector="c|WizardControl">
+    <Setter Property="Template">
+        <ControlTemplate>
+            <Grid RowDefinitions="*,auto" VerticalAlignment="Stretch" ColumnDefinitions="auto,*,auto">
+                <Carousel Name="PART_Carousel" Grid.ColumnSpan="3"
+                          Items="{TemplateBinding Items}"
+                          SelectedIndex="{TemplateBinding SelectedIndex, Mode=TwoWay}"
+                          SelectedItem="{TemplateBinding SelectedItem, Mode=TwoWay}"
+                          />
+                <Button Name="PART_BackButton" Grid.Row="1"
+                        Command  ="{TemplateBinding BackCommand}"
+                        Content  ="Back"
+                        />
+                <Button Name="PART_NextButton" Grid.Row="1" Grid.Column="2"
+                        Command  ="{TemplateBinding NextCommand}"
+                        />
+            </Grid>
+        </ControlTemplate>      
+    </Setter>
+  </Style>
+</Styles>

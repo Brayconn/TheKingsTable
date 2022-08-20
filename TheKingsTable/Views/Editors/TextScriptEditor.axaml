@@ -1,0 +1,18 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:c="using:TheKingsTable.Controls">
+	<DataTemplate x:Key="ScriptEditorHeaderDataTemplate">
+		<TextBlock Text="{Binding TSCPath}"/>
+	</DataTemplate>
+	<DataTemplate x:Key="ScriptEditorDataTemplate">
+		<DockPanel>
+			<Menu DockPanel.Dock="Top">
+				<MenuItem Header="_File">
+					<MenuItem Header="_Save" Command="{Binding SaveCommand}"/>
+					<MenuItem Header="Save As..." Command="{Binding SaveAsCommand}"/>
+				</MenuItem>
+			</Menu>
+			<c:TextEditorWrapper Text="{Binding Text}"/>
+		</DockPanel>
+	</DataTemplate>
+</ResourceDictionary>

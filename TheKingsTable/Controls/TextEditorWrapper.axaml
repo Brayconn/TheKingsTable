@@ -1,0 +1,16 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:c="using:TheKingsTable.Controls"
+		xmlns:ae="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit">
+  <Design.PreviewWith>
+    <c:TextEditorWrapper Text="Hello" />
+  </Design.PreviewWith>
+
+  <Style Selector="c|TextEditorWrapper">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <ae:TextEditor Name="PART_TextEditor"/>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+</Styles>

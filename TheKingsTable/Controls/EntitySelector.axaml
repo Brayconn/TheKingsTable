@@ -1,0 +1,33 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:c="using:TheKingsTable.Controls"
+        xmlns:cnv="using:TheKingsTable.Converters">
+  <Design.PreviewWith>
+    <c:EntitySelector />
+  </Design.PreviewWith>
+
+  <Style Selector="c|EntitySelector">
+    <Style.Resources>
+          <cnv:EntityListConverter x:Key="entityListConverter"/>
+    </Style.Resources>
+    <Setter Property="Template">
+      <ControlTemplate>
+        <ListBox Name="PART_EntityList"
+                 Items="{TemplateBinding Entities}">
+          <ListBox.ItemTemplate>
+            <DataTemplate>
+              <TextBlock>
+                <TextBlock.Text>
+                  <MultiBinding Converter="{StaticResource entityListConverter}">
+                    <Binding Path="."/>
+					<Binding Path="#PART_EntityList.Items"/>
+                  </MultiBinding>
+                </TextBlock.Text>
+              </TextBlock>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+</Styles>

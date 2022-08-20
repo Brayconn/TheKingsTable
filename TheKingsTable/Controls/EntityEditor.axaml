@@ -1,0 +1,45 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:c="using:TheKingsTable.Controls"
+        xmlns:cnv="using:TheKingsTable.Converters">
+  <Design.PreviewWith>
+    <c:EntityEditor />
+  </Design.PreviewWith>
+
+  <Style Selector="c|EntityEditor">
+    <Style.Resources>
+      <cnv:ShortConverter x:Key="shortConverter"/>
+    </Style.Resources>
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Grid ColumnDefinitions="auto,*" RowDefinitions="auto,auto,auto,auto,auto,auto,*">
+          <TextBlock Text="X"/>
+          <TextBox Grid.Column="1"
+                         Name="PART_XEditor"/>
+          
+          <TextBlock Grid.Row="1" Text="Y"/>
+          <TextBox Grid.Row="1" Grid.Column="1"
+                         Name="PART_YEditor"/>
+          
+          <TextBlock Grid.Row="2" Text="TSC Flag"/>
+          <TextBox Grid.Row="2" Grid.Column="1"
+                   Name="PART_FlagEditor"/>
+          
+          <TextBlock Grid.Row="3" Text="TSC Event"/>
+          <TextBox Grid.Row="3" Grid.Column="1"
+                   Name="PART_EventEditor"/>
+          
+          <TextBlock Grid.Row="4" Text="Type"/>
+          <TextBox Grid.Row="4" Grid.Column="1"
+                   Name="PART_TypeEditor"/>
+          
+          <TextBlock Grid.Row="5" Text="Entity Flags"/>
+          <TextBox Grid.Row="5" Grid.Column="1"
+                         Name="PART_RawBitEditor"/>
+          <c:BitEditor Grid.Row="6" Grid.ColumnSpan="2"
+                       Name="PART_ListBitEditor"/>
+        </Grid>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+</Styles>

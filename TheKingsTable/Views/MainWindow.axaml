@@ -1,0 +1,54 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:TheKingsTable.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:np="https://np.com/visuals"
+        xmlns:views="using:TheKingsTable.Views"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="TheKingsTable.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="The King's Table"
+        np:DockAttachedProperties.DockChildWindowOwner=
+                       "{Binding RelativeSource={RelativeSource Mode=Self}}"
+        np:DockAttachedProperties.WindowId="TheMainWindow">
+  <Design.DataContext>
+    <vm:MainWindowViewModel/>
+  </Design.DataContext>
+  <Window.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="/Views/Editors/StageEditor.axaml"/>
+		<ResourceInclude Source="/Views/Editors/StageTableEditors.axaml"/>
+		<ResourceInclude Source="/Views/Editors/TextScriptEditor.axaml"/> 
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+	<np:DockManager x:Key="TheDockManager"/>
+  </Window.Resources>
+  <Grid RowDefinitions="Auto,*">
+    <Menu Grid.Row="0">
+      <MenuItem Header="_File">
+        <MenuItem Header="_New Project" Command="{Binding NewProjectCommand}"/>
+        <MenuItem Header="_Load Project" Command="{Binding LoadProjectCommand}"/>
+        <MenuItem Header="_Save Project" Command="{Binding SaveProjectCommand}"/>
+      </MenuItem>
+      <MenuItem Header="_Edit"></MenuItem>
+      <MenuItem Header="_View"></MenuItem>
+      <MenuItem Header="_Analyze">
+        <MenuItem Header="Flag List..."/>
+        <MenuItem Header="Npc Usage..."/>
+        <MenuItem Header="Text List..."/>
+      </MenuItem>
+      <MenuItem Header="_Tools">
+        <MenuItem Header="PE Editor"/>
+      </MenuItem>
+    </Menu>
+      <np:RootDockGroup Grid.Row="1" DockId="RootGroup"
+                        TheDockManager="{StaticResource TheDockManager}">
+		  <np:StackDockGroup TheOrientation="Horizontal">
+        <np:TabbedDockGroup DockId="EditorGroup" IsStableGroup="True"/>
+        <np:TabbedDockGroup DockId="ToolGroup" IsStableGroup="True"/>
+		  </np:StackDockGroup>
+	  </np:RootDockGroup>
+  </Grid>
+</Window>

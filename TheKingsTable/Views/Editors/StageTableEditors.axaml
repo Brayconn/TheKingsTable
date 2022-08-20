@@ -1,0 +1,38 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:cnv="using:TheKingsTable.Converters">
+	<cnv:StageEntryListConverter x:Key="stageEntryListConverter"/>
+	<DataTemplate x:Key="StageTableHeader">
+		<TextBlock Text="{Binding Location.Filename}"/>
+	</DataTemplate>
+	<DataTemplate x:Key="StageTableGridView">
+        <DataGrid CanUserReorderColumns="True"
+                  CanUserResizeColumns="True"
+                  CanUserSortColumns="False"
+                  Items="{Binding StageTable}"/>
+    </DataTemplate>
+    <DataTemplate x:Key="StageTableListView">
+		<Grid RowDefinitions="*,Auto" ColumnDefinitions="*,*">
+			<!--35 was the old height-->
+			<ListBox Name="StageList" Grid.ColumnSpan="2"
+					 Items="{Binding Stages}" Selection="{Binding Selection}">
+				<ListBox.ItemTemplate>
+					<DataTemplate>
+						<TextBlock>
+							<TextBlock.Text>
+								<MultiBinding Converter="{StaticResource stageEntryListConverter}">
+									<Binding Path="."/>
+									<Binding Path="#StageList.Items"/>
+								</MultiBinding>
+							</TextBlock.Text>
+						</TextBlock>
+					</DataTemplate>
+				</ListBox.ItemTemplate>
+			</ListBox>
+			<Button Grid.Row="1"
+					Command="{Binding OpenStageCommand}">Open Stage</Button>
+			<Button Grid.Row="1" Grid.Column="1"
+					Command="{Binding OpenScriptCommand}">Open Script</Button>
+		</Grid>
+    </DataTemplate>
+</ResourceDictionary>

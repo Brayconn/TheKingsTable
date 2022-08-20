@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="0.10.17" />
+    <PackageReference Include="Avalonia.AvaloniaEdit" Version="0.10.12.2" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="0.10.17" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.10.17" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="0.10.17" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.17" />
+    <PackageReference Include="Avalonia.Xaml.Interactions" Version="0.10.17" />
+    <PackageReference Include="AvaloniaEdit.TextMate" Version="0.10.12.2" />
+    <PackageReference Include="MessageBox.Avalonia" Version="2.0.2" />
+    <PackageReference Include="NP.Avalonia.UniDock" Version="1.0.35" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
+    <PackageReference Include="WriteableBitmapEx" Version="1.6.8" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CaveStoryModdingFramework\CaveStoryModdingFramework.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Controls\FileSystemSelector.axaml.cs">
+      <DependentUpon>FileSystemSelector.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\WizardView.axaml.cs">
+      <DependentUpon>WizardView.axaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Controls\EntityEditor.axaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Controls\BitEditor.axaml" />
+  </ItemGroup>
+</Project>

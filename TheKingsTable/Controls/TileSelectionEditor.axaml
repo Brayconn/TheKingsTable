@@ -1,0 +1,33 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:c="using:TheKingsTable.Controls">
+  <Design.PreviewWith>
+    <c:TileSelectionEditor />
+  </Design.PreviewWith>
+
+  <Style Selector="c|TileSelectionEditor">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Grid RowDefinitions="*,4,*">
+          <c:StageRenderer Name="PART_SelectionViewer"
+            Map              ="{Binding #PART_TilesetViewer.Selection.Contents}"
+            TilesetImage     ="{Binding #PART_TilesetViewer.TilesetImage}"
+            TileTypesImage   ="{Binding #PART_TilesetViewer.TileTypesImage}"
+            ShowTileTypes    ="{Binding #PART_TilesetViewer.ShowTileTypes}"
+            TilesetAttributes="{Binding #PART_TilesetViewer.TilesetAttributes}"
+            SelectionStartX  ="{Binding #PART_TilesetViewer.Selection.CursorX}"
+            SelectionStartY  ="{Binding #PART_TilesetViewer.Selection.CursorY}"
+            SelectionEndX    ="{Binding #PART_TilesetViewer.Selection.CursorX}"
+            SelectionEndY    ="{Binding #PART_TilesetViewer.Selection.CursorY}"/>
+          <GridSplitter Grid.Row="1" ResizeDirection="Rows"/>
+          <c:TilesetViewer Grid.Row="2" Name="PART_TilesetViewer"
+            Selection="{Binding TheTileSelection, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+            TilesetImage="{TemplateBinding TilesetImage}"
+            TileTypesImage="{TemplateBinding TileTypesImage}"
+            TilesetAttributes="{TemplateBinding TilesetAttributes}"
+            ShowTileTypes="{TemplateBinding ShowTileTypes}"/>
+        </Grid>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+</Styles>

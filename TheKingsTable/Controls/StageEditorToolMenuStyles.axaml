@@ -1,0 +1,49 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:c="using:TheKingsTable.Controls">
+    <Design.PreviewWith>
+        <Border Padding="20">
+          <c:StageEditorToolMenu/>
+        </Border>
+    </Design.PreviewWith>
+  
+  <Style Selector="c|StageEditorToolMenu">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <TabControl Name="PART_Tabs">
+          <TabItem Header="Tile" c:StageEditorToolMenu.TabType="Tile">
+            <c:TileSelectionEditor
+              TilesetImage="{Binding TilesetImage}"
+              TileTypesImage="{Binding TileTypesImage}"
+              TilesetAttributes="{Binding Attributes}"
+              ShowTileTypes="{Binding ShowTileTypes}"
+              TheTileSelection="{Binding TileEditor.Selection, Mode=TwoWay}"
+              />
+          </TabItem>
+          <TabItem Header="Entity" c:StageEditorToolMenu.TabType="Entity">
+            <StackPanel Orientation="Vertical">
+              <c:EntityEditor
+                X="{Binding EntityEditor.SelectedX}"
+                Y="{Binding EntityEditor.SelectedY}"
+                Flag="{Binding EntityEditor.SelectedFlag}"
+                Event="{Binding EntityEditor.SelectedEvent}"
+                Type="{Binding EntityEditor.SelectedType}"
+                Bits="{Binding EntityEditor.SelectedBits}"
+                />
+              <c:EntitySelector
+                  Entities="{Binding Project.EntityInfos}"
+                  SelectedEntity="{Binding SelectedEntityType}"
+                  />
+            </StackPanel>
+          </TabItem>
+          <TabItem Header="Entity List" c:StageEditorToolMenu.TabType="Entity">
+
+          </TabItem>
+          <TabItem Header="Map States" c:StageEditorToolMenu.TabType="MapState">
+
+          </TabItem>
+        </TabControl>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+</Styles>

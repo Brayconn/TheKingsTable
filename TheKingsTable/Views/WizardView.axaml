@@ -1,0 +1,59 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="TheKingsTable.Views.WizardView"
+             xmlns:c="using:TheKingsTable.Controls">
+	<c:WizardControl
+	  SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}"
+	  NextCommand="{Binding NextCommand}"
+	  BackCommand="{Binding BackCommand}"
+	  >
+		<!--Init-->
+		<Grid RowDefinitions="auto,auto" ColumnDefinitions="*,auto">
+			<c:FileSystemSelector Watermark="Doukutsu.exe" Description="Executable" Filters="Executables|exe|All Files|*"
+					Text="{Binding EXEPath, Mode=TwoWay}"
+					StartDirectory="{Binding EXEStart}"/>
+			<Button VerticalAlignment="Bottom" Grid.Column="1"
+				IsEnabled="{Binding DataOK^, Mode=OneWay}" Command="{Binding DetectEXECommand}">Auto Detect</Button>
+			<c:FileSystemSelector Grid.Row="1" Watermark="data" Description="Data Folder"
+						Text="{Binding BaseDataPath, Mode=TwoWay}"
+						StartDirectory="{Binding DataStart}" />
+			<Button VerticalContentAlignment="Bottom" Grid.Row="1" Grid.Column="1"
+				IsEnabled="{Binding EXEOK^, Mode=OneWay}" Command="{Binding DetectDataCommand}">Auto Detect</Button>
+		</Grid>
+		<!--Stage Tables-->
+		<Grid ColumnDefinitions="*,*">
+			<ListBox Items="{Binding Project.StageTables}"/>
+		</Grid>
+		<!--Data-->
+		<Grid RowDefinitions="auto,auto,auto">
+			<c:FileSystemSelector Watermark="data" Description="Data Folder" Text="{Binding LayoutDataPath, Mode=TwoWay}" />
+			<TextBox Grid.Row="1" Watermark="Image Extension" Text="{Binding ImageExtension, Mode=TwoWay}"/>
+			<TextBox Grid.Row="2" Watermark="Background Prefix" Text="{Binding BackgroundPrefix, Mode=TwoWay}"/>
+		</Grid>
+		<!--NPC-->
+		<Grid RowDefinitions="auto,auto">
+			<c:FileSystemSelector Watermark="Npc" Description="Npc Folder" Text="{Binding LayoutNpcPath, Mode=TwoWay}" />
+			<TextBox Grid.Row="1" Watermark="Spritesheet Prefix" Text="{Binding SpritesheetPrefix}"/>
+		</Grid>
+		<!--Stage-->
+		<Grid RowDefinitions="*,*,*,*,*,*,*" ColumnDefinitions="*,*">
+			<c:FileSystemSelector Watermark="Stage" Description="Stage Folder" Text="{Binding LayoutStagePath, Mode=TwoWay}" />
+			<TextBox Grid.Row="1" Watermark="Entity Extension" Text="{Binding EntityExtension, Mode=TwoWay}"/>
+			<TextBox Grid.Row="2" Watermark="Map Extension" Text="{Binding MapExtension, Mode=TwoWay}"/>
+			<TextBox Grid.Row="3" Watermark="Script Extension" Text="{Binding ScriptExtension, Mode=TwoWay}"/>
+			<CheckBox Grid.Row="3" Grid.Column="1" IsChecked="{Binding ScriptsEncrypted, Mode=TwoWay}"/>
+			<Separator Grid.Row="4" Grid.ColumnSpan="2"/>
+			<TextBox Grid.Row="5" Watermark="Attribute Extension" Text="{Binding AttributeExtension, Mode=TwoWay}"/>
+			<TextBox Grid.Row="6" Watermark="Tileset Prefix" Text="{Binding TilesetPrefix, Mode=TwoWay}"/>
+		</Grid>
+		<!--Layout review-->
+		<Grid ColumnDefinitions="*,*">
+			<ListBox Items="{Binding Project.AssetLayouts}"/>
+		</Grid>
+		<!--Done-->
+		<TextBlock>Click next to start modding!!!!1</TextBlock>
+	</c:WizardControl>
+</UserControl>

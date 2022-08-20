@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30114.105
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32414.318
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CaveStoryEditor", "CaveStoryEditor\CaveStoryEditor.csproj", "{8150F0E5-0B43-4B09-BFFC-4D0E1F2EFABC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CaveStoryModdingFramework", "CaveStoryModdingFramework\CaveStoryModdingFramework.csproj", "{00C92507-872A-47C4-A632-6946B0F0935E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CaveStoryModdingFramework", "CaveStoryModdingFramework\CaveStoryModdingFramework.csproj", "{00C92507-872A-47C4-A632-6946B0F0935E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PixelModdingFramework", "..\PixelModdingFramework\PixelModdingFramework\PixelModdingFramework.csproj", "{4582AE75-D1E5-4228-BD5F-F9389DA86EA4}"
 EndProject
@@ -16,6 +16,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LayeredPictureBox", "..\LayeredPictureBox\LayeredPictureBox\LayeredPictureBox.csproj", "{2BCB2AFA-27DB-4B92-83F8-02B859F1E1F4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormsKeybinds", "..\WinFormsKeybinds\WinFormsKeybinds\WinFormsKeybinds.csproj", "{01D4486A-D72A-421D-842F-AB35EF1CDFBB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheKingsTable", "TheKingsTable\TheKingsTable.csproj", "{2A32BB3E-B1D1-460C-8733-D376EF42EFDC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CaveStoryModdingFrameworkTests", "CaveStoryModdingFrameworkTests\CaveStoryModdingFrameworkTests.csproj", "{B4CC6E9D-3860-434D-A2A0-814263286D6E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +55,14 @@ Global
 		{01D4486A-D72A-421D-842F-AB35EF1CDFBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{01D4486A-D72A-421D-842F-AB35EF1CDFBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{01D4486A-D72A-421D-842F-AB35EF1CDFBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A32BB3E-B1D1-460C-8733-D376EF42EFDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A32BB3E-B1D1-460C-8733-D376EF42EFDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A32BB3E-B1D1-460C-8733-D376EF42EFDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A32BB3E-B1D1-460C-8733-D376EF42EFDC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4CC6E9D-3860-434D-A2A0-814263286D6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4CC6E9D-3860-434D-A2A0-814263286D6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4CC6E9D-3860-434D-A2A0-814263286D6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4CC6E9D-3860-434D-A2A0-814263286D6E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

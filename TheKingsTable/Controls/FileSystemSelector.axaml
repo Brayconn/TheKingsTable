@@ -1,0 +1,16 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			       xmlns:c="using:TheKingsTable.Controls"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="100"
+             x:Class="TheKingsTable.Controls.FileSystemSelector">
+  <Grid RowDefinitions="auto,auto" ColumnDefinitions="*,auto">
+    <Label Grid.ColumnSpan="2"
+		   Content="{Binding Path=Title, Mode=OneTime, RelativeSource={RelativeSource AncestorType=c:FileSystemSelector}}}"/>
+    <TextBox Grid.Row="1"
+			 Watermark="{Binding Path=Watermark, Mode=OneTime, RelativeSource={RelativeSource AncestorType=c:FileSystemSelector}}}"
+			 Text="{Binding Path=Text, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=c:FileSystemSelector}}}"/>
+	<Button Grid.Row="1" Grid.Column="1" Click="OnBrowse">...</Button> 
+  </Grid>
+</UserControl>

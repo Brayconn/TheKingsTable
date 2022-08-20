@@ -1,0 +1,127 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:c="using:TheKingsTable.Controls">
+  <DataTemplate x:Key="StageEditorHeaderDataTemplate">
+    <TextBlock Text="{Binding StageName}"/>
+  </DataTemplate>
+  <DataTemplate x:Key="StageEditorDataTemplate">
+    <DockPanel>
+      <Menu DockPanel.Dock="Top">
+        <MenuItem Header="_File">
+          <MenuItem Header="_Save" Command="{Binding SaveCommand}"/>
+        </MenuItem>
+        <MenuItem Header="_Edit">
+          <MenuItem Header="_Undo" Command="{Binding UndoCommand}"/>
+          <MenuItem Header="_Redo" Command="{Binding RedoCommand}"/>
+        </MenuItem>
+        
+        <MenuItem Header="_View">
+          <MenuItem Header="_Background">
+            <MenuItem.Icon>
+              <CheckBox IsChecked="{Binding #MR.ShowBackground, Mode=TwoWay}"/>
+            </MenuItem.Icon>
+          </MenuItem>
+          <MenuItem Header="Tile _Types">
+            <MenuItem.Icon>
+              <CheckBox IsChecked="{Binding ShowTileTypes, Mode=TwoWay}"/>
+            </MenuItem.Icon>
+          </MenuItem>
+          <MenuItem Header="Entity _Sprites">
+            <MenuItem.Icon>
+              <CheckBox IsChecked="{Binding #MR.ShowEntitySprites, Mode=TwoWay}"/>
+            </MenuItem.Icon>
+          </MenuItem>
+          <MenuItem Header="Entity _Boxes">
+            <MenuItem.Icon>
+              <CheckBox IsChecked="{Binding #MR.ShowEntityBoxes, Mode=TwoWay}"/>
+            </MenuItem.Icon>
+          </MenuItem>
+          <MenuItem Header="Player _Preview">
+            <MenuItem.Icon>
+              <CheckBox IsChecked="{Binding #MR.ShowPlayerPreview, Mode=TwoWay}"/>
+            </MenuItem.Icon>
+          </MenuItem>
+        </MenuItem>
+        
+        <MenuItem Header="_Tools">
+          <MenuItem Header="_Draw">
+            <MenuItem.Icon>
+              <CheckBox IsChecked="{Binding TileDraw, Mode=TwoWay}"/>
+            </MenuItem.Icon>
+          </MenuItem>
+          <MenuItem Header="_Rectangle">
+            <MenuItem.Icon>
+              <CheckBox IsChecked="{Binding TileRectangle, Mode=TwoWay}"/>
+            </MenuItem.Icon>
+          </MenuItem>
+          <MenuItem Header="_Fill">
+            <MenuItem.Icon>
+              <CheckBox IsChecked="{Binding TileFill, Mode=TwoWay}"/>
+            </MenuItem.Icon>
+          </MenuItem>
+          <MenuItem Header="Replace">
+            <MenuItem.Icon>
+              <CheckBox IsChecked="{Binding TileReplace, Mode=TwoWay}"/>
+            </MenuItem.Icon>
+          </MenuItem>
+          <MenuItem Header="Select">
+            <MenuItem.Icon>
+              <CheckBox IsChecked="{Binding TileSelect, Mode=TwoWay}"/>
+            </MenuItem.Icon>
+          </MenuItem>
+        </MenuItem>
+      </Menu>
+      <Grid ColumnDefinitions="*,5,*">
+        <c:StageEditorToolMenu EditorMode="{Binding ActiveEditor}"/>
+        <GridSplitter Grid.Column="1" ResizeDirection="Columns"/>
+        <ScrollViewer Grid.Column="2"
+                      HorizontalScrollBarVisibility="Auto"
+                      VerticalScrollBarVisibility="Auto">
+          <c:StageRenderer Name="MR" DockPanel.Dock="Bottom"
+                           HorizontalAlignment="Left" VerticalAlignment="Top"
+              BackgroundType="{Binding Entry.BackgroundType}"
+              Background="{Binding Background}"
+                       
+              TileSize="{Binding Project.TileSize}"
+              TilesetAttributes="{Binding Attributes}"
+              TilesetImage="{Binding TilesetImage}"
+              TileTypesImage="{Binding TileTypesImage}"
+              ShowTileTypes="{Binding ShowTileTypes}"
+                       
+              Map="{Binding TileEditor.Tiles}"
+              TileChangeQueue="{Binding TileEditor.TileChangeQueue}"
+              CurrentTileEditorAction="{Binding TileEditor.CurrentAction}"
+              TileSelection="{Binding TileEditor.Selection, Mode=TwoWay}"
+                       
+              Entities="{Binding EntityEditor.Entities}"
+              SelectedEntities="{Binding EntityEditor.Selection}"
+                           
+              ShowCursor="{Binding ShowCursor}"
+              SelectedEntityOffsetX="{Binding EntityMoveOffsetX}"
+              SelectedEntityOffsetY="{Binding EntityMoveOffsetY}"
+             
+              SelectionStartX="{Binding SelectionStartX}"
+              SelectionStartY="{Binding SelectionStartY}"
+              SelectionEndX="{Binding SelectionEndX}"
+              SelectionEndY="{Binding SelectionEndY}"
+             
+              PointerEnterCommand="{Binding PointerEnterCommand}"
+              PointerMovedCommand="{Binding PointerMovedCommand}"
+              PointerPressedCommand="{Binding PointerPressedCommand}"
+              PointerReleasedCommand="{Binding PointerReleasedCommand}"
+              PointerLeaveCommand="{Binding PointerLeaveCommand}"
+              PointerCaptureLostCommand="{Binding PointerCaptureLostCommand}"
+              
+              KeyDownCommand="{Binding KeyDownCommand}"
+                           
+              RedrawTilesNeeded="{Binding RedrawTilesNeeded}"
+              RedrawTileTypesNeeded="{Binding RedrawTileTypesNeeded}"
+              
+              ContextMenu="{Binding ContextMenu}"
+             >
+          </c:StageRenderer>
+        </ScrollViewer>
+      </Grid>
+    </DockPanel>
+  </DataTemplate>
+</ResourceDictionary>
