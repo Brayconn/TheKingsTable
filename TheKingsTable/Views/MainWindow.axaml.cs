@@ -48,6 +48,8 @@ namespace TheKingsTable.Views
                 RegisterHandler(x => CommonAvaloniaHandlers.ShowFolderBrowser(x, this))));
             this.WhenActivated(d => d(CommonInteractions.BrowseToSaveFile.
                 RegisterHandler(x => CommonAvaloniaHandlers.ShowSaveFileBrowser(x, this))));
+            this.WhenActivated(d => d(CommonInteractions.IsOk
+                .RegisterHandler(x => CommonAvaloniaHandlers.ShowYesNoMessage(x, this))));
         }
 
         private void InitializeComponent()
