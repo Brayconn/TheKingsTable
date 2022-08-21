@@ -586,9 +586,10 @@ namespace TheKingsTable.ViewModels
 
                 //HACK need to generate functions that do the comparison
                 //otherwise i will stay at PageCount for every comparison
-                var f = (int j) =>
-                    (int x) =>
-                        x == j;
+                Func<int, Func<int,bool>> f =
+                    (int j) =>
+                        (int x) =>
+                            x == j;
 
                 //Basic page check
                 pageConditions.Add(this.WhenAnyValue(x => x.SelectedIndex, f(i)));

@@ -1,11 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+	<TargetFrameworks>net5.0;net6.0</TargetFrameworks>  
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="tiletypes.png" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="0.10.17" />
@@ -37,5 +40,10 @@
   </ItemGroup>
   <ItemGroup>
     <UpToDateCheckInput Remove="Controls\BitEditor.axaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="tiletypes.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>
