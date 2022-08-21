@@ -36,7 +36,9 @@ namespace TheKingsTable
             o.Filters = PrepareFilters(context.Input);
             
             var result = await o.ShowAsync(parent);
-            context.SetOutput(result?[0]);
+            //cancelling the dialog returns null on windows
+            //but I think it returns empty array on mac...?
+            context.SetOutput(result?.Length > 0 ? result[0] : null);
         }
 
         public static async Task ShowSaveFileBrowser(InteractionContext<FileSelection, string?> context, Window parent)
