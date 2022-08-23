@@ -20,9 +20,9 @@ namespace TheKingsTable.ViewModels
             LoadProjectCommand = ReactiveCommand.Create<RoutedEventArgs>(LoadProject);
             SaveProjectCommand = ReactiveCommand.Create<RoutedEventArgs>(SaveProject);
 
-            ShowNewProjectWizard = new Interaction<Unit, ProjectFile?>();
+            ShowNewProjectWizard = new Interaction<Unit, WizardViewModel?>();
         }
-        public Interaction<Unit, ProjectFile?> ShowNewProjectWizard { get; }
+        public Interaction<Unit, WizardViewModel?> ShowNewProjectWizard { get; }
         public ReactiveCommand<RoutedEventArgs, Unit> NewProjectCommand { get; }
         public ReactiveCommand<RoutedEventArgs, Unit> LoadProjectCommand { get; }
         public ReactiveCommand<RoutedEventArgs, Unit> SaveProjectCommand { get; }
@@ -43,10 +43,12 @@ namespace TheKingsTable.ViewModels
         {
             if (await ProjectOverwriteOK())
             {
-                var newProj = await ShowNewProjectWizard.Handle(new Unit());
-                if (newProj != null)
+                var wizard = await ShowNewProjectWizard.Handle(new Unit());
+                if (wizard != null)
                 {
-                    Project = newProj;
+                    Project = wizard.Project;
+                    if (wizard.SaveProject)
+                        Project.Save(wizard.SavePath);
                     EditorManager = new EditorManager(Project);
                     await EditorManager.OpenStageTableEditor(Project.StageTables[Project.SelectedLayout.StageTables[0].Key]);
                 }

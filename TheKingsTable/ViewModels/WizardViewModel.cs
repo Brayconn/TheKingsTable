@@ -26,6 +26,11 @@ namespace TheKingsTable.ViewModels
             StagePaths = new List<string>() { string.Empty }
         };
 
+        bool saveProject = true;
+        public bool SaveProject { get => saveProject; set => this.RaiseAndSetIfChanged(ref saveProject, value); }
+        string savePath = "";
+        public string SavePath { get => savePath; set => this.RaiseAndSetIfChanged(ref savePath, value); }
+
         const int ThrottleTimeMS = 250;
 
         public WizardViewModel()
@@ -400,14 +405,25 @@ namespace TheKingsTable.ViewModels
                 case 5:
                     if(nextPage == nextPageToAutodetect)
                     {
-                        nextPageToAutodetect = -1;
+                        nextPageToAutodetect = 6;
                         if(!AutoDetectMods())
                             nextPage++;
+                        if (nextPage == 6)
+                            goto case 6;
                     }
                     break;
-
+                case 6:
+                    if(nextPage == nextPageToAutodetect)
+                    {
+                        if (!string.IsNullOrWhiteSpace(EXEPath))
+                            SavePath = Path.ChangeExtension(EXEPath, ProjectFile.Extension);
+                        else
+                            SavePath = Path.Combine(Path.GetDirectoryName(BaseDataPath), Path.ChangeExtension("CS2", ProjectFile.Extension));
+                        nextPageToAutodetect = -1;
+                    }
+                    break;
                 case 7:
-                    await Close.Handle(Project);
+                    await Close.Handle(this);
                     return;
             }
             SelectedIndex = nextPage;

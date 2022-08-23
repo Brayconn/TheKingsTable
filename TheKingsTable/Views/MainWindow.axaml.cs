@@ -110,13 +110,13 @@ namespace TheKingsTable.Views
             context.SetOutput(new Unit());
         }
 
-        private async Task DoShowWizard(InteractionContext<Unit, ProjectFile?> interaction)
+        private async Task DoShowWizard(InteractionContext<Unit, WizardViewModel> interaction)
         {
             var dialog = new WizardWindow();
             var vm = new WizardWindowViewModel();
             dialog.DataContext = vm;
             dialog.ViewModel = vm;
-            var result = await dialog.ShowDialog<ProjectFile?>(this);
+            var result = await dialog.ShowDialog<WizardViewModel>(this);
             interaction.SetOutput(result);
         }
     }

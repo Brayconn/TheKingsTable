@@ -53,7 +53,20 @@
 		<Grid ColumnDefinitions="*,*">
 			<ListBox Items="{Binding Project.AssetLayouts}"/>
 		</Grid>
-		<!--Done-->
-		<TextBlock>Click next to start modding!!!!1</TextBlock>
+		<!--Final options-->
+		<StackPanel Orientation="Vertical">
+			<Grid ColumnDefinitions="auto,*">
+				<CheckBox IsChecked="{Binding Project.UseScriptSource, Mode=TwoWay}"/>
+				<TextBlock Grid.Column="1">Use Scriptsource</TextBlock>
+			</Grid>
+			<Grid RowDefinitions="auto,*" ColumnDefinitions="auto,*">
+				<TextBlock>Save a project file</TextBlock>
+				<CheckBox Grid.Row="1" IsChecked="{Binding SaveProject, Mode=TwoWay}"/>
+				<c:FileSystemSelector Grid.Row="1" Grid.Column="1"
+									  IsEnabled="{Binding SaveProject}" Watermark="Save Location"
+									  Filters="Project Files|cav|All Files|*"
+									  Text="{Binding SavePath, Mode=TwoWay}"/>
+			</Grid>
+		</StackPanel>
 	</c:WizardControl>
 </UserControl>
