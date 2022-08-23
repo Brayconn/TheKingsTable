@@ -119,5 +119,13 @@ namespace TheKingsTable.Views
             var result = await dialog.ShowDialog<WizardViewModel>(this);
             interaction.SetOutput(result);
         }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+            //see https://github.com/npolyak/NP.Avalonia.UniDock/issues/8
+            //tl;dr avalonia moment
+            Environment.Exit(0);
+        }
     }
 }
