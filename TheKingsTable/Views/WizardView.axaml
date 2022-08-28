@@ -63,7 +63,7 @@
 				<TextBlock>Save a project file</TextBlock>
 				<CheckBox Grid.Row="1" IsChecked="{Binding SaveProject, Mode=TwoWay}"/>
 				<c:FileSystemSelector Grid.Row="1" Grid.Column="1"
-									  IsEnabled="{Binding SaveProject}" Watermark="Save Location"
+									  IsEnabled="{Binding SaveProject}" Watermark="Save Location" IsSave="true"
 									  Filters="Project Files|cav|All Files|*"
 									  Text="{Binding SavePath, Mode=TwoWay}"/>
 			</Grid>

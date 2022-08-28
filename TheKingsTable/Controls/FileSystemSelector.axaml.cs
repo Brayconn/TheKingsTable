@@ -49,6 +49,17 @@ namespace TheKingsTable.Controls
         public string Filters { get => GetValue(FiltersProperty); set => SetValue(FiltersProperty, value); }
         #endregion
 
+        #region IsSave Styled Property
+        public static readonly StyledProperty<bool> IsSaveProperty =
+            AvaloniaProperty.Register<FileSystemSelector, bool>(nameof(IsSave), false);
+
+        public bool IsSave
+        {
+            get => GetValue(IsSaveProperty);
+            set => SetValue(IsSaveProperty, value);
+        }
+        #endregion
+
         public FileSystemSelector()
         {
             InitializeComponent();
@@ -77,8 +88,9 @@ namespace TheKingsTable.Controls
                 for (int i = 0; i < splitFilters.Length; i += 2)
                     formattedFilters.Add(new Tuple<string, string>(splitFilters[i], splitFilters[i + 1]));
 
-                result = await CommonInteractions.BrowseToOpenFile
-                        .Handle(new FileSelection(WindowTitle, formattedFilters, start));
+                var interaction = IsSave ? CommonInteractions.BrowseToSaveFile : CommonInteractions.BrowseToOpenFile;
+
+                result = await interaction.Handle(new FileSelection(WindowTitle, formattedFilters, start));
             }
             //none means we're finding directories
             else
