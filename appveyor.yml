@@ -1,3 +1,4 @@
+image: Visual Studio 2022
 version: 1.0.{build}
 skip_tags: true
 configuration: Release
@@ -22,8 +23,8 @@ build:
   verbosity: minimal
 after_build:
 - cmd: >-
-    cd %APPVEYOR_BUILD_FOLDER%/TheKingsTable/bin/%CONFIGURATION%/%PLATFORM%/
+    cd %APPVEYOR_BUILD_FOLDER%/TheKingsTable/bin/%CONFIGURATION%/net6.0/
 
-    7z a %CONFIGURATION%.zip *.exe *.dll *.png
+    7z a %CONFIGURATION%.zip *.exe *.dll *.png *.json runtimes
 
     appveyor PushArtifact %CONFIGURATION%.zip
