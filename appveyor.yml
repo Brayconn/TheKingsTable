@@ -8,25 +8,21 @@ clone_script:
 
     cd %APPVEYOR_BUILD_FOLDER%/../
 
-    git clone https://github.com/Brayconn/LayeredPictureBox.git
+    git clone https://github.com/Brayconn/CaveStoryModdingFramework.git
 
     git clone https://github.com/Brayconn/PixelModdingFramework.git
 
     git clone https://github.com/Brayconn/PETools.git
-
-    git clone https://github.com/Brayconn/LocalizeableComponentModel.git
-
-    git clone https://github.com/Brayconn/WinFormsKeybinds.git
 before_build:
 - cmd: >-
-    nuget restore %APPVEYOR_BUILD_FOLDER%/CaveStoryEditor.sln
+    nuget restore %APPVEYOR_BUILD_FOLDER%/TheKingsTable.sln
 
     dotnet restore %APPVEYOR_BUILD_FOLDER%
 build:
   verbosity: minimal
 after_build:
 - cmd: >-
-    cd %APPVEYOR_BUILD_FOLDER%/CaveStoryEditor/bin/%CONFIGURATION%/
+    cd %APPVEYOR_BUILD_FOLDER%/TheKingsTable/bin/%CONFIGURATION%/%PLATFORM%/
 
     7z a %CONFIGURATION%.zip *.exe *.dll *.png
 
