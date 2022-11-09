@@ -25,7 +25,7 @@
     <PackageReference Include="WriteableBitmapEx" Version="1.6.8" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CaveStoryModdingFramework\CaveStoryModdingFramework.csproj" />
+    <ProjectReference Include="..\..\CaveStoryModdingFramework\CaveStoryModdingFramework\CaveStoryModdingFramework.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Controls\FileSystemSelector.axaml.cs">
