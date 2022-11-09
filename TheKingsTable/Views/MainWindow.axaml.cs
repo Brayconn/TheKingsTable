@@ -34,13 +34,16 @@ namespace TheKingsTable.Views
             
             this.WhenActivated(d => d(ViewModel!.ShowNewProjectWizard
                 .RegisterHandler(DoShowWizard)));
+
             this.WhenActivated(d => d(EditorManager.StageTableEditorOpened
                 .RegisterHandler(AddStageTableEditor)));
             this.WhenActivated(d => d(EditorManager.StageEditorOpened
                 .RegisterHandler(AddStageEditor)));
             this.WhenActivated(d => d(EditorManager.ScriptEditorOpened
                 .RegisterHandler(AddScriptEditor)));
-            
+            this.WhenActivated(d => d(EditorManager.ProjectClosing
+                .RegisterHandler(CloseProject)));
+
 
             this.WhenActivated(d => d(CommonInteractions.BrowseToOpenFile.
                 RegisterHandler(x => CommonAvaloniaHandlers.ShowOpenFileBrowser(x, this))));
@@ -50,6 +53,21 @@ namespace TheKingsTable.Views
                 RegisterHandler(x => CommonAvaloniaHandlers.ShowSaveFileBrowser(x, this))));
             this.WhenActivated(d => d(CommonInteractions.IsOk
                 .RegisterHandler(x => CommonAvaloniaHandlers.ShowYesNoMessage(x, this))));
+
+            Button.ClickEvent.AddClassHandler<MainWindow>((x, e) =>
+            {
+                if ((e.Source as Button)?.Name == "CloseButton")
+                {
+                    var t = e.RoutedEvent.EventArgsType;
+                    
+                    //TODO hook into FloatingWindow.Closing?????
+                }
+            });
+        }
+
+        private void CloseProject(InteractionContext<Unit, bool> obj)
+        {
+            
         }
 
         private void InitializeComponent()
@@ -110,14 +128,20 @@ namespace TheKingsTable.Views
             context.SetOutput(new Unit());
         }
 
-        private async Task DoShowWizard(InteractionContext<Unit, WizardViewModel> interaction)
+        private async Task DoShowWizard(InteractionContext<Unit, WizardViewModel> context)
         {
             var dialog = new WizardWindow();
             var vm = new WizardWindowViewModel();
             dialog.DataContext = vm;
             dialog.ViewModel = vm;
             var result = await dialog.ShowDialog<WizardViewModel>(this);
-            interaction.SetOutput(result);
+            context.SetOutput(result);
+        }
+
+        private async Task DoShowProjectEditor(InteractionContext<ProjectEditorViewModel, Unit> context)
+        {
+
+            context.SetOutput(new Unit());
         }
 
         protected override void OnClosed(EventArgs e)

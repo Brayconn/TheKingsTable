@@ -36,6 +36,14 @@ namespace TheKingsTable.Models
             = new Interaction<StageEditorViewModel, Unit>();
         public static readonly Interaction<TextScriptEditorViewModel, Unit> ScriptEditorOpened
             = new Interaction<TextScriptEditorViewModel, Unit>();
+        public static readonly Interaction<ProjectEditorViewModel, Unit> ProjectSettingsOpened
+            = new Interaction<ProjectEditorViewModel, Unit>();
+
+        public static readonly Interaction<Unit, bool> ProjectClosing
+            = new Interaction<Unit, bool>();
+
+        ProjectEditorViewModel? ProjectEditor = null;
+        //TODO make a thing to toggle showing the project editor
 
         StageEditorToolMenu ToolMenu;
         public void UpdateGlobalSelection(StageEditorViewModel editor)
@@ -51,17 +59,11 @@ namespace TheKingsTable.Models
         }
 
         private List<object> AttributeEditors { get; set; }
-        private List<StageEditorViewModel> StageEditors { get; } = new List<StageEditorViewModel>();
+        private Dictionary<StageTableEntry, StageEditorViewModel> StageEditors { get; } = new Dictionary<StageTableEntry, StageEditorViewModel>();
         public async Task<StageEditorViewModel?> OpenStageEditor(StageTableEntry entry)
         {
-            foreach (var item in StageEditors)
-            {
-                if (item.Entry == entry)
-                {
-                    //await StageEditorOpened.Handle(item);
-                    return item;
-                }
-            }
+            if (StageEditors.ContainsKey(entry))
+                return StageEditors[entry];
                         
             var background = await TryGetBackground(entry.BackgroundName);
             if (background == null)
@@ -84,7 +86,7 @@ namespace TheKingsTable.Models
                 return null;
 
             var e = new StageEditorViewModel(Project, entry, background, tileset, attributes, tiles, entities);
-            StageEditors.Add(e);
+            StageEditors.Add(entry, e);
             await StageEditorOpened.Handle(e);
             return e;
         }

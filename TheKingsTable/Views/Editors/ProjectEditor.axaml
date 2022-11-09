@@ -1,13 +1,61 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-			 xmlns:c="using:TheKingsTable.Controls"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="TheKingsTable.Views.Editors.ProjectEditor">
-	<TabControl>
-		<TabItem Header="Stage Tables">
-			<c:StageTableLocationEditor/>
-		</TabItem>
-	</TabControl>
-</UserControl>
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:c="using:TheKingsTable.Controls">
+  <DataTemplate x:Key="ProjectEditorHeaderDataTemplate">
+    <TextBlock Text="{Binding ProjectName}"/>
+  </DataTemplate>
+  <DataTemplate x:Key="ProjectEditorDataTemplate">
+	  <TabControl>
+		  <TabItem Header="Stage Tables">
+			  <c:StageTableLocationEditor/>
+		  </TabItem>
+		  <TabItem Header="Images">
+			  <StackPanel Orientation="Vertical">
+				  <StackPanel Orientation="Horizontal">
+					  <TextBlock>Images Copyrighted?</TextBlock>
+					  <CheckBox IsChecked="{Binding ImagesCopyrighted, Mode=TwoWay}"/>
+				  </StackPanel>
+				  <StackPanel Orientation="Horizontal">
+					  <TextBlock>Transparent Color</TextBlock>
+					  <TextBlock>TBA</TextBlock>
+				  </StackPanel>
+			  </StackPanel>
+		  </TabItem>
+		  <TabItem Header="TSC">
+			  <Grid ColumnDefinitions="*,10,*">
+				  <StackPanel Orientation="Vertical">
+					  <StackPanel Orientation="Horizontal">
+						  <TextBlock>Scripts Encrypted</TextBlock>
+						  <CheckBox IsChecked="{Binding ScriptsEncrypted, Mode=TwoWay}"/>
+					  </StackPanel>
+					  <StackPanel Orientation="Horizontal">
+						  <TextBlock>Encryption Key Location</TextBlock>
+						  <NumericUpDown Minimum="1" Value="{Binding ScriptKeyLocation, Mode=TwoWay}"/>
+					  </StackPanel>
+					  <StackPanel Orientation="Horizontal">
+						  <TextBlock>Default Encryption Key</TextBlock>
+						  <NumericUpDown Minimum="-127" Maximum="127" Value="{Binding DefaultEncryptionKey, Mode=TwoWay}"/>
+					  </StackPanel>
+				  </StackPanel>
+				  <GridSplitter Grid.Column="1" ResizeDirection="Columns"/>
+				  <TextBlock>TSC Command editing will go here</TextBlock>
+			  </Grid>
+		  </TabItem>
+		  <TabItem Header="Filenames">
+			  
+		  </TabItem>
+		  <TabItem Header="Gameplay">
+			  <StackPanel Orientation="Vertical">
+				  <StackPanel Orientation="Horizontal">
+					  <TextBlock>Screen Width (Pixels)</TextBlock>
+					  <NumericUpDown Minimum="1" Value="{Binding ScreenWidth, Mode=TwoWay}"/>
+				  </StackPanel>
+				  <StackPanel Orientation="Horizontal">
+					  <TextBlock>Screen Height (Pixels)</TextBlock>
+					  <NumericUpDown Minimum="1" Value="{Binding ScreenHeight, Mode=TwoWay}"/>
+				  </StackPanel>
+			  </StackPanel>
+		  </TabItem>
+	  </TabControl>
+  </DataTemplate>
+</ResourceDictionary>

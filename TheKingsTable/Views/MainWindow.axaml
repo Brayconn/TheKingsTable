@@ -19,8 +19,9 @@
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
         <ResourceInclude Source="/Views/Editors/StageEditor.axaml"/>
-		<ResourceInclude Source="/Views/Editors/StageTableEditors.axaml"/>
-		<ResourceInclude Source="/Views/Editors/TextScriptEditor.axaml"/> 
+		    <ResourceInclude Source="/Views/Editors/StageTableEditors.axaml"/>
+		    <ResourceInclude Source="/Views/Editors/TextScriptEditor.axaml"/>
+        <ResourceInclude Source="/Views/Editors/ProjectEditor.axaml"/>
       </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>
 	<np:DockManager x:Key="TheDockManager"/>
@@ -33,7 +34,13 @@
         <MenuItem Header="_Save Project" Command="{Binding SaveProjectCommand}"/>
       </MenuItem>
       <MenuItem Header="_Edit"></MenuItem>
-      <MenuItem Header="_View"></MenuItem>
+      <MenuItem Header="_View">
+        <MenuItem Header="Project Settings">
+          <MenuItem.Icon>
+            <CheckBox IsChecked="{Binding ProjectSettingsShown, Mode=TwoWay}"/>
+          </MenuItem.Icon>
+        </MenuItem>
+      </MenuItem>
       <MenuItem Header="_Analyze">
         <MenuItem Header="Flag List..."/>
         <MenuItem Header="Npc Usage..."/>

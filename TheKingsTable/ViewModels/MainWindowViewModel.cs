@@ -27,6 +27,26 @@ namespace TheKingsTable.ViewModels
         public ReactiveCommand<RoutedEventArgs, Unit> LoadProjectCommand { get; }
         public ReactiveCommand<RoutedEventArgs, Unit> SaveProjectCommand { get; }
 
+        Editors.ProjectEditorViewModel? ProjectEditor = null;
+
+        bool projectSettingsShown = false;
+        bool ProjectSettingsShown
+        {
+            get => Project != null && ProjectEditor != null && projectSettingsShown;
+            set
+            {
+                if (Project == null)
+                    projectSettingsShown = false;
+                else
+                {
+                    if(ProjectEditor == null)
+                    {
+                        ProjectEditor = new Editors.ProjectEditorViewModel(Project);
+                    }
+                }
+            }
+        }
+
         private async Task<bool> ProjectOverwriteOK()
         {
             if (Project != null)
@@ -43,6 +63,13 @@ namespace TheKingsTable.ViewModels
         {
             if (await ProjectOverwriteOK())
             {
+                if (Project != null)
+                {
+                    var closeOk = await EditorManager.ProjectClosing.Handle(new Unit());
+                    if (!closeOk)
+                        return;
+                }
+
                 var wizard = await ShowNewProjectWizard.Handle(new Unit());
                 if (wizard != null)
                 {
@@ -58,6 +85,13 @@ namespace TheKingsTable.ViewModels
         {
             if (await ProjectOverwriteOK())
             {
+                if (Project != null)
+                {
+                    var closeOk = await EditorManager.ProjectClosing.Handle(new Unit());
+                    if (!closeOk)
+                        return;
+                }
+
                 var result = await CommonInteractions.BrowseToOpenFile.Handle(new FileSelection(
                     "Select Project",
                     new List<Tuple<string, string>>() { new Tuple<string, string>("Project Files", ProjectFile.Extension) },
