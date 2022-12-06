@@ -138,7 +138,7 @@ namespace TheKingsTable.ViewModels.Editors
             Entry = entry;
 
             //TODO LOAD FROM PROJECT URL AND MAYBE CACHE???
-            TileTypesImage = new Bitmap(@"tiletypes.png");
+            TileTypesImage = new Bitmap(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), @"tiletypes.png"));
 
             Background = background;
 
