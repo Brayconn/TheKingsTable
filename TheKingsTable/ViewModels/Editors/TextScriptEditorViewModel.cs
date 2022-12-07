@@ -10,6 +10,9 @@ using NP.Avalonia.UniDockService;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Reactive.Linq;
+using CaveStoryModdingFramework.Editors;
+using System.Linq;
+using System.Text;
 
 namespace TheKingsTable.ViewModels.Editors
 {
@@ -17,33 +20,80 @@ namespace TheKingsTable.ViewModels.Editors
     public class TextScriptEditorViewModel : ViewModelBase
     {
         public ProjectFile Project { get; }
+        public TSCEditor Editor { get; private set; }
         public string TSCPath { get; private set; }
         string text = "";
         public string Text { get => text; set => this.RaiseAndSetIfChanged(ref text, value); }
         void Load(string tscPath)
         {
             byte[] bytes = Array.Empty<byte>();
+            bool encrypted = Project.ScriptsEncrypted;
             if (Project.UseScriptSource)
             {
                 var sspath = ScriptSource.GetScriptSourcePath(tscPath);
-                if(File.Exists(sspath))
+                if (File.Exists(sspath))
+                {
                     bytes = File.ReadAllBytes(sspath);
+                    encrypted = false;
+                }
             }
             if (bytes.Length <= 0 && File.Exists(tscPath))
             {
                 bytes = File.ReadAllBytes(tscPath);
-                if (Project.ScriptsEncrypted)
-                    Encryptor.DecryptInPlace(bytes, Project.DefaultEncryptionKey);
             }
             if (bytes.Length > 0)
-                Text = Project.ScriptEncoding.GetString(bytes);
+            {
+                Editor = new TSCEditor(bytes, encrypted, Project.ScriptEncoding, Project.ScriptCommands?.Values.ToList());
+            }
             else
-                Text = "";
+            {
+                Editor = new TSCEditor(Project.ScriptEncoding, Project.ScriptCommands.Values.ToList());
+            }
+            foreach(var line in Editor.Tokens)
+            {
+                foreach(var token in line)
+                {
+                    var sb = new StringBuilder();
+                    sb.Append("(Text=\"");
+                    sb.Append(token.GetString().Replace("\n", "\\n").Replace("\r","\\r"));
+                    sb.Append("\" Type=");
+                    if (token is TSCEventToken2 e)
+                    {
+                        sb.Append("Event Value=");
+                        sb.Append(e.Value);
+                    }
+                    else if (token is TSCTextToken2 t)
+                    {
+                        sb.Append("Text");
+                    }
+                    else if (token is TSCCommandToken c)
+                    {
+                        sb.Append("Command ArgumentCount=");
+                        sb.Append(c.Command?.Arguments.Count ?? -1);
+                    }
+                    else if(token is TSCArgumentToken a)
+                    {
+                        sb.Append("Argument Name=");
+                        sb.Append(a.Argument.Name);
+                        sb.Append(" Type=");
+                        sb.Append(a.Argument.Type);
+                    }
+                    else
+                        throw new ArgumentException("Unkown token type! " + token.GetType(), nameof(token));
+                    sb.Append(" Validity=");
+                    sb.Append(token.Validity);
+                    sb.Append(")");
+                    Text += sb.ToString();
+                }
+                Text += "\n";
+            }
         }
         void Save(string tscPath)
         {
-            var bytes = Project.ScriptEncoding.GetBytes(Text);
-            if(Project.UseScriptSource)
+            var ms = new MemoryStream();
+            Editor.Save(ms);
+            var bytes = ms.ToArray();
+            if (Project.UseScriptSource)
             {
                 string ssdir = ScriptSource.GetScriptSourceDirectory(tscPath);
                 if (!Directory.Exists(ssdir))
@@ -76,7 +126,7 @@ namespace TheKingsTable.ViewModels.Editors
         {
             Project = project;
             TSCPath = tscPath;
-
+            
             SaveCommand = ReactiveCommand.Create<RoutedEventArgs>(e => Save(TSCPath));
             SaveAsCommand = ReactiveCommand.Create<RoutedEventArgs>(SaveAs);
 
