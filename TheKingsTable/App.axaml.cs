@@ -17,7 +17,7 @@ namespace TheKingsTable
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                desktop.MainWindow = new MainWindow
+                desktop.MainWindow = new MainWindow(desktop.Args)
                 {
                     DataContext = new MainWindowViewModel(),
                 };

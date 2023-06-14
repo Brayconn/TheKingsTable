@@ -23,7 +23,12 @@ namespace TheKingsTable.Views
         const string EditorGroup = "EditorGroup";
         const string DockManager = "TheDockManager";
 
-        public MainWindow()
+        public MainWindow() : this(Array.Empty<string>())
+        {
+
+        }
+
+        public MainWindow(string[] args)
         {
             InitializeComponent();
 #if DEBUG
@@ -31,7 +36,7 @@ namespace TheKingsTable.Views
 #endif
             UniDockService = (IUniDockService)this.FindResource(DockManager)!;
             UniDockService.DockItemsViewModels = new ObservableCollection<DockItemViewModelBase>();
-            
+
             this.WhenActivated(d => d(ViewModel!.ShowNewProjectWizard
                 .RegisterHandler(DoShowWizard)));
 
@@ -59,10 +64,17 @@ namespace TheKingsTable.Views
                 if ((e.Source as Button)?.Name == "CloseButton")
                 {
                     var t = e.RoutedEvent.EventArgsType;
-                    
+
                     //TODO hook into FloatingWindow.Closing?????
                 }
             });
+
+            //TODO put more advanced arg parsing here
+            this.WhenActivated(d => {
+                if (args.Length == 1)
+                    ViewModel!.LoadProject(args[0]);
+            });
+            
         }
 
         private void CloseProject(InteractionContext<Unit, bool> obj)

@@ -99,11 +99,16 @@ namespace TheKingsTable.ViewModels
                     ));
                 if (result != null)
                 {
-                    Project = ProjectFile.Load(result);
-                    EditorManager = new EditorManager(Project);
-                    await EditorManager.OpenStageTableEditor(Project.StageTables[Project.SelectedLayout.StageTables[0].Key]);
+                    LoadProject(result);
                 }
             }
+        }
+        public async void LoadProject(string path)
+        {
+            Project = ProjectFile.Load(path);
+            //TODO probably need to properly teardown the old stuff
+            EditorManager = new EditorManager(Project);
+            await EditorManager.OpenStageTableEditor(Project.StageTables[Project.SelectedLayout.StageTables[0].Key]);
         }
 
         public async void SaveProject(RoutedEventArgs e)
