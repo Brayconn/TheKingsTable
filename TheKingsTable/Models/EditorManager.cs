@@ -104,7 +104,7 @@ namespace TheKingsTable.Models
 
             if(!File.Exists(location.Filename))
             {
-                if(!await CommonInteractions.IsOk.Handle(new Words("Warning",
+                if(await CommonInteractions.IsOk.Handle(new Words("Warning",
                     $"{location.Filename} doesn't exist! Would you like to create it and continue?")))
                 {
                     File.Create(location.Filename);
@@ -163,15 +163,15 @@ namespace TheKingsTable.Models
         public async Task<string?> TryLoadAsset(bool caseOK, List<string> foundFiles)
         {
             //if we found something
-            if (foundFiles.Count > 0
+            if (foundFiles.Count > 0 &&
                 //and we don't care about the case
-                && !CaseSensitive
+                (!CaseSensitive
                 //or we do care about the casing, but it was ok
                 || caseOK
                 //or we do care about the casing, but it doesn't matter 'cause the user said it was ok
                 || await CommonInteractions.IsOk.Handle(new Words("Warning",
                     $"Case mismatch on {foundFiles[0]}! Continue using this file?"
-                    )))
+                    ))))
             {
                 return foundFiles[0];
             }
